@@ -1,7 +1,9 @@
 package com.ubi.academicapplication.controller;
 
 import com.ubi.academicapplication.dto.jwtdto.JwtResponse;
-import com.ubi.academicapplication.dto.jwtdto.LoginCredentialDTO;
+import com.ubi.academicapplication.dto.jwtdto.LoginCredentialDto;
+import com.ubi.academicapplication.dto.responsedto.Response;
+import com.ubi.academicapplication.error.HttpStatusCode;
 import com.ubi.academicapplication.service.UserAuthenticationService;
 import com.ubi.academicapplication.service.UserDetailsServiceImpl;
 import com.ubi.academicapplication.service.UserService;
@@ -31,19 +33,31 @@ public class AuthenticateController {
     UserService userService;
 
     @PostMapping
-    public ResponseEntity<?> getToken(@RequestBody LoginCredentialDTO loginCredentialDTO) {
+    public Response<JwtResponse> getToken(@RequestBody LoginCredentialDto loginCredentialDTO) {
         String username = loginCredentialDTO.getUsername();
         String password = loginCredentialDTO.getPassword();
-        if(!userService.isUsernamePasswordValid(username,password)) return ResponseEntity.ok().body("Invalid Username password");
+        Response<JwtResponse> response = new Response<>();
+        if(!userService.isUsernamePasswordValid(username,password)){
+            response.setStatusCode(HttpStatusCode.INVALID_CREDENTIALS.getCode());
+            response.setMessage(HttpStatusCode.INVALID_CREDENTIALS.getMessage());
+            return response;
+        }
 
         try {
             userAuthenticationService.authenticate(username,password);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            response.setStatusCode(HttpStatusCode.INVALID_CREDENTIALS.getCode());
+            response.setMessage(HttpStatusCode.INVALID_CREDENTIALS.getMessage());
+            return response;
         }
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+        String roleName = userService.getRoleByUsername(username);
         String token = jwtUtil.generateToken(userDetails);
-        return ResponseEntity.ok().body(new JwtResponse(token));
+
+        response.setStatusCode(HttpStatusCode.SUCCESSFUL.getCode());
+        response.setMessage(HttpStatusCode.SUCCESSFUL.getMessage());
+        response.setResult(new JwtResponse(token,roleName));
+        return response;
     }
 
 }

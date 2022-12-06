@@ -1,8 +1,8 @@
 package com.ubi.academicapplication.util;
 
-import com.ubi.academicapplication.dto.roledto.RoleCreationDTO;
-import com.ubi.academicapplication.dto.userdto.UserCreationDTO;
-import com.ubi.academicapplication.dto.userdto.UserDTO;
+import com.ubi.academicapplication.dto.roledto.RoleCreationDto;
+import com.ubi.academicapplication.dto.userdto.UserCreationDto;
+import com.ubi.academicapplication.dto.userdto.UserDto;
 import com.ubi.academicapplication.service.RoleService;
 import com.ubi.academicapplication.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +22,11 @@ public class DataLoaderUtil implements ApplicationRunner {
     private RoleService roleService;
 
     private void loadRolesInDatabase(){
-        RoleCreationDTO roleSuperAdmin = new RoleCreationDTO("Super Admin","ROLE_SUPER_ADMIN");
-        RoleCreationDTO roleEducationHQAdmin = new RoleCreationDTO("Educational Institute HQ ADMIN","ROLE_EDUCATIONAL_INSTITUTE_HQ_ADMIN");
-        RoleCreationDTO roleRegionalAdmin = new RoleCreationDTO("Regional Admin","ROLE_REGIONAL_OFFICE_ADMIN");
-        RoleCreationDTO rolePrincipal = new RoleCreationDTO("Principal","ROLE_PRINCIPAL");
-        RoleCreationDTO roleTeacher = new RoleCreationDTO("Teacher","ROLE_TEACHER");
+        RoleCreationDto roleSuperAdmin = new RoleCreationDto("Super Admin","ROLE_SUPER_ADMIN");
+        RoleCreationDto roleEducationHQAdmin = new RoleCreationDto("Educational Institute HQ ADMIN","ROLE_EDUCATIONAL_INSTITUTE_HQ_ADMIN");
+        RoleCreationDto roleRegionalAdmin = new RoleCreationDto("Regional Admin","ROLE_REGIONAL_OFFICE_ADMIN");
+        RoleCreationDto rolePrincipal = new RoleCreationDto("Principal","ROLE_PRINCIPAL");
+        RoleCreationDto roleTeacher = new RoleCreationDto("Teacher","ROLE_TEACHER");
         roleService.createRole(roleSuperAdmin);
         roleService.createRole(roleEducationHQAdmin);
         roleService.createRole(roleRegionalAdmin);
@@ -38,7 +38,7 @@ public class DataLoaderUtil implements ApplicationRunner {
         // adding super admin
         Set<String> roles = new HashSet<>();
         roles.add("ROLE_SUPER_ADMIN");
-        UserCreationDTO userCreationDTO = new UserCreationDTO(
+        UserCreationDto userCreationDTO = new UserCreationDto(
                 "john",
                 "doe",
                 "superadmin",
@@ -49,7 +49,7 @@ public class DataLoaderUtil implements ApplicationRunner {
         // adding edu HQ Admin
         Set<String> roles2 = new HashSet<>();
         roles2.add("ROLE_EDUCATIONAL_INSTITUTE_HQ_ADMIN");
-        UserCreationDTO userCreationDTO2 = new UserCreationDTO(
+        UserCreationDto userCreationDTO2 = new UserCreationDto(
                 "jimmy",
                 "doe",
                 "hqadmin",
@@ -60,7 +60,7 @@ public class DataLoaderUtil implements ApplicationRunner {
         // adding ROLE_REGIONAL_OFFICE_ADMIN
         Set<String> roles3 = new HashSet<>();
         roles3.add("ROLE_REGIONAL_OFFICE_ADMIN");
-        UserCreationDTO userCreationDTO3 = new UserCreationDTO(
+        UserCreationDto userCreationDTO3 = new UserCreationDto(
                 "john",
                 "doe",
                 "rgadmin",
@@ -71,7 +71,7 @@ public class DataLoaderUtil implements ApplicationRunner {
         // adding ROLE_PRINCIPAL
         Set<String> roles4 = new HashSet<>();
         roles4.add("ROLE_PRINCIPAL");
-        UserCreationDTO userCreationDTO4 = new UserCreationDTO(
+        UserCreationDto userCreationDTO4 = new UserCreationDto(
                 "joss",
                 "doe",
                 "principal",
@@ -82,7 +82,7 @@ public class DataLoaderUtil implements ApplicationRunner {
         // adding ROLE_TEACHER
         Set<String> roles5 = new HashSet<>();
         roles5.add("ROLE_TEACHER");
-        UserCreationDTO userCreationDTO5 = new UserCreationDTO(
+        UserCreationDto userCreationDTO5 = new UserCreationDto(
                 "jeff",
                 "doe",
                 "teacher",
@@ -99,7 +99,7 @@ public class DataLoaderUtil implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        UserDTO userDTO = userService.getUserByUsername("superadmin");
+        UserDto userDTO = userService.getUserByUsername("superadmin");
         if(userDTO != null) return;
         loadRolesInDatabase();
         loadUserInDatabase();

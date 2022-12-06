@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class RestControllerAdvice {
 	private final Logger log = LoggerFactory.getLogger(RestControllerAdvice.class);
 
-	
 	@ExceptionHandler(CustomException.class)
 	public ResponseEntity<Object> handleGenericException(CustomException exception) {
 

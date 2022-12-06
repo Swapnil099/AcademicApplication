@@ -6,8 +6,7 @@ import lombok.RequiredArgsConstructor;
 
 @Data @RequiredArgsConstructor
 @AllArgsConstructor
-public class RoleDTO {
-    Long id;
+public class RoleCreationDto {
     String roleName;
     String roleType;
 }

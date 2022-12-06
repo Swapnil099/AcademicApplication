@@ -4,7 +4,7 @@ import lombok.*;
 
 @Getter
 @Setter @AllArgsConstructor @NoArgsConstructor
-public class LoginCredentialDTO {
+public class LoginCredentialDto {
     String username;
     String password;
 }
