@@ -15,6 +15,11 @@ public enum HttpStatusCode {
 	
 	NO_STUDENT_MATCH_WITH_ID(109,"No such student found with such id"),
 	
+    NO_PAYMENT_FOUND(108,"No Payment Found"),
+	
+	NO_PAYMENT_MATCH_WITH_ID(109,"No Payment found with given Id "),
+	
+	
 	//INVALID_COLUMN_ATTRIBUTE(103, "Invalid column attribute is provided"), 
 	
 	INVALID_JSON_INPUT(105, "Invalid JSON input or JSON format"),
