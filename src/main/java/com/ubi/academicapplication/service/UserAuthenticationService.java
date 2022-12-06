@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserAuthenticationService {
-
     @Autowired
     AuthenticationManager authenticationManager;
 
@@ -18,7 +17,6 @@ public class UserAuthenticationService {
 
     public void authenticate(String userName, String userPassword) throws Exception {
         try {
-
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userName, userPassword));
         } catch (DisabledException e) {
             throw new Exception("USER_DISABLED", e);

@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.ubi.academicapplication.dto.errorDto.BaseResponse;
+import com.ubi.academicapplication.dto.responsedto.BaseResponse;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

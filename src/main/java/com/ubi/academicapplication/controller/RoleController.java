@@ -1,8 +1,8 @@
 package com.ubi.academicapplication.controller;
 
-import com.ubi.academicapplication.dto.roledto.RoleCreationDTO;
-import com.ubi.academicapplication.dto.roledto.RoleDTO;
-import com.ubi.academicapplication.dto.roledto.RoleUserDTO;
+import com.ubi.academicapplication.dto.roledto.RoleCreationDto;
+import com.ubi.academicapplication.dto.roledto.RoleDto;
+import com.ubi.academicapplication.dto.roledto.RoleUserDto;
 import com.ubi.academicapplication.entity.Role;
 import com.ubi.academicapplication.entity.User;
 import com.ubi.academicapplication.mapper.RoleMapper;
@@ -29,11 +29,11 @@ public class RoleController {
 
     @Operation(summary = "Create New Role", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping
-    public ResponseEntity<?> createNewRole(@RequestBody RoleCreationDTO roleCreationDTO) {
+    public ResponseEntity<?> createNewRole(@RequestBody RoleCreationDto roleCreationDTO) {
         if(roleService.getRoleByRoleType(roleCreationDTO.getRoleType()) != null){
             return ResponseEntity.ok().body("Role Already Exists");
         }
-        RoleDTO roleDTO = roleService.createRole(roleCreationDTO);
+        RoleDto roleDTO = roleService.createRole(roleCreationDTO);
         if(roleDTO == null) return ResponseEntity.internalServerError().body("Error Occured");
         return ResponseEntity.ok().body(roleDTO);
     }
@@ -46,7 +46,7 @@ public class RoleController {
             return ResponseEntity.ok().body("Given Role Not Exist");
         }
         Set<User> users = role.getUsers();
-        Set<RoleUserDTO> roleUsers = roleMapper.toRoleUsers(users);
+        Set<RoleUserDto> roleUsers = roleMapper.toRoleUsers(users);
         return ResponseEntity.ok().body(roleUsers);
     }
 
@@ -54,7 +54,7 @@ public class RoleController {
     @GetMapping
     @IsPrincipal
     public ResponseEntity<?> getAllRoles() {
-        List<RoleDTO> roles = roleService.getAllRoles();
+        List<RoleDto> roles = roleService.getAllRoles();
         return ResponseEntity.ok().body(roles);
     }
 

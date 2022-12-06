@@ -5,7 +5,7 @@ import lombok.*;
 
 @Data @RequiredArgsConstructor
 @AllArgsConstructor
-public class RoleUserDTO {
+public class RoleUserDto {
     Long id;
     String firstName;
     String lastName;

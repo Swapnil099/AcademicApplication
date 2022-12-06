@@ -1,4 +1,4 @@
-package com.ubi.academicapplication.dto.errorDto;
+package com.ubi.academicapplication.dto.responsedto;
 
 
 import lombok.AllArgsConstructor;

@@ -3,7 +3,7 @@ package com.ubi.academicapplication.error;
 import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.ubi.academicapplication.dto.errorDto.BaseResponse;
+import com.ubi.academicapplication.dto.responsedto.BaseResponse;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,7 +16,6 @@ public class RestApiErrorHandling extends BaseResponse {
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
 	private LocalDateTime timestamp;
-	
 
 	private Result<?> result;
 

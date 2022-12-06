@@ -1,21 +1,26 @@
 package com.ubi.academicapplication.service;
 
-import com.ubi.academicapplication.dto.userdto.UserCreationDTO;
-import com.ubi.academicapplication.dto.userdto.UserDTO;
+import com.ubi.academicapplication.dto.responsedto.Response;
+import com.ubi.academicapplication.dto.roledto.RoleDto;
+import com.ubi.academicapplication.dto.userdto.UserCreationDto;
+import com.ubi.academicapplication.dto.userdto.UserDto;
+import com.ubi.academicapplication.entity.Role;
 
 import java.util.List;
 
 public interface UserService {
 
-    List<UserDTO> getAllUsers();
+    Response<List<UserDto>> getAllUsers();
 
-    UserDTO createNewUser(UserCreationDTO userCreationDTO);
+    Response<UserDto> createNewUser(UserCreationDto userCreationDTO);
 
-    UserDTO getUserById(String userId);
+    UserDto getUserById(String userId);
 
-    public UserDTO getUserByUsername(String username);
+    public UserDto getUserByUsername(String username);
 
     public Boolean deleteUserById(String userId);
 
     public boolean isUsernamePasswordValid(String username,String password);
+
+    public String getRoleByUsername(String username);
 }

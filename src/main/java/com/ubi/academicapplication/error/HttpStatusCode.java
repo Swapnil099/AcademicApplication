@@ -23,8 +23,8 @@ public enum HttpStatusCode {
 	
 	//TABLE_NOT_UNDER_DELETION(109, "Not under deletion"),
 	
-	TABLE_ALREADY_EXISTS(110, "Already exists"),
-	
+	RESOURCE_ALREADY_EXISTS(110, "Already exists"),
+
 	INVALID_COLUMN_NAME(111, "Invalid column name provided"),
 	
 	WRONG_DATA_TYPE(112, "Wrong datatype selected for non multivalued field"),
@@ -58,8 +58,12 @@ public enum HttpStatusCode {
 	
 	PROCESSING_NOT_COMPLETED (202, "Request cannot be Processed"),
 	
-	NOT_ACCEPTABLE_ERROR (406, "Request Not accpetable");
-	
+	NOT_ACCEPTABLE_ERROR (406, "Request Not accpetable"),
+
+	// SUCCESS STATUS CODES
+	SUCCESSFUL(200, "Request Successfull"),
+	RESOURCE_CREATED_SUCCESSFULLY (201, "Resource Created Successfully");
+
 	private int code;
 	private String message;
 	

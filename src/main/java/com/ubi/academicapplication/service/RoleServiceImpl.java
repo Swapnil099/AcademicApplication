@@ -1,7 +1,7 @@
 package com.ubi.academicapplication.service;
 
-import com.ubi.academicapplication.dto.roledto.RoleCreationDTO;
-import com.ubi.academicapplication.dto.roledto.RoleDTO;
+import com.ubi.academicapplication.dto.roledto.RoleCreationDto;
+import com.ubi.academicapplication.dto.roledto.RoleDto;
 import com.ubi.academicapplication.entity.Role;
 import com.ubi.academicapplication.mapper.RoleMapper;
 import com.ubi.academicapplication.repository.RoleRepository;
@@ -32,7 +32,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public RoleDTO createRole(RoleCreationDTO roleCreationDTO) {
+    public RoleDto createRole(RoleCreationDto roleCreationDTO) {
         Role role = roleMapper.toRole(roleCreationDTO);
         Role currRole = roleRepository.getRoleByRoleType(role.getRoleType());
         if(currRole == null) currRole = roleRepository.save(role);
@@ -40,7 +40,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public List<RoleDTO> getAllRoles() {
+    public List<RoleDto> getAllRoles() {
         List<Role> roles = roleRepository.findAll();
         return roles.stream().map(roleMapper::toDto).collect(Collectors.toList());
     }

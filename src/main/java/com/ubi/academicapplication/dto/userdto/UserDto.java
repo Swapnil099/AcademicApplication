@@ -6,12 +6,9 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.Set;
 
-@Data @RequiredArgsConstructor
-@AllArgsConstructor
-public class UserCreationDTO {
-    private String firstName;
-    private String lastName;
-    private String username;
-    private String password;
+@Data @RequiredArgsConstructor @AllArgsConstructor
+public class UserDto {
+    private Long id;
+    private String fullName;
     private Set<String> roles;
 }

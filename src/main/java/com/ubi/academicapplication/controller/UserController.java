@@ -1,7 +1,9 @@
 package com.ubi.academicapplication.controller;
 
-import com.ubi.academicapplication.dto.userdto.UserCreationDTO;
-import com.ubi.academicapplication.dto.userdto.UserDTO;
+import com.ubi.academicapplication.dto.responsedto.Response;
+import com.ubi.academicapplication.dto.userdto.UserCreationDto;
+import com.ubi.academicapplication.dto.userdto.UserDto;
+import com.ubi.academicapplication.security.roleaccessinterface.IsPrincipal;
 import com.ubi.academicapplication.security.roleaccessinterface.IsSuperAdmin;
 import com.ubi.academicapplication.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,27 +23,23 @@ public class UserController {
 
     @Operation(summary = "Create New User", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping
-    public ResponseEntity<?> createUser(@RequestBody UserCreationDTO userCreationDTO){
-        if(userService.getUserByUsername(userCreationDTO.getUsername()) != null){
-            return ResponseEntity.ok().body("user already Exist");
-        }
-        UserDTO userDTO = userService.createNewUser(userCreationDTO);
-        if(userDTO == null) return ResponseEntity.internalServerError().body("Error Occured During User Creation");
-        return ResponseEntity.ok().body(userDTO);
+    public Response<UserDto> createUser(@RequestBody UserCreationDto userCreationDTO){
+        Response<UserDto> userDtoResponse = userService.createNewUser(userCreationDTO);
+        return userDtoResponse;
     }
 
     @Operation(summary = "Get All Users", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping
-    @IsSuperAdmin
-    public ResponseEntity<?> getAllUsers() {
-        List<UserDTO> users = userService.getAllUsers();
-        return ResponseEntity.ok().body(users);
+    @IsPrincipal
+    public Response<List<UserDto>> getAllUsers() {
+        Response<List<UserDto>> allUserDtoResponse = userService.getAllUsers();
+        return allUserDtoResponse;
     }
 
     @Operation(summary = "Get User By Id", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/{userId}")
     public ResponseEntity<?> getAllUserById(@PathVariable String userId) {
-        UserDTO userDTO = userService.getUserById(userId);
+        UserDto userDTO = userService.getUserById(userId);
         if(userDTO == null) return ResponseEntity.badRequest().body("User Not Found");
         return ResponseEntity.ok().body(userDTO);
     }
