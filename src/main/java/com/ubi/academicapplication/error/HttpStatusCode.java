@@ -1,7 +1,11 @@
 package com.ubi.academicapplication.error;
 
 public enum HttpStatusCode {
+
 	
+	NO_ENTRY_FOUND(101,"Resource Not Found"),
+	
+	NO_STUDENT_NAME_FOUND(202,"No student name found"),
 	// With Custom Error Status Code
 	//INVALID_TABLE_NAME(101, "Invalid table name"),
 	
