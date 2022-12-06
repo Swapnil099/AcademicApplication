@@ -2,26 +2,15 @@ package com.ubi.academicapplication.error;
 
 public enum HttpStatusCode {
 	
-	// With Custom Error Status Code
-	//INVALID_TABLE_NAME(101, "Invalid table name"),
-	
-	//INVALID_SKU_NAME(102, "Invalid SKU name"),
 	
 	NO_STUDENT_FOUND(108,"No Student Found"),
 	
 	NO_STUDENT_MATCH_WITH_ID(109,"No such student found with such id"),
 	
-	//INVALID_COLUMN_ATTRIBUTE(103, "Invalid column attribute is provided"), 
 	
 	INVALID_JSON_INPUT(105, "Invalid JSON input or JSON format"),
 	
 	UNRECOGNIZED_FIELD(106, "Check sequence of fields or field name"),
-	
-	//UNDER_DELETION_PROCESS(107, "Under deletion process"),
-	
-	//TABLE_NOT_FOUND(108, "Does not exist"),
-	
-	//TABLE_NOT_UNDER_DELETION(109, "Not under deletion"),
 	
 	TABLE_ALREADY_EXISTS(110, "Already exists"),
 	
