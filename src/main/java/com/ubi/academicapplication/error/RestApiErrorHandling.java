@@ -4,12 +4,14 @@ import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ubi.academicapplication.dto.responsedto.BaseResponse;
-
+import com.ubi.academicapplication.error.Result;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper=false)
 public class RestApiErrorHandling extends BaseResponse {
 
 	private HttpStatusCode status;
