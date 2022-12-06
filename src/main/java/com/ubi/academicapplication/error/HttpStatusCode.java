@@ -19,7 +19,7 @@ public enum HttpStatusCode {
 	
 	//UNDER_DELETION_PROCESS(107, "Under deletion process"),
 	
-	//TABLE_NOT_FOUND(108, "Does not exist"),
+	RESOURCE_NOT_FOUND(108, "Does not exist"),
 	
 	//TABLE_NOT_UNDER_DELETION(109, "Not under deletion"),
 	

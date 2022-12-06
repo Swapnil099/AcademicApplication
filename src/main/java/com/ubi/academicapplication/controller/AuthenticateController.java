@@ -4,6 +4,7 @@ import com.ubi.academicapplication.dto.jwtdto.JwtResponse;
 import com.ubi.academicapplication.dto.jwtdto.LoginCredentialDto;
 import com.ubi.academicapplication.dto.responsedto.Response;
 import com.ubi.academicapplication.error.HttpStatusCode;
+import com.ubi.academicapplication.error.Result;
 import com.ubi.academicapplication.service.UserAuthenticationService;
 import com.ubi.academicapplication.service.UserDetailsServiceImpl;
 import com.ubi.academicapplication.service.UserService;
@@ -56,7 +57,7 @@ public class AuthenticateController {
 
         response.setStatusCode(HttpStatusCode.SUCCESSFUL.getCode());
         response.setMessage(HttpStatusCode.SUCCESSFUL.getMessage());
-        response.setResult(new JwtResponse(token,roleName));
+        response.setResult(new Result<JwtResponse>(new JwtResponse(token,roleName)));
         return response;
     }
 
