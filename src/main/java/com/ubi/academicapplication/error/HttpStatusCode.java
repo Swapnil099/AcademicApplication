@@ -1,7 +1,11 @@
 package com.ubi.academicapplication.error;
 
 public enum HttpStatusCode {
+
 	
+	NO_ENTRY_FOUND(101,"Resource Not Found"),
+	
+	NO_STUDENT_NAME_FOUND(202,"No student name found"),
 	// With Custom Error Status Code
 	//INVALID_TABLE_NAME(101, "Invalid table name"),
 	
@@ -10,6 +14,11 @@ public enum HttpStatusCode {
 	NO_STUDENT_FOUND(108,"No Student Found"),
 	
 	NO_STUDENT_MATCH_WITH_ID(109,"No such student found with such id"),
+	
+    NO_PAYMENT_FOUND(108,"No Payment Found"),
+	
+	NO_PAYMENT_MATCH_WITH_ID(109,"No Payment found with given Id "),
+	
 	
 	//INVALID_COLUMN_ATTRIBUTE(103, "Invalid column attribute is provided"), 
 	
