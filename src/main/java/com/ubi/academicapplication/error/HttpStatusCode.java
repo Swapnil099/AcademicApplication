@@ -16,6 +16,10 @@ public enum HttpStatusCode {
 	
 	NO_PAYMENT_MATCH_WITH_ID(109,"No Payment found with given Id "),
 	
+	NO_TRANSFERCERTIFICATE_FOUND(108,"No Transfer Certificate Found"),
+	
+	NO_TRANSFERCERTIFICATE_MATCH_WITH_ID(109,"No Transfer Certificate  found with given Id "),
+	
 	INVALID_JSON_INPUT(105, "Invalid JSON input or JSON format"),
 	
 	UNRECOGNIZED_FIELD(106, "Check sequence of fields or field name"),
