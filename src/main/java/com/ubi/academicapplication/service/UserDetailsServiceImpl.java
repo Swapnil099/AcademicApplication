@@ -1,6 +1,8 @@
 package com.ubi.academicapplication.service;
 
 import com.ubi.academicapplication.entity.User;
+import com.ubi.academicapplication.error.CustomException;
+import com.ubi.academicapplication.error.HttpStatusCode;
 import com.ubi.academicapplication.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,7 +19,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username);
-        if(user == null) throw new UsernameNotFoundException("No User Found with given username");
+        if(user == null){
+            throw new CustomException(HttpStatusCode.RESOURCE_NOT_FOUND.getCode(),
+                    HttpStatusCode.RESOURCE_NOT_FOUND,
+                    HttpStatusCode.RESOURCE_NOT_FOUND.getMessage(),
+                    null);
+        }
         return user;
     }
 }

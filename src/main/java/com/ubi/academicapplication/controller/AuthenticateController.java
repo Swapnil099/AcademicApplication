@@ -3,6 +3,7 @@ package com.ubi.academicapplication.controller;
 import com.ubi.academicapplication.dto.jwtdto.JwtResponse;
 import com.ubi.academicapplication.dto.jwtdto.LoginCredentialDto;
 import com.ubi.academicapplication.dto.responsedto.Response;
+import com.ubi.academicapplication.error.CustomException;
 import com.ubi.academicapplication.error.HttpStatusCode;
 import com.ubi.academicapplication.error.Result;
 import com.ubi.academicapplication.service.UserAuthenticationService;
@@ -38,10 +39,12 @@ public class AuthenticateController {
         String username = loginCredentialDTO.getUsername();
         String password = loginCredentialDTO.getPassword();
         Response<JwtResponse> response = new Response<>();
+        Result<JwtResponse> result = new Result<>();
         if(!userService.isUsernamePasswordValid(username,password)){
-            response.setStatusCode(HttpStatusCode.INVALID_CREDENTIALS.getCode());
-            response.setMessage(HttpStatusCode.INVALID_CREDENTIALS.getMessage());
-            return response;
+            throw new CustomException(HttpStatusCode.INVALID_CREDENTIALS.getCode(),
+                    HttpStatusCode.INVALID_CREDENTIALS,
+                    HttpStatusCode.INVALID_CREDENTIALS.getMessage(),
+                    result);
         }
 
         try {
