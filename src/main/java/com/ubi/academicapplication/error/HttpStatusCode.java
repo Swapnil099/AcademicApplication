@@ -4,7 +4,6 @@ public enum HttpStatusCode {
 
 	
 	NO_ENTRY_FOUND(101,"Resource Not Found"),
-	
 	NO_STUDENT_NAME_FOUND(202,"No student name found"),
 	
 	NO_STUDENT_FOUND(108,"No Student Found"),
@@ -56,9 +55,14 @@ public enum HttpStatusCode {
 	NOT_ACCEPTABLE_ERROR (406, "Request Not accpetable"),
 
 	SUCCESSFUL(200, "Request Successfull"),
+
+	STUDENT_DELETED(200,"student deleted successfully"),
+	STUDENT_UPDATED(200,"student updated successfully"),
 	
 	RESOURCE_CREATED_SUCCESSFULLY (201, "Resource Created Successfully");
 
+	
+	
 	private int code;
 	private String message;
 	

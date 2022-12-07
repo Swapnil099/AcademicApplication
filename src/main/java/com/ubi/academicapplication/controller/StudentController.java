@@ -2,7 +2,6 @@ package com.ubi.academicapplication.controller;
 
 import java.util.List;
 
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,79 +21,53 @@ import com.ubi.academicapplication.service.StudentServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
-
-
 @RestController
 @RequestMapping("/student")
 public class StudentController {
-
-	
 
 	@Autowired
 	private StudentServiceImpl service;
 
 	@PostMapping
 	@Operation(summary = "Create New Student", security = @SecurityRequirement(name = "bearerAuth"))
-	public Student addStudent(@RequestBody Student studentId) {
-		return service.saveStudent(studentId);
+	public ResponseEntity<Response<Student>> addStudent(@RequestBody Student studentId) {
+		Response<Student> response = service.saveStudent(studentId);
+		return ResponseEntity.ok().body(response);
 	}
 
-	
 	@Operation(summary = "Get All Student", security = @SecurityRequirement(name = "bearerAuth"))
 	@GetMapping
 	public ResponseEntity<Response<List<Student>>> getStudents() {
-	     Response<List<Student>> response=service.getStudents();
-	     if(response.getStatusCode()==200)
-	     {
-	    	 return ResponseEntity.status(HttpStatus.OK).body(response);
-	     }
-	     else
-	     {
-	    	 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response); 
-	     }
-	
+		Response<List<Student>> response = service.getStudents();
+		return ResponseEntity.ok().body(response);
+
 	}
-	
-	
+
 	@DeleteMapping("/{id}")
 	@Operation(summary = "Delete Student By Id", security = @SecurityRequirement(name = "bearerAuth"))
-	public void deleteStudent(@PathVariable int id) {
-	     service.deleteStudent(id);
-	
+	public ResponseEntity<Response<Student>> deleteStudent(@PathVariable int id) {
+		Response<Student> response = service.deleteById(id);
+		return ResponseEntity.ok().body(response);
+
 	}
-	
-	
-//
-//	@GetMapping("/{id}")
-//	public Optional<Student> findStudentById(@PathVariable int id) {
-//		return Optional.ofNullable(service.getStudentById(id).orElseThrow(() -> new ResourceNotFoundException("Student not found with id :" + id)));
-//	}
-	
-	
+
 	@GetMapping("{id}")
 	@Operation(summary = "Get Student By Id", security = @SecurityRequirement(name = "bearerAuth"))
-	public ResponseEntity<Response> getStudentById(@PathVariable("id") int id)
-	{
-		Response response=service.getStudentById(id)
-;
-	     if(response.getStatusCode()==200)
-	     {
-	    	 return ResponseEntity.status(HttpStatus.OK).body(response);
-	     }
-	     else
-	     {
-	    	 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response); 
-	     }
+	public ResponseEntity<Response> getStudentById(@PathVariable("id") int id) {
+		Response response = service.getStudentById(id);
+		if (response.getStatusCode() == 200) {
+			return ResponseEntity.status(HttpStatus.OK).body(response);
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+		}
 	}
+
 //
 	@PutMapping
 	@Operation(summary = "Update Student", security = @SecurityRequirement(name = "bearerAuth"))
-	public Student updateStudent(@RequestBody Student student) {
-		return service.updateStudent(student);
+	public ResponseEntity<Response> updateStudent(@RequestBody Student student) {
+		Response<Student> response = service.updateStudent(student);
+		return ResponseEntity.ok().body(response);
 	}
 
-//	@DeleteMapping("/{id}")
-//	public void deleteStudent(@PathVariable int id) {
-//		service.deleteStudent(id);
-//	}
 }
