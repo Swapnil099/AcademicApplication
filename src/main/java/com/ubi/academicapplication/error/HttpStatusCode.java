@@ -19,6 +19,12 @@ public enum HttpStatusCode {
 	
 	NO_PAYMENT_MATCH_WITH_ID(109,"No Payment found with given Id "),
 	
+	NO_SCHOOL_MATCH_WITH_ID(109, "No School Found with Given ID"),
+	
+	NO_SCHOOL_FOUND(108, "No School Found"),
+	
+	NO_SCHOOL_MATCH_WITH_NAME(110, "No School Found With Given NAME"),
+	
 	
 	//INVALID_COLUMN_ATTRIBUTE(103, "Invalid column attribute is provided"), 
 	
