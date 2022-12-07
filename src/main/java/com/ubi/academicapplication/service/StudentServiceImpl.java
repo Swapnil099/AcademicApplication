@@ -3,6 +3,7 @@ package com.ubi.academicapplication.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.ubi.academicapplication.entity.Payment;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,13 +45,14 @@ public class StudentServiceImpl implements StudentService {
 		Response<List<Student>> getListofStudent = new Response<List<Student>>();
 		List<Student> list = (List<Student>) this.repository.findAll();
 		res.setData(list);
+		Result<List<Student>> studentsResult = new Result<>();
 		if (list.size() == 0) {
 			throw new CustomException(HttpStatusCode.NO_ENTRY_FOUND.getCode(), HttpStatusCode.NO_ENTRY_FOUND,
 					HttpStatusCode.NO_ENTRY_FOUND.getMessage(), res);
 		}
-
+		studentsResult.setData(list);
 		getListofStudent.setStatusCode(200);
-		getListofStudent.setResult(list);
+		getListofStudent.setResult(studentsResult);
 		return getListofStudent;
 	}
 
@@ -58,12 +60,14 @@ public class StudentServiceImpl implements StudentService {
 		Response<Student> getStudent = new Response<Student>();
 		Optional<Student> std = null;
 		std = this.repository.findById(id);
+		Result<Student> studentResult = new Result<>();
 		if (!std.isPresent()) {
 			throw new CustomException(HttpStatusCode.NO_STUDENT_MATCH_WITH_ID.getCode(),
 					HttpStatusCode.NO_STUDENT_MATCH_WITH_ID, HttpStatusCode.NO_STUDENT_MATCH_WITH_ID.getMessage(), res);
 		}
+		studentResult.setData(std.get());
 		getStudent.setStatusCode(200);
-		getStudent.setResult(std.get());
+		getStudent.setResult(studentResult);
 		return getStudent;
 	}
 

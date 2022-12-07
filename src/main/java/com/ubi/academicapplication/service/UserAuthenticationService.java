@@ -1,5 +1,8 @@
 package com.ubi.academicapplication.service;
 
+import com.ubi.academicapplication.error.CustomException;
+import com.ubi.academicapplication.error.HttpStatusCode;
+import com.ubi.academicapplication.error.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -15,13 +18,19 @@ public class UserAuthenticationService {
     @Autowired
     UserService userService;
 
+    @Autowired
+    Result result;
+
     public void authenticate(String userName, String userPassword) throws Exception {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userName, userPassword));
         } catch (DisabledException e) {
             throw new Exception("USER_DISABLED", e);
         } catch (BadCredentialsException e) {
-            throw new Exception("INVALID_CREDENTIALS", e);
+            throw new CustomException(HttpStatusCode.INVALID_CREDENTIALS.getCode(),
+                    HttpStatusCode.INVALID_CREDENTIALS,
+                    HttpStatusCode.INVALID_CREDENTIALS.getMessage(),
+                    result);
         }
     }
 }
