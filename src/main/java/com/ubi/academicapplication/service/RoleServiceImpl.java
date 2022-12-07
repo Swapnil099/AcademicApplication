@@ -1,10 +1,16 @@
 package com.ubi.academicapplication.service;
 
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.ubi.academicapplication.dto.responsedto.Response;
 import com.ubi.academicapplication.dto.roledto.RoleCreationDto;
 import com.ubi.academicapplication.dto.roledto.RoleDto;
 import com.ubi.academicapplication.dto.roledto.RoleUserDto;
-import com.ubi.academicapplication.dto.userdto.UserDto;
 import com.ubi.academicapplication.entity.Role;
 import com.ubi.academicapplication.entity.User;
 import com.ubi.academicapplication.error.CustomException;
@@ -12,14 +18,8 @@ import com.ubi.academicapplication.error.HttpStatusCode;
 import com.ubi.academicapplication.error.Result;
 import com.ubi.academicapplication.mapper.RoleMapper;
 import com.ubi.academicapplication.repository.RoleRepository;
-import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import lombok.Data;
 
 @Service
 @Data
