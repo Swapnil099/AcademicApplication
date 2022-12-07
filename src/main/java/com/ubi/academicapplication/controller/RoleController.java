@@ -1,22 +1,29 @@
 package com.ubi.academicapplication.controller;
 
+import java.util.List;
+import java.util.Set;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.ubi.academicapplication.dto.responsedto.Response;
 import com.ubi.academicapplication.dto.roledto.RoleCreationDto;
 import com.ubi.academicapplication.dto.roledto.RoleDto;
 import com.ubi.academicapplication.dto.roledto.RoleUserDto;
-import com.ubi.academicapplication.entity.Role;
-import com.ubi.academicapplication.entity.User;
 import com.ubi.academicapplication.mapper.RoleMapper;
 import com.ubi.academicapplication.security.roleaccessinterface.IsPrincipal;
 import com.ubi.academicapplication.service.RoleService;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/role")

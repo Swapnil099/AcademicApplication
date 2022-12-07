@@ -10,6 +10,8 @@ public enum HttpStatusCode {
 	
 	NO_STUDENT_MATCH_WITH_ID(109,"No such student found with such id"),
 	
+	NO_CLASS_MATCH_WITH_ID(109,"No such class found with such id"),
+	
     NO_PAYMENT_FOUND(108,"No Payment Found"),
 	
 	NO_PAYMENT_MATCH_WITH_ID(109,"No Payment found with given Id "),
