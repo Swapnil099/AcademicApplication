@@ -22,10 +22,7 @@ public class PaymentServiceImpl implements PaymentService {
 
 	@Autowired
 	private PaymentRepository paymentRepository;
-	
-//	@Autowired
-//	private ModelMapper modelMapper;
-//	
+		
     @Autowired
 	private Result res;
     
