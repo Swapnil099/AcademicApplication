@@ -4,8 +4,10 @@ public enum HttpStatusCode {
 
 	
 	NO_ENTRY_FOUND(101,"Resource Not Found"),
-	
 	NO_STUDENT_NAME_FOUND(202,"No student name found"),
+	
+	
+	
 	// With Custom Error Status Code
 	//INVALID_TABLE_NAME(101, "Invalid table name"),
 	
@@ -71,8 +73,12 @@ public enum HttpStatusCode {
 
 	// SUCCESS STATUS CODES
 	SUCCESSFUL(200, "Request Successfull"),
+	STUDENT_DELETED(200,"student deleted successfully"),
+	STUDENT_UPDATED(200,"student updated successfully"),
 	RESOURCE_CREATED_SUCCESSFULLY (201, "Resource Created Successfully");
 
+	
+	
 	private int code;
 	private String message;
 	

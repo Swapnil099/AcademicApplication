@@ -1,24 +1,24 @@
 package com.ubi.academicapplication.service;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
 import com.ubi.academicapplication.dto.responsedto.Response;
-import com.ubi.academicapplication.dto.roledto.RoleDto;
 import com.ubi.academicapplication.dto.userdto.UserCreationDto;
 import com.ubi.academicapplication.dto.userdto.UserDto;
-import com.ubi.academicapplication.entity.Role;
 import com.ubi.academicapplication.entity.User;
 import com.ubi.academicapplication.error.CustomException;
 import com.ubi.academicapplication.error.HttpStatusCode;
 import com.ubi.academicapplication.error.Result;
 import com.ubi.academicapplication.mapper.UserMapper;
 import com.ubi.academicapplication.repository.UserRepository;
-import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import lombok.Data;
 
 @Service
 @Data

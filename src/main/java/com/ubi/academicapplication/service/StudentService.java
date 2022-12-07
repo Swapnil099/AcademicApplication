@@ -5,18 +5,14 @@ import java.util.List;
 import com.ubi.academicapplication.dto.responsedto.Response;
 import com.ubi.academicapplication.entity.Student;
 
+public interface StudentService {
+	Response<Student> saveStudent(Student student);
 
+	Response<List<Student>> getStudents();
 
-public interface StudentService{
-	Student saveStudent(Student student);// throws BusinessException;;
-
-	Response<List<Student>>  getStudents();
-	
-//	List<Student> getStudents();
-	
 	Response<Student> getStudentById(int id);
 
-    void  deleteStudent(int id);
-//
-	Student updateStudent(Student student);
+	public Response<Student> deleteById(int id);
+
+	Response<Student> updateStudent(Student student);
 }
