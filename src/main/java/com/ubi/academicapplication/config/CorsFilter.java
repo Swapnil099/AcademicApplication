@@ -21,6 +21,7 @@ public class CorsFilter extends OncePerRequestFilter{
 
 
     private final Logger log = LoggerFactory.getLogger(CorsFilter.class);
+   
     public CorsFilter() {
         log.info("CORSFilter init");
     }
@@ -30,10 +31,7 @@ public class CorsFilter extends OncePerRequestFilter{
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
 
-//		HttpServletRequest req = (HttpServletRequest) request;
-
         response.setHeader("Access-Control-Allow-Origin", headerValue);
-//        response.setHeader("Access-Control-Allow-Credentials", "true");
         response.setHeader("Access-Control-Allow-Methods","*");
         response.setHeader("Access-Control-Max-Age", "3600");
         response.setHeader("Access-Control-Allow-Headers","*");

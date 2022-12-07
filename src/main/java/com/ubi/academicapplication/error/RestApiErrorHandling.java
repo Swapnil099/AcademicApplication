@@ -7,9 +7,11 @@ import com.ubi.academicapplication.dto.responsedto.BaseResponse;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper=false)
 public class RestApiErrorHandling extends BaseResponse {
 
 	private HttpStatusCode status;

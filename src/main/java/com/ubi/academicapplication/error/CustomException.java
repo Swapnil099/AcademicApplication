@@ -1,7 +1,5 @@
 package com.ubi.academicapplication.error;
 
-
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +14,5 @@ public class CustomException extends RuntimeException{
 	private final HttpStatusCode status;
 	private final String exceptionMessage;	
 	private final Result<?> result;
-	
-	
 
 }

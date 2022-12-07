@@ -1,12 +1,10 @@
 package com.ubi.academicapplication.service;
 
+import java.util.List;
+
 import com.ubi.academicapplication.dto.responsedto.Response;
-import com.ubi.academicapplication.dto.roledto.RoleDto;
 import com.ubi.academicapplication.dto.userdto.UserCreationDto;
 import com.ubi.academicapplication.dto.userdto.UserDto;
-import com.ubi.academicapplication.entity.Role;
-
-import java.util.List;
 
 public interface UserService {
 
@@ -14,11 +12,11 @@ public interface UserService {
 
     Response<UserDto> createNewUser(UserCreationDto userCreationDTO);
 
-    UserDto getUserById(String userId);
+    Response<UserDto> getUserById(String userId);
 
     public UserDto getUserByUsername(String username);
 
-    public Boolean deleteUserById(String userId);
+    public Response<UserDto> deleteUserById(String userId);
 
     public boolean isUsernamePasswordValid(String username,String password);
 
