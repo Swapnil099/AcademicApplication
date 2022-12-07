@@ -1,13 +1,10 @@
 package com.ubi.academicapplication.service;
 
+import java.util.List;
+
 import com.ubi.academicapplication.dto.responsedto.Response;
-import com.ubi.academicapplication.dto.roledto.RoleDto;
 import com.ubi.academicapplication.dto.userdto.UserCreationDto;
 import com.ubi.academicapplication.dto.userdto.UserDto;
-import com.ubi.academicapplication.entity.Role;
-import com.ubi.academicapplication.entity.User;
-
-import java.util.List;
 
 public interface UserService {
 

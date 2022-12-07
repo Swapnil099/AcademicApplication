@@ -3,7 +3,6 @@ package com.ubi.academicapplication.error;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
-import com.ubi.academicapplication.error.Result;
 
 @Data
 @RequiredArgsConstructor

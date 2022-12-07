@@ -4,21 +4,19 @@ public enum HttpStatusCode {
 
 	
 	NO_ENTRY_FOUND(101,"Resource Not Found"),
-	
 	NO_STUDENT_NAME_FOUND(202,"No student name found"),
-	// With Custom Error Status Code
-	//INVALID_TABLE_NAME(101, "Invalid table name"),
-	
-	//INVALID_SKU_NAME(102, "Invalid SKU name"),
 	
 	NO_STUDENT_FOUND(108,"No Student Found"),
 	
 	NO_STUDENT_MATCH_WITH_ID(109,"No such student found with such id"),
 	
+	NO_CLASS_MATCH_WITH_ID(109,"No such class found with such id"),
+	
     NO_PAYMENT_FOUND(108,"No Payment Found"),
 	
 	NO_PAYMENT_MATCH_WITH_ID(109,"No Payment found with given Id "),
 	
+
 	NO_SCHOOL_MATCH_WITH_ID(109, "No School Found with Given ID"),
 	
 	NO_SCHOOL_FOUND(108, "No School Found"),
@@ -27,16 +25,12 @@ public enum HttpStatusCode {
 	
 	
 	//INVALID_COLUMN_ATTRIBUTE(103, "Invalid column attribute is provided"), 
-	
+
 	INVALID_JSON_INPUT(105, "Invalid JSON input or JSON format"),
 	
 	UNRECOGNIZED_FIELD(106, "Check sequence of fields or field name"),
 	
-	//UNDER_DELETION_PROCESS(107, "Under deletion process"),
-	
 	RESOURCE_NOT_FOUND(108, "Does not exist"),
-	
-	//TABLE_NOT_UNDER_DELETION(109, "Not under deletion"),
 	
 	RESOURCE_ALREADY_EXISTS(110, "Already exists"),
 
@@ -50,13 +44,10 @@ public enum HttpStatusCode {
 	
 	INVALID_FIELD_VALUE(116, "Value for field : {} is not expected as : {}"), 
 	
-	//SAAS_SERVER_ERROR(119, "This feature is currently down. Try again later"), 
-	
 	CONNECTION_REFUSED(120, "Connection is refused from the server"), 
 	
 	INVALID_CREDENTIALS(121, "Invalid credentials provided"), 
 	
-	// With Primitive Error Status Code
 	BAD_REQUEST_EXCEPTION(400, "Bad Request Occuured"),
 	
 	NULL_POINTER_EXCEPTION(500, "Received Null response"),
@@ -75,10 +66,15 @@ public enum HttpStatusCode {
 	
 	NOT_ACCEPTABLE_ERROR (406, "Request Not accpetable"),
 
-	// SUCCESS STATUS CODES
 	SUCCESSFUL(200, "Request Successfull"),
+
+	STUDENT_DELETED(200,"student deleted successfully"),
+	STUDENT_UPDATED(200,"student updated successfully"),
+	
 	RESOURCE_CREATED_SUCCESSFULLY (201, "Resource Created Successfully");
 
+	
+	
 	private int code;
 	private String message;
 	
