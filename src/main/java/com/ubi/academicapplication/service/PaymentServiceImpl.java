@@ -32,8 +32,9 @@ public class PaymentServiceImpl implements PaymentService {
 	public Response<Payment> makePayment(Payment payment) {
 		
 		Response<Payment> response = new Response<>();
-		 
-		  if(paymentRepository.findById(payment.getId()) != null){
+		Optional<Payment> tempPayment= paymentRepository.findById(payment.getId());
+		res.setData(tempPayment);
+		  if(tempPayment.isPresent()){
 	            throw new CustomException(HttpStatusCode.NO_PAYMENT_FOUND.getCode(),HttpStatusCode.NO_PAYMENT_FOUND, HttpStatusCode.NO_PAYMENT_FOUND.getMessage(),res);
 		  }
 		  Payment savePayment = paymentRepository.save(payment);
@@ -49,11 +50,12 @@ public class PaymentServiceImpl implements PaymentService {
 	public Response<Payment> getSingle(int id) {
 		Response<Payment> getPayment = new Response<Payment>();
 		Optional<Payment> pay = null;
+//		res.setData(pay);
 		pay = this.paymentRepository.findById(id);
 		Result<Payment> paymentResult = new Result<>();
 		if (!pay.isPresent()) {
 			throw new CustomException(HttpStatusCode.NO_PAYMENT_MATCH_WITH_ID.getCode(),
-					HttpStatusCode.NO_PAYMENT_MATCH_WITH_ID, HttpStatusCode.NO_PAYMENT_MATCH_WITH_ID.getMessage(), null);
+					HttpStatusCode.NO_PAYMENT_MATCH_WITH_ID, HttpStatusCode.NO_PAYMENT_MATCH_WITH_ID.getMessage(), paymentResult);
 		}
 		paymentResult.setData(pay.get());
 		getPayment.setStatusCode(HttpStatusCode.PAYMENT_RETRIVED_SUCCESSFULLY.getCode());
