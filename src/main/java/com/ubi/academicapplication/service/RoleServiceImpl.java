@@ -1,9 +1,11 @@
 package com.ubi.academicapplication.service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,17 +37,15 @@ public class RoleServiceImpl implements RoleService {
     Result result;
 
     @Override
-    public Set<Role> getRolesFromString(Set<String> roles) {
-        return roles.stream()
-                .map(roleRepository::getRoleByRoleType)
-                .filter(role -> role!=null)
-                .collect(Collectors.toSet());
+    public Role getRoleFromString(String roleType) {
+        Role role = roleRepository.getRoleByRoleType(roleType);
+        return role;
     }
 
     @Override
     public Response<RoleDto> createRole(RoleCreationDto roleCreationDTO) {
         Role role = roleMapper.toRole(roleCreationDTO);
-        Role currRole = roleRepository.getRoleByRoleType(role.getRoleType());
+        Role currRole = roleRepository.getRoleByRoleType(roleCreationDTO.getRoleType());
         Response<RoleDto> response = new Response<>();
         if(currRole != null) {
             throw new CustomException(
@@ -55,6 +55,13 @@ public class RoleServiceImpl implements RoleService {
                     result);
         }
         Role savedRole = roleRepository.save(role);
+        if(savedRole == null) {
+            throw new CustomException(
+                    HttpStatusCode.INTERNAL_SERVER_ERROR.getCode(),
+                    HttpStatusCode.INTERNAL_SERVER_ERROR,
+                    HttpStatusCode.INTERNAL_SERVER_ERROR.getMessage(),
+                    result);
+        }
         response.setMessage(HttpStatusCode.RESOURCE_CREATED_SUCCESSFULLY.getMessage());
         response.setStatusCode(HttpStatusCode.RESOURCE_CREATED_SUCCESSFULLY.getCode());
         response.setResult(new Result<RoleDto>(roleMapper.toDto(savedRole)));

@@ -10,7 +10,7 @@ import com.ubi.academicapplication.dto.roledto.RoleUserDto;
 import com.ubi.academicapplication.entity.Role;
 
 public interface RoleService {
-    Set<Role> getRolesFromString(Set<String> roles);
+    Role getRoleFromString(String roleTye);
     Response<RoleDto> createRole(RoleCreationDto roleCreationDTO);
     Response<List<RoleDto>> getAllRoles();
 
