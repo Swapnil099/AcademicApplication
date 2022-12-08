@@ -40,12 +40,13 @@ public class StudentServiceImpl implements StudentService {
 		return response;
 	}
 
+	
 	public Response<List<Student>> getStudents(Integer PageNumber, Integer PageSize) {
 		res.setData(null);
 		Pageable paging = PageRequest.of(PageNumber, PageSize);
 		Response<List<Student>> getListofStudent = new Response<>();
 		Page<Student> list = this.repository.findAll(paging);
-		res.setData(list);
+		res.setData(list.toList());
 		Result<List<Student>> result = new Result<>();
 		if (list.getSize() == 0) {
 			throw new CustomException(HttpStatusCode.NO_ENTRY_FOUND.getCode(), HttpStatusCode.NO_ENTRY_FOUND,
