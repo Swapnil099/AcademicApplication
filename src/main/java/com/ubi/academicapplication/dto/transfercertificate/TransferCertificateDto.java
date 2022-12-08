@@ -1,4 +1,4 @@
-package com.ubi.academicapplication.dto.responsedto;
+package com.ubi.academicapplication.dto.transfercertificate;
 
 import java.util.Date;
 
