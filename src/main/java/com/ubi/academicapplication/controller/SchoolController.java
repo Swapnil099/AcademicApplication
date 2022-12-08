@@ -26,7 +26,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 
 @RestController
-@RequestMapping("school/")
+@RequestMapping("/school")
 public class SchoolController {
 
 	Logger logger = LoggerFactory.getLogger(SchoolController.class);

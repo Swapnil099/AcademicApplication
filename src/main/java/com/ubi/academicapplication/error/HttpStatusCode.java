@@ -4,6 +4,7 @@ public enum HttpStatusCode {
 
 	
 	NO_ENTRY_FOUND(101,"Resource Not Found"),
+	
 	NO_STUDENT_NAME_FOUND(202,"No student name found"),
 	
 	NO_STUDENT_FOUND(108,"No Student Found"),
@@ -16,6 +17,20 @@ public enum HttpStatusCode {
 	
 	NO_PAYMENT_MATCH_WITH_ID(109,"No Payment found with given Id "),
 	
+	PAYMENT_RETRIVED_SUCCESSFULLY(200,"Payment Retrived"),
+	
+    NO_EDUCATIONAL_INSTITUTION_FOUND(108,"No Educational Institution Found"),
+	
+	NO_EDUCATIONAL_INSTITUTION_MATCH_WITH_ID(109,"No Educational Institution found with given Id "),
+	
+	NO_EDUCATIONAL_INSTITUTION_NAME_FOUND(202,"No Educational Institution Name Found"),
+	
+	
+	
+	NO_TRANSFERCERTIFICATE_FOUND(108,"No Transfer Certificate Found"),
+	
+	NO_TRANSFERCERTIFICATE_MATCH_WITH_ID(109,"No Transfer Certificate  found with given Id "),
+
 
 	NO_SCHOOL_MATCH_WITH_ID(109, "No School Found with Given ID"),
 	
@@ -25,6 +40,7 @@ public enum HttpStatusCode {
 	
 	
 	//INVALID_COLUMN_ATTRIBUTE(103, "Invalid column attribute is provided"), 
+
 
 	INVALID_JSON_INPUT(105, "Invalid JSON input or JSON format"),
 	
@@ -67,11 +83,28 @@ public enum HttpStatusCode {
 	NOT_ACCEPTABLE_ERROR (406, "Request Not accpetable"),
 
 	SUCCESSFUL(200, "Request Successfull"),
+	
+	TRANSFER_CERTIFICATE_DELETED(200,"Transfer Certificate Deleted Successfully"),
+	
+	RETREIVED_SUCCESSFULLY(200,"Data Retrieved Successfully"),
 
-	STUDENT_DELETED(200,"student deleted successfully"),
-	STUDENT_UPDATED(200,"student updated successfully"),
+	STUDENT_DELETED(200,"Student Deleted Successfully"),
+	
+	STUDENT_UPDATED(200,"Student Updated Successfully"),
+	
+	RESOURCE_CREATED_SUCCESSFULLY (201, "Resource Created Successfully"),
+	
+
+	TRANSFER_CERTIFICATE_UPDATED(200,"Transfer Certificate Updated Successfully");
+
+	PAYMENT_DELETED(200,"Payment deleted successfully"),
+	PAYMENT_UPDATED(200,"Payment updated successfully"),
+	
+	EDUCATIONAL_INSTITUTION_DELETED(200,"Educational Institution deleted successfully"),
+	EDUCATIONAL_INSTITUTION_UPDATED(200,"Educational Institution updated successfully"),
 	
 	RESOURCE_CREATED_SUCCESSFULLY (201, "Resource Created Successfully");
+
 
 	
 	
