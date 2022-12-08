@@ -83,10 +83,20 @@ public enum HttpStatusCode {
 	NOT_ACCEPTABLE_ERROR (406, "Request Not accpetable"),
 
 	SUCCESSFUL(200, "Request Successfull"),
-
-	STUDENT_DELETED(200,"student deleted successfully"),
-	STUDENT_UPDATED(200,"student updated successfully"),
 	
+	TRANSFER_CERTIFICATE_DELETED(200,"Transfer Certificate Deleted Successfully"),
+	
+	RETREIVED_SUCCESSFULLY(200,"Data Retrieved Successfully"),
+
+	STUDENT_DELETED(200,"Student Deleted Successfully"),
+	
+	STUDENT_UPDATED(200,"Student Updated Successfully"),
+	
+	RESOURCE_CREATED_SUCCESSFULLY (201, "Resource Created Successfully"),
+	
+
+	TRANSFER_CERTIFICATE_UPDATED(200,"Transfer Certificate Updated Successfully");
+
 	PAYMENT_DELETED(200,"Payment deleted successfully"),
 	PAYMENT_UPDATED(200,"Payment updated successfully"),
 	
@@ -94,6 +104,7 @@ public enum HttpStatusCode {
 	EDUCATIONAL_INSTITUTION_UPDATED(200,"Educational Institution updated successfully"),
 	
 	RESOURCE_CREATED_SUCCESSFULLY (201, "Resource Created Successfully");
+
 
 	
 	

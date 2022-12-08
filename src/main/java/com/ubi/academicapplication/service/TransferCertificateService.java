@@ -1,26 +1,29 @@
 package com.ubi.academicapplication.service;
 
+import java.text.ParseException;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
 
 import com.ubi.academicapplication.dto.responsedto.Response;
 import com.ubi.academicapplication.entity.TransferCertificate;
+
 public interface TransferCertificateService {
 
-	
-	public Response<List<TransferCertificate>> getTC(); 
-	
-	public Response<TransferCertificate> addTC(TransferCertificate transferCertificate);
+	public Response<List<TransferCertificate>> getAllTransferCertificate();
 
-	public TransferCertificate updateTC(TransferCertificate transferCertificate);
+	public Response<TransferCertificate> addTransferCertificate(TransferCertificate transferCertificate);
 
-	public void deleteTC(int tcId);
+	public Response<TransferCertificate> deleteTransferCertificate(int transferCertificateId);
 
-	public TransferCertificate getSingleTC(int id);
+	public Response<TransferCertificate> getSingleTransferCertificate(int transferCertificateId);
+
+	public Response<TransferCertificate> updateTransferCertificate(TransferCertificate transferCertificate) throws ParseException;
+
 	
-	public Page<TransferCertificate> findTCWithPagination(int offset,int pageSize);
-	
+
+	public Page<TransferCertificate> findTCWithPagination(int offset, int pageSize);
+
 	public List<TransferCertificate> findTCWithSorting(String field);
 
 }
