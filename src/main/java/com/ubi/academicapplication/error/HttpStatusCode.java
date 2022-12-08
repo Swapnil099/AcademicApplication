@@ -37,8 +37,8 @@ public enum HttpStatusCode {
 	NO_SCHOOL_FOUND(108, "No School Found"),
 	
 	NO_SCHOOL_MATCH_WITH_NAME(110, "No School Found With Given NAME"),
-	
-	
+
+
 	//INVALID_COLUMN_ATTRIBUTE(103, "Invalid column attribute is provided"), 
 
 
@@ -93,17 +93,16 @@ public enum HttpStatusCode {
 	STUDENT_UPDATED(200,"Student Updated Successfully"),
 	
 	RESOURCE_CREATED_SUCCESSFULLY (201, "Resource Created Successfully"),
-	
 
-	TRANSFER_CERTIFICATE_UPDATED(200,"Transfer Certificate Updated Successfully");
+
+	TRANSFER_CERTIFICATE_UPDATED(200,"Transfer Certificate Updated Successfully"),
 
 	PAYMENT_DELETED(200,"Payment deleted successfully"),
 	PAYMENT_UPDATED(200,"Payment updated successfully"),
 	
 	EDUCATIONAL_INSTITUTION_DELETED(200,"Educational Institution deleted successfully"),
-	EDUCATIONAL_INSTITUTION_UPDATED(200,"Educational Institution updated successfully"),
-	
-	RESOURCE_CREATED_SUCCESSFULLY (201, "Resource Created Successfully");
+	EDUCATIONAL_INSTITUTION_UPDATED(200,"Educational Institution updated successfully");
+
 
 
 	
