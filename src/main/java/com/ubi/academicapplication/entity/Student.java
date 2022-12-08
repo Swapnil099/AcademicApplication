@@ -1,10 +1,12 @@
 package com.ubi.academicapplication.entity;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,7 +31,10 @@ public class Student {
 	private String motherName;
 	private String motherOccupation;
 	private String gender;
-	private Date joiningDate;
+	
+	@JsonFormat(pattern = "yyyy-MM-dd")
+	private LocalDate joiningDate;
+	
 	private String status;
 	private String verifiedByTeacher;
 	private String verifiedByPrincipal;

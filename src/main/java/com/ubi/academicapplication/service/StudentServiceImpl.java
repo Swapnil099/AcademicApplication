@@ -10,10 +10,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.ubi.academicapplication.dto.responsedto.Response;
+import com.ubi.academicapplication.dto.student.StudentDto;
 import com.ubi.academicapplication.entity.Student;
 import com.ubi.academicapplication.error.CustomException;
 import com.ubi.academicapplication.error.HttpStatusCode;
 import com.ubi.academicapplication.error.Result;
+import com.ubi.academicapplication.mapper.StudentMapper;
 import com.ubi.academicapplication.repository.StudentRepository;
 
 @Service
@@ -23,59 +25,63 @@ public class StudentServiceImpl implements StudentService {
 	Result res;
 
 	@Autowired
+	private StudentMapper studentMapper;
+
+	@Autowired
 	private StudentRepository repository;
 
-	public Response<Student> saveStudent(Student student) {
-		res.setData(null);
-		Response<Student> response = new Response<>();
+	public Response<StudentDto> saveStudent(StudentDto studentDto) {
 
-		if (student.getStudentName().isEmpty() || student.getStudentName().length() == 0) {
+		res.setData(null);
+		Response<StudentDto> response = new Response<>();
+
+		if (studentDto.getStudentName().isEmpty() || studentDto.getStudentName().length() == 0) {
 			throw new CustomException(HttpStatusCode.NO_STUDENT_NAME_FOUND.getCode(),
 					HttpStatusCode.NO_STUDENT_NAME_FOUND, HttpStatusCode.NO_STUDENT_NAME_FOUND.getMessage(), res);
 		}
-		Student savedStudent = repository.save(student);
+		Student savedStudent = repository.save(studentMapper.dtoToEntity(studentDto));
 		response.setStatusCode(HttpStatusCode.RESOURCE_CREATED_SUCCESSFULLY.getCode());
 		response.setMessage(HttpStatusCode.RESOURCE_CREATED_SUCCESSFULLY.getMessage());
-		response.setResult(new Result<Student>(savedStudent));
+		response.setResult(new Result<StudentDto>(studentMapper.entityToDto(savedStudent)));
 		return response;
 	}
 
-	
-	public Response<List<Student>> getStudents(Integer PageNumber, Integer PageSize) {
+	public Response<List<StudentDto>> getStudents(Integer PageNumber, Integer PageSize) {
 		res.setData(null);
 		Pageable paging = PageRequest.of(PageNumber, PageSize);
-		Response<List<Student>> getListofStudent = new Response<>();
+		Response<List<StudentDto>> getListofStudent = new Response<>();
 		Page<Student> list = this.repository.findAll(paging);
-		res.setData(list.toList());
-		Result<List<Student>> result = new Result<>();
+
+		List<StudentDto> studentDtos = studentMapper.entitiesToDtos(list.toList());
+
+		res.setData(studentDtos);
 		if (list.getSize() == 0) {
 			throw new CustomException(HttpStatusCode.NO_ENTRY_FOUND.getCode(), HttpStatusCode.NO_ENTRY_FOUND,
 					HttpStatusCode.NO_ENTRY_FOUND.getMessage(), res);
 		}
-
 		getListofStudent.setStatusCode(200);
 		getListofStudent.setResult(res);
 		return getListofStudent;
 	}
 
-	public Response<Student> getStudentById(int id) {
+	public Response<StudentDto> getStudentById(int id) {
 		res.setData(null);
-		Response<Student> getStudent = new Response<Student>();
+		Response<StudentDto> getStudent = new Response<StudentDto>();
 		Optional<Student> std = null;
 		std = this.repository.findById(id);
-		Result<Student> studentResult = new Result<>();
+		Result<StudentDto> studentResult = new Result<>();
 		if (!std.isPresent()) {
 			throw new CustomException(HttpStatusCode.NO_STUDENT_MATCH_WITH_ID.getCode(),
 					HttpStatusCode.NO_STUDENT_MATCH_WITH_ID, HttpStatusCode.NO_STUDENT_MATCH_WITH_ID.getMessage(), res);
 		}
-		studentResult.setData(std.get());
+		studentResult.setData(studentMapper.entityToDto(std.get()));
 		getStudent.setStatusCode(200);
 		getStudent.setResult(studentResult);
 		return getStudent;
 	}
 
 	@Override
-	public Response<Student> deleteById(int id) {
+	public Response<StudentDto> deleteById(int id) {
 		res.setData(null);
 		Optional<Student> student = repository.findById(id);
 		if (!student.isPresent()) {
@@ -83,40 +89,39 @@ public class StudentServiceImpl implements StudentService {
 					HttpStatusCode.RESOURCE_NOT_FOUND.getMessage(), res);
 		}
 		repository.deleteById(id);
-		Response<Student> response = new Response<>();
+		Response<StudentDto> response = new Response<>();
 		response.setMessage(HttpStatusCode.STUDENT_DELETED.getMessage());
 		response.setStatusCode(HttpStatusCode.STUDENT_DELETED.getCode());
-		response.setResult(new Result<Student>(student.get()));
+		response.setResult(new Result<StudentDto>(studentMapper.entityToDto(student.get())));
 		return response;
 	}
 
-	public Response<Student> updateStudent(Student student) {
+	public Response<StudentDto> updateStudent(StudentDto studentDto) {
 		res.setData(null);
-		Optional<Student> existingStudentContainer = repository.findById(student.getStudentId());
+		Optional<Student> existingStudentContainer = repository.findById(studentDto.getStudentId());
 		if (!existingStudentContainer.isPresent()) {
 			throw new CustomException(HttpStatusCode.NO_STUDENT_FOUND.getCode(), HttpStatusCode.NO_STUDENT_FOUND,
 					HttpStatusCode.NO_STUDENT_FOUND.getMessage(), res);
 		}
-		Student existingStudent = existingStudentContainer.get();
-		existingStudent.setStudentName(student.getStudentName());
-		existingStudent.setStudentStatus(student.isStudentStatus());
-		existingStudent.setCategory(student.getCategory());
-		existingStudent.setFatherName(student.getFatherName());
-		existingStudent.setFatherOccupation(student.getFatherOccupation());
-		existingStudent.setMotherName(student.getMotherName());
-		existingStudent.setMotherOccupation(student.getMotherOccupation());
-		existingStudent.setGender(student.getGender());
-		existingStudent.setJoiningDate(student.getJoiningDate());
-		existingStudent.setStatus(student.getStatus());
-		existingStudent.setVerifiedByTeacher(student.getVerifiedByTeacher());
-		existingStudent.setVerifiedByPrincipal(student.getVerifiedByPrincipal());
-		existingStudent.setVerifiedByRegion(student.getVerifiedByRegion());
-
-		Student updateStudent = repository.save(existingStudent);
-		Response<Student> response = new Response<>();
+		StudentDto existingStudent = studentMapper.entityToDto(existingStudentContainer.get());
+		existingStudent.setStudentName(studentDto.getStudentName());
+		existingStudent.setStudentStatus(studentDto.isStudentStatus());
+		existingStudent.setCategory(studentDto.getCategory());
+		existingStudent.setFatherName(studentDto.getFatherName());
+		existingStudent.setFatherOccupation(studentDto.getFatherOccupation());
+		existingStudent.setMotherName(studentDto.getMotherName());
+		existingStudent.setMotherOccupation(studentDto.getMotherOccupation());
+		existingStudent.setGender(studentDto.getGender());
+		existingStudent.setJoiningDate(studentDto.getJoiningDate());
+		existingStudent.setStatus(studentDto.getStatus());
+		existingStudent.setVerifiedByTeacher(studentDto.getVerifiedByTeacher());
+		existingStudent.setVerifiedByPrincipal(studentDto.getVerifiedByPrincipal());
+		existingStudent.setVerifiedByRegion(studentDto.getVerifiedByRegion());
+		Student updateStudent = repository.save(studentMapper.dtoToEntity(existingStudent));
+		Response<StudentDto> response = new Response<>();
 		response.setMessage(HttpStatusCode.STUDENT_UPDATED.getMessage());
 		response.setStatusCode(HttpStatusCode.STUDENT_UPDATED.getCode());
-		response.setResult(new Result<>(updateStudent));
+		response.setResult(new Result<>(studentMapper.entityToDto(updateStudent)));
 		return response;
 	}
 
