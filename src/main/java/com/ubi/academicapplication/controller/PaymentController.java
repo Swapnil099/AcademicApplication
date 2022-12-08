@@ -24,7 +24,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @RestController
-@RequestMapping("payment/")
+@RequestMapping("/payment")
 public class PaymentController {
 
 	Logger logger = LoggerFactory.getLogger(PaymentController.class);
@@ -34,18 +34,18 @@ public class PaymentController {
 
 	@Operation(summary = "Create New Payment", security = @SecurityRequirement(name = "bearerAuth"))
 	@PostMapping
-	public Response<Payment> insertPayment(@RequestBody Payment payment) { // NOSONAR
+	public ResponseEntity<Response<Payment>> insertPayment(@RequestBody Payment payment) { // NOSONAR
 
-		Response<Payment> pay = this.paymentService.makePayment(payment);
+		Response<Payment> response = this.paymentService.makePayment(payment);
 
-		return pay;
+		return ResponseEntity.ok().body(response);
 
 	}
 
 	@Operation(summary = "Get Payment By Id", security = @SecurityRequirement(name = "bearerAuth"))
 	@GetMapping("/{id}")
-	public ResponseEntity<Response> getSinglePayment(@PathVariable int id) {
-		Response response = paymentService.getSingle(id);
+	public ResponseEntity<Response<Payment>> getSinglePayment(@PathVariable int id) {
+		Response<Payment> response = paymentService.getSingle(id);
 		if (response.getStatusCode() == 200) {
 			return ResponseEntity.status(HttpStatus.OK).body(response);
 		} else {
@@ -67,19 +67,21 @@ public class PaymentController {
 
 	@Operation(summary = "Delete Payment By Id", security = @SecurityRequirement(name = "bearerAuth"))
 	@DeleteMapping("/{id}")
-	public void deletePaymentById(@PathVariable("id") int id) {
+	public ResponseEntity<Response<Payment>> deletePaymentById(@PathVariable("id") int id) {
 
-		this.paymentService.deletePayment(id);
+		Response<Payment> response=this.paymentService.deletePayment(id);
+		
+		return ResponseEntity.ok().body(response);
 
 	}
 
 	@Operation(summary = "Update Payment with Id", security = @SecurityRequirement(name = "bearerAuth"))
 	@PutMapping
-	public ResponseEntity<Payment> updatePayment(@RequestBody Payment pay) { // NOSONAR
+	public ResponseEntity<Response<Payment>> updatePayment(@RequestBody Payment pay) { // NOSONAR
 
-		Payment updatepayment = this.paymentService.updatePay(pay);
+		Response<Payment> updatepayment = this.paymentService.updatePay(pay);
 
-		return new ResponseEntity<>(updatepayment, HttpStatus.CREATED);
+		return ResponseEntity.ok().body(updatepayment);
 
 	}
 

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.ubi.academicapplication.dto.responsedto.Response;
 import com.ubi.academicapplication.entity.Payment;
+import com.ubi.academicapplication.entity.Student;
 
 public interface PaymentService {
 
@@ -13,9 +14,9 @@ public interface PaymentService {
 
 	Response<List<Payment>> getAllPayment();
 	
-	Payment updatePay(Payment pay);
+	Response<Payment> updatePay(Payment pay);
 
-    void deletePayment(int id);
+	public Response<Payment> deletePayment(int id);
 
 	
 //	Response<PaymentDto> makePayment(PaymentDto payment);
