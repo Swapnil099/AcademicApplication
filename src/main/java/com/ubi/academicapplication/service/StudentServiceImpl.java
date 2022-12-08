@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.ubi.academicapplication.dto.responsedto.Response;
@@ -23,7 +26,7 @@ public class StudentServiceImpl implements StudentService {
 	private StudentRepository repository;
 
 	public Response<Student> saveStudent(Student student) {
-
+		res.setData(null);
 		Response<Student> response = new Response<>();
 
 		if (student.getStudentName().isEmpty() || student.getStudentName().length() == 0) {
@@ -37,22 +40,26 @@ public class StudentServiceImpl implements StudentService {
 		return response;
 	}
 
-	public Response<List<Student>> getStudents() {
-		Response<List<Student>> getListofStudent = new Response<List<Student>>();
-		List<Student> list = (List<Student>) this.repository.findAll();
-		res.setData(list);
-		Result<List<Student>> studentsResult = new Result<>();
-		if (list.size() == 0) {
+	
+	public Response<List<Student>> getStudents(Integer PageNumber, Integer PageSize) {
+		res.setData(null);
+		Pageable paging = PageRequest.of(PageNumber, PageSize);
+		Response<List<Student>> getListofStudent = new Response<>();
+		Page<Student> list = this.repository.findAll(paging);
+		res.setData(list.toList());
+		Result<List<Student>> result = new Result<>();
+		if (list.getSize() == 0) {
 			throw new CustomException(HttpStatusCode.NO_ENTRY_FOUND.getCode(), HttpStatusCode.NO_ENTRY_FOUND,
 					HttpStatusCode.NO_ENTRY_FOUND.getMessage(), res);
 		}
-		studentsResult.setData(list);
+
 		getListofStudent.setStatusCode(200);
-		getListofStudent.setResult(studentsResult);
+		getListofStudent.setResult(res);
 		return getListofStudent;
 	}
 
 	public Response<Student> getStudentById(int id) {
+		res.setData(null);
 		Response<Student> getStudent = new Response<Student>();
 		Optional<Student> std = null;
 		std = this.repository.findById(id);
