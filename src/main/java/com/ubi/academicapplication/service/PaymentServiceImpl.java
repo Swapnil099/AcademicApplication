@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.ubi.academicapplication.dto.responsedto.Response;
 import com.ubi.academicapplication.entity.Payment;
+import com.ubi.academicapplication.entity.Student;
 import com.ubi.academicapplication.error.CustomException;
 import com.ubi.academicapplication.error.HttpStatusCode;
 import com.ubi.academicapplication.error.Result;
@@ -31,13 +32,14 @@ public class PaymentServiceImpl implements PaymentService {
 	public Response<Payment> makePayment(Payment payment) {
 		
 		Response<Payment> response = new Response<>();
-		  System.out.println(payment);
-//		  if(paymentRepository.findById(payment.getId()) != null){
-//	            throw new CustomException(HttpStatusCode.NO_PAYMENT_FOUND.getCode(),HttpStatusCode.NO_PAYMENT_FOUND, HttpStatusCode.NO_PAYMENT_FOUND.getMessage(),res);
-//		  }
+		 
+		  if(paymentRepository.findById(payment.getId()) != null){
+	            throw new CustomException(HttpStatusCode.NO_PAYMENT_FOUND.getCode(),HttpStatusCode.NO_PAYMENT_FOUND, HttpStatusCode.NO_PAYMENT_FOUND.getMessage(),res);
+		  }
 		  Payment savePayment = paymentRepository.save(payment);
-		  response.setStatusCode(200);
-		  response.setMessage("Payment saved SuccessFully..!!");
+		  response.setStatusCode(HttpStatusCode.RESOURCE_CREATED_SUCCESSFULLY.getCode());
+		  response.setMessage(HttpStatusCode.RESOURCE_CREATED_SUCCESSFULLY.getMessage());
+		  response.setResult(new Result<Payment>(savePayment));
 			return response;
 	
 	}
@@ -54,7 +56,8 @@ public class PaymentServiceImpl implements PaymentService {
 					HttpStatusCode.NO_PAYMENT_MATCH_WITH_ID, HttpStatusCode.NO_PAYMENT_MATCH_WITH_ID.getMessage(), null);
 		}
 		paymentResult.setData(pay.get());
-		getPayment.setStatusCode(200);
+		getPayment.setStatusCode(HttpStatusCode.PAYMENT_RETRIVED_SUCCESSFULLY.getCode());
+		getPayment.setMessage(HttpStatusCode.PAYMENT_RETRIVED_SUCCESSFULLY.getMessage());
 		getPayment.setResult(paymentResult);
 		return getPayment;
 	}
@@ -71,48 +74,60 @@ public class PaymentServiceImpl implements PaymentService {
 					HttpStatusCode.NO_PAYMENT_FOUND.getMessage(), res);
 		}
 		allPaymentResult.setData(list);
-		getListofPayment.setStatusCode(200);
+		getListofPayment.setStatusCode(HttpStatusCode.PAYMENT_RETRIVED_SUCCESSFULLY.getCode());
+		getListofPayment.setMessage(HttpStatusCode.PAYMENT_RETRIVED_SUCCESSFULLY.getMessage());
 		getListofPayment.setResult(allPaymentResult);
 		return getListofPayment;
 	}
 	
 	
 	@Override
-	public void deletePayment(int id) {
+	public Response<Payment> deletePayment(int id) {
 		
-		try {
-			Response<Payment> deleteStd=new Response<Payment>();
-			paymentRepository.deleteById(id);
-			
-		} catch (IllegalArgumentException e) {
-			throw new CustomException(HttpStatusCode.NO_PAYMENT_FOUND.getCode(), HttpStatusCode.NO_PAYMENT_FOUND,
-					HttpStatusCode.NO_PAYMENT_FOUND.getMessage(), res);
-		} catch (Exception e) {
-			throw new CustomException(HttpStatusCode.NO_PAYMENT_FOUND.getCode(), HttpStatusCode.NO_PAYMENT_FOUND,
-					HttpStatusCode.NO_PAYMENT_FOUND.getMessage(), res);
-
-		}	
+		res.setData(null);
+		Optional<Payment> payment = paymentRepository.findById(id);
+		if (!payment.isPresent()) {
+			throw new CustomException(HttpStatusCode.RESOURCE_NOT_FOUND.getCode(), HttpStatusCode.RESOURCE_NOT_FOUND,
+					HttpStatusCode.RESOURCE_NOT_FOUND.getMessage(), res);
+		}
+		paymentRepository.deleteById(id);
+		Response<Payment> response = new Response<>();
+		response.setMessage(HttpStatusCode.PAYMENT_DELETED.getMessage());
+		response.setStatusCode(HttpStatusCode.PAYMENT_DELETED.getCode());
+		response.setResult(new Result<Payment>(payment.get()));
+		return response;
 
 	}
 
 	
 	@Override
-	public Payment updatePay(Payment pay) {
+	public Response<Payment> updatePay(Payment pay) {
 
 
-		return this.paymentRepository.save(pay);
+		res.setData(null);
+		Optional<Payment> existingPaymentContainer = paymentRepository.findById(pay.getId());
+		if (!existingPaymentContainer.isPresent()) {
+			throw new CustomException(HttpStatusCode.NO_PAYMENT_FOUND.getCode(), HttpStatusCode.NO_PAYMENT_FOUND,
+					HttpStatusCode.NO_PAYMENT_FOUND.getMessage(), res);
+		}
+		Payment existingPayment = existingPaymentContainer.get();
+		existingPayment.setDate(pay.getDate());
+		existingPayment.setTotalFees(pay.getTotalFees());
+		existingPayment.setPaidFees(pay.getPaidFees());
+		existingPayment.setBalanceFees(pay.getBalanceFees());
+		existingPayment.setDescription(pay.getDescription());
+		existingPayment.setRemark(pay.getRemark());
+		existingPayment.setStatus(pay.isStatus());
+		
+
+		Payment updatePayment = paymentRepository.save(existingPayment);
+		Response<Payment> response = new Response<>();
+		response.setMessage(HttpStatusCode.PAYMENT_UPDATED.getMessage());
+		response.setStatusCode(HttpStatusCode.PAYMENT_UPDATED.getCode());
+		response.setResult(new Result<>(updatePayment));
+		return response;
 	}
 	
-
-
-
-
-
-
-
-
 	
-
-
-
 }
+	
