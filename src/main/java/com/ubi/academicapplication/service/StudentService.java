@@ -8,7 +8,7 @@ import com.ubi.academicapplication.entity.Student;
 public interface StudentService {
 	Response<Student> saveStudent(Student student);
 
-	Response<List<Student>> getStudents();
+	Response<List<Student>> getStudents(Integer PageNumber, Integer PageSize);
 
 	Response<Student> getStudentById(int id);
 

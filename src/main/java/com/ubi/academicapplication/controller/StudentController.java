@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ubi.academicapplication.dto.responsedto.Response;
@@ -35,13 +36,24 @@ public class StudentController {
 		return ResponseEntity.ok().body(response);
 	}
 
+//	@Operation(summary = "Get All Student", security = @SecurityRequirement(name = "bearerAuth"))
+//	@GetMapping
+//	public ResponseEntity<Response<List<Student>>> getStudents() {
+//		Response<List<Student>> response = service.getStudents();
+//		return ResponseEntity.ok().body(response);
+//
+//	}
 	@Operation(summary = "Get All Student", security = @SecurityRequirement(name = "bearerAuth"))
 	@GetMapping
-	public ResponseEntity<Response<List<Student>>> getStudents() {
-		Response<List<Student>> response = service.getStudents();
+	public ResponseEntity<Response<List<Student>>> getStudents(	@RequestParam(value = "PageNumber", defaultValue = "0", required = false) Integer pageNumber,
+			@RequestParam(value = "PageSize", defaultValue = "5", required = false) Integer pageSize) {
+		Response<List<Student>> response = service.getStudents(pageNumber, pageSize);
 		return ResponseEntity.ok().body(response);
 
 	}
+	
+	
+	
 
 	@DeleteMapping("/{id}")
 	@Operation(summary = "Delete Student By Id", security = @SecurityRequirement(name = "bearerAuth"))
