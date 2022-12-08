@@ -7,6 +7,5 @@ import lombok.*;
 @AllArgsConstructor
 public class RoleUserDto {
     Long id;
-    String firstName;
-    String lastName;
+    String username;
 }

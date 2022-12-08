@@ -20,35 +20,31 @@ public class User implements UserDetails {
 	private Long id;
 
 	@Column(nullable = false)
-	private String firstName;
-
-	@Column(nullable = false)
-	private String lastName;
-
-	@Column(nullable = false)
 	private String username;
 
 	@Column(nullable = false)
 	private String password;
 
-	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-	@JoinTable(name = "USER_ROLE",
-				joinColumns = {@JoinColumn(name = "USER_ID")},
-				inverseJoinColumns = {@JoinColumn(name = "ROLE_ID")})
-	private Set<Role> roles;
+	@Column
+	private Boolean isEnabled;
 
-	public User(String firstName, String lastName, String username, String password, Set<Role> roles) {
-		this.firstName = firstName;
-		this.lastName = lastName;
+	@ManyToOne
+	@JoinColumn(name="roleId",referencedColumnName = "id", nullable=true)
+	private Role role;
+
+	public User(String username, String password, Role role) {
 		this.username = username;
 		this.password = password;
-		this.roles = roles;
+		this.isEnabled = true;
+		this.role = role;
 	}
 
 	// UserDetails Methods
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return this.getRoles().stream().map(role -> new Authority(role.getRoleType())).collect(Collectors.toSet());
+		Set<Authority> roles = new HashSet<>();
+		if(this.role != null) roles.add(new Authority(role.getRoleType()));
+		return roles;
 	}
 
 	@Override

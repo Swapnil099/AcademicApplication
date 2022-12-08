@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.ubi.academicapplication.entity.Role;
+import com.ubi.academicapplication.repository.RoleRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -28,7 +31,11 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Autowired
+    private RoleService roleService;
+
+    @Autowired
     private UserMapper userMapper;
+
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -59,6 +66,7 @@ public class UserServiceImpl implements UserService {
         }
 
         User user = userMapper.toUser(userCreationDTO);
+        Role role = roleService.getRoleFromString(userCreationDTO.getRoleType());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         User currUser = userRepository.save(user);
         if(currUser == null) {
@@ -87,8 +95,8 @@ public class UserServiceImpl implements UserService {
         }
         User user = currUser.get();
         UserDto userDto = userMapper.toDto(user);
-        response.setStatusCode(HttpStatusCode.RESOURCE_NOT_FOUND.getCode());
-        response.setMessage(HttpStatusCode.RESOURCE_NOT_FOUND.getMessage());
+        response.setStatusCode(HttpStatusCode.SUCCESSFUL.getCode());
+        response.setMessage(HttpStatusCode.SUCCESSFUL.getMessage());
         response.setResult(new Result<UserDto>(userDto));
         return response;
     }
@@ -125,11 +133,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public String getRoleByUsername(String username) {
         UserDto user = this.getUserByUsername(username);
-        if(user.getRoles().size() > 0) {
-            for (String role : user.getRoles()) {
-                return role;
-            }
-        }
-        return "";
+        return user.getRoleType();
     }
 }

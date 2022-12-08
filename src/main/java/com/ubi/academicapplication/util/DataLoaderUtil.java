@@ -36,58 +36,38 @@ public class DataLoaderUtil implements ApplicationRunner {
 
     private void loadUserInDatabase() {
         // adding super admin
-        Set<String> roles = new HashSet<>();
-        roles.add("ROLE_SUPER_ADMIN");
         UserCreationDto userCreationDTO = new UserCreationDto(
-                "john",
-                "doe",
                 "superadmin",
                 "superadmin",
-                roles
+                "ROLE_SUPER_ADMIN"
         );
 
         // adding edu HQ Admin
-        Set<String> roles2 = new HashSet<>();
-        roles2.add("ROLE_EDUCATIONAL_INSTITUTE_HQ_ADMIN");
         UserCreationDto userCreationDTO2 = new UserCreationDto(
-                "jimmy",
-                "doe",
                 "hqadmin",
                 "hqadmin",
-                roles2
+                "ROLE_EDUCATIONAL_INSTITUTE_HQ_ADMIN"
         );
 
         // adding ROLE_REGIONAL_OFFICE_ADMIN
-        Set<String> roles3 = new HashSet<>();
-        roles3.add("ROLE_REGIONAL_OFFICE_ADMIN");
         UserCreationDto userCreationDTO3 = new UserCreationDto(
-                "john",
-                "doe",
                 "rgadmin",
                 "rgadmin",
-                roles3
+                "ROLE_REGIONAL_OFFICE_ADMIN"
         );
 
         // adding ROLE_PRINCIPAL
-        Set<String> roles4 = new HashSet<>();
-        roles4.add("ROLE_PRINCIPAL");
         UserCreationDto userCreationDTO4 = new UserCreationDto(
-                "joss",
-                "doe",
                 "principal",
                 "principal",
-                roles4
+                "ROLE_PRINCIPAL"
         );
 
         // adding ROLE_TEACHER
-        Set<String> roles5 = new HashSet<>();
-        roles5.add("ROLE_TEACHER");
         UserCreationDto userCreationDTO5 = new UserCreationDto(
-                "jeff",
-                "doe",
                 "teacher",
                 "teacher",
-                roles5
+                "ROLE_TEACHER"
         );
 
         userService.createNewUser(userCreationDTO);
