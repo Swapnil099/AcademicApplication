@@ -14,6 +14,10 @@ public enum HttpStatusCode {
 	NO_CLASS_MATCH_WITH_ID(109,"No such class found with such id"),
 	
     NO_PAYMENT_FOUND(108,"No Payment Found"),
+    
+    NO_CLASSCODE_FOUND(202,"No class code found"),
+    
+    NO_CLASS_FOUND(108,"No class found"),
 	
 	NO_PAYMENT_MATCH_WITH_ID(109,"No Payment found with given Id "),
 	
@@ -37,8 +41,8 @@ public enum HttpStatusCode {
 	NO_SCHOOL_FOUND(108, "No School Found"),
 	
 	NO_SCHOOL_MATCH_WITH_NAME(110, "No School Found With Given NAME"),
-	
-	
+
+
 	//INVALID_COLUMN_ATTRIBUTE(103, "Invalid column attribute is provided"), 
 
 
@@ -83,17 +87,31 @@ public enum HttpStatusCode {
 	NOT_ACCEPTABLE_ERROR (406, "Request Not accpetable"),
 
 	SUCCESSFUL(200, "Request Successfull"),
-
-	STUDENT_DELETED(200,"student deleted successfully"),
-	STUDENT_UPDATED(200,"student updated successfully"),
 	
+	TRANSFER_CERTIFICATE_DELETED(200,"Transfer Certificate Deleted Successfully"),
+	
+	RETREIVED_SUCCESSFULLY(200,"Data Retrieved Successfully"),
+
+	STUDENT_DELETED(200,"Student Deleted Successfully"),
+	
+	STUDENT_UPDATED(200,"Student Updated Successfully"),
+	
+	CLASS_DELETED(200,"class deleted successfully"),
+	
+	CLASS_UPDATED(200,"Class updated successfully"),
+	
+	RESOURCE_CREATED_SUCCESSFULLY (201, "Resource Created Successfully"),
+
+
+	TRANSFER_CERTIFICATE_UPDATED(200,"Transfer Certificate Updated Successfully"),
+
 	PAYMENT_DELETED(200,"Payment deleted successfully"),
 	PAYMENT_UPDATED(200,"Payment updated successfully"),
 	
 	EDUCATIONAL_INSTITUTION_DELETED(200,"Educational Institution deleted successfully"),
-	EDUCATIONAL_INSTITUTION_UPDATED(200,"Educational Institution updated successfully"),
-	
-	RESOURCE_CREATED_SUCCESSFULLY (201, "Resource Created Successfully");
+	EDUCATIONAL_INSTITUTION_UPDATED(200,"Educational Institution updated successfully");
+
+
 
 	
 	

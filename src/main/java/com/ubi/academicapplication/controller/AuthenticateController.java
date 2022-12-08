@@ -60,7 +60,7 @@ public class AuthenticateController {
 
         response.setStatusCode(HttpStatusCode.SUCCESSFUL.getCode());
         response.setMessage(HttpStatusCode.SUCCESSFUL.getMessage());
-        response.setResult(new Result<JwtResponse>(new JwtResponse(token,roleName)));
+        response.setResult(new Result<>(new JwtResponse(token,roleName)));
         return response;
     }
 

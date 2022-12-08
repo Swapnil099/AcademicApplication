@@ -25,7 +25,7 @@ public class RoleMapper {
     }
 
     public RoleUserDto toRoleUserDTO(User user){
-        return new RoleUserDto(user.getId(),user.getFirstName(),user.getLastName());
+        return new RoleUserDto(user.getId(),user.getUsername());
 
     }
 

@@ -1,5 +1,8 @@
 package com.ubi.academicapplication.config;
 
+import com.ubi.academicapplication.error.CustomException;
+import com.ubi.academicapplication.error.HttpStatusCode;
+import com.ubi.academicapplication.error.Result;
 import com.ubi.academicapplication.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -32,33 +35,32 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String jwtToken = null;
 
         if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
-            
-        	jwtToken = requestTokenHeader.substring(7);
 
+        	jwtToken = requestTokenHeader.substring(7);
             try {
                 username = jwtUtil.extractUsername(jwtToken);
-            } catch (IllegalArgumentException e) {
-                System.out.println("Unable to get JWT Token");
             } catch (Exception e) {
-                System.out.println(e.getMessage());
+                throw new CustomException(
+                        HttpStatusCode.UNAUTHORIZED_EXCEPTION.getCode(),
+                        HttpStatusCode.UNAUTHORIZED_EXCEPTION,
+                        HttpStatusCode.UNAUTHORIZED_EXCEPTION.getMessage(),
+                        new Result<>());
             }
-        } else {
-            System.out.println("JWT token does not start with Bearer");
         }
-
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-
             try {
                 if (jwtUtil.validateToken(jwtToken, userDetails)) {
-
                     UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                     usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
                 }
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                throw new CustomException(
+                        HttpStatusCode.UNAUTHORIZED_EXCEPTION.getCode(),
+                        HttpStatusCode.UNAUTHORIZED_EXCEPTION,
+                        HttpStatusCode.UNAUTHORIZED_EXCEPTION.getMessage(),
+                        new Result<>());
             }
         }
         filterChain.doFilter(request, response);

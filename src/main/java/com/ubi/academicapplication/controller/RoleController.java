@@ -32,8 +32,8 @@ public class RoleController {
     @Autowired
     RoleService roleService;
 
-    @Autowired
-    RoleMapper roleMapper;
+//    @Autowired
+//    RoleMapper roleMapper;
 
     @Operation(summary = "Create New Role", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping

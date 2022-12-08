@@ -8,11 +8,12 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @SpringBootApplication
 @EnableWebMvc
 public class AcademicApplication  {
-	@Bean
-	public ModelMapper modelMapper(){
-		return new ModelMapper();
-	}
 	public static void main(String[] args) {
 		SpringApplication.run(AcademicApplication.class, args);
+	}
+
+	@Bean
+	ModelMapper createModelMapperBean(){
+		return new ModelMapper();
 	}
 }

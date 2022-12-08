@@ -9,6 +9,6 @@ import java.util.Set;
 @Data @RequiredArgsConstructor @AllArgsConstructor
 public class UserDto {
     private Long id;
-    private String fullName;
-    private Set<String> roles;
+    private String username;
+    private String roleType;
 }
