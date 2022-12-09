@@ -1,14 +1,15 @@
 package com.ubi.academicapplication.dto.transfercertificate;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
-@Data @RequiredArgsConstructor
+@Data
+@NoArgsConstructor
 @AllArgsConstructor
 public class TransferCertificateDto {
 	private int id;
-	private Date dateOfIssue;
+	private LocalDate dateOfIssue;
 }
