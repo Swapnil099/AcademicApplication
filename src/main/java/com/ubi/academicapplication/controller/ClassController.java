@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ubi.academicapplication.dto.classdto.ClassDto;
 import com.ubi.academicapplication.dto.responsedto.Response;
-import com.ubi.academicapplication.entity.ClassDetail;
 import com.ubi.academicapplication.service.ClassServiceImpl;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -34,22 +34,21 @@ public class ClassController
 
 	@Autowired
 	private ClassServiceImpl classServiceImpl;
-
-	//@Autowired
-	//private ClassMapper classMapper;
+	
 
 	@PostMapping
 	@Operation(summary = "Add Class Details", security = @SecurityRequirement(name = "bearerAuth"))
-	public ResponseEntity<Response<ClassDetail>> addClassDetails(@RequestBody ClassDetail classDetail) {
-		Response<ClassDetail> response = classServiceImpl.addClassDetails(classDetail);
+	public ResponseEntity<Response<ClassDto>> addClassDetails(@RequestBody ClassDto classDto) {
+		Response<ClassDto> response = classServiceImpl.addClassDetails(classDto);
 		return ResponseEntity.ok().body(response);
 	}
 	
 	@Operation(summary = "Get All Class details", security = @SecurityRequirement(name = "bearerAuth"))
 	@GetMapping
-	public ResponseEntity<Response<List<ClassDetail>>> getClassDetails(	@RequestParam(value = "PageNumber", defaultValue = "0", required = false) Integer pageNumber,
+	public ResponseEntity<Response<List<ClassDto>>> getClassDetails(	
+			@RequestParam(value = "PageNumber", defaultValue = "0", required = false) Integer pageNumber,
 			@RequestParam(value = "PageSize", defaultValue = "5", required = false) Integer pageSize) {
-		Response<List<ClassDetail>> response = classServiceImpl.getClassDetails(pageNumber, pageSize);
+		Response<List<ClassDto>> response = classServiceImpl.getClassDetails(pageNumber, pageSize);
 		return ResponseEntity.ok().body(response);
 
 	}
@@ -67,29 +66,19 @@ public class ClassController
 
 	@DeleteMapping("{classid}")
 	@Operation(summary = "Delete Class By Id", security = @SecurityRequirement(name = "bearerAuth"))
-	public ResponseEntity<Response<ClassDetail>> deleteClassId(@PathVariable Long classid) {
-		Response<ClassDetail> response = classServiceImpl.deleteClassById(classid);
+	public ResponseEntity<Response<ClassDto>> deleteClassId(@PathVariable Long classid) {
+		Response<ClassDto> response = classServiceImpl.deleteClassById(classid);
 		return ResponseEntity.ok().body(response);
 
 	}
 
 	@PutMapping
 	@Operation(summary = "Update Class Details", security = @SecurityRequirement(name = "bearerAuth"))
-	public ResponseEntity<Response> updateClassDetails(@RequestBody ClassDetail classDetail) {
-		Response<ClassDetail> response = classServiceImpl.updateClassDetails(classDetail);
+	public ResponseEntity<Response> updateClassDetails(@RequestBody ClassDto classDetail) {
+		Response<ClassDto> response = classServiceImpl.updateClassDetails(classDetail);
 		return ResponseEntity.ok().body(response);
 	}
 
-	//	// Sorting as per required fields
-
-	//	@GetMapping("/sort/{field}")
-	//	@Operation(summary = "Sort Class Details", security = @SecurityRequirement(name = "bearerAuth"))
-	//	public ResponseEntity<List<ClassDetails>> getAllClassesBySorting(@PathVariable String field){
-	//		LOGGER.info("getAllClassesBySorting method started..");
-	//      List<ClassDetails> classes=this.classServiceImpl.findClassWithSorting(field);
-	//		LOGGER.info("getAllClassesBySorting method ended..");
-	//		return new ResponseEntity<List<ClassDetails>>(classes,HttpStatus.OK);
-	//	}
 
 
 }
