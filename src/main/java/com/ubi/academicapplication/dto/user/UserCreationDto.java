@@ -1,15 +1,13 @@
-package com.ubi.academicapplication.dto.userdto;
+package com.ubi.academicapplication.dto.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
-import java.util.Set;
-
 @Data @RequiredArgsConstructor
 @AllArgsConstructor
 public class UserCreationDto {
     private String username;
-    private String password;
+    private Boolean isActivate;
     private String roleType;
 }

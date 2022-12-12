@@ -2,19 +2,15 @@ package com.ubi.academicapplication.controller;
 
 import java.util.List;
 
+import com.ubi.academicapplication.dto.user.PasswordChangeDto;
+import com.ubi.academicapplication.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.ubi.academicapplication.dto.responsedto.Response;
-import com.ubi.academicapplication.dto.userdto.UserCreationDto;
-import com.ubi.academicapplication.dto.userdto.UserDto;
+import com.ubi.academicapplication.dto.response.Response;
+import com.ubi.academicapplication.dto.user.UserCreationDto;
+import com.ubi.academicapplication.dto.user.UserDto;
 import com.ubi.academicapplication.security.roleaccessinterface.IsPrincipal;
 import com.ubi.academicapplication.service.UserService;
 
@@ -30,9 +26,9 @@ public class UserController {
 
     @Operation(summary = "Create New User", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping
-    public ResponseEntity<Response<UserDto>> createUser(@RequestBody UserCreationDto userCreationDTO){
-        Response<UserDto> userDtoResponse = userService.createNewUser(userCreationDTO);
-        return ResponseEntity.ok().body(userDtoResponse);
+    public ResponseEntity<Response<User>> createUser(@RequestBody UserCreationDto userCreationDTO){
+        Response<User> userResponse = userService.createNewUser(userCreationDTO);
+        return ResponseEntity.ok().body(userResponse);
     }
 
     @Operation(summary = "Get All Users", security = @SecurityRequirement(name = "bearerAuth"))
@@ -57,4 +53,31 @@ public class UserController {
         return ResponseEntity.ok().body(response);
     }
 
+    @Operation(summary = "Change Active Status To True Of User By Id", security = @SecurityRequirement(name = "bearerAuth"))
+    @PatchMapping("/activate/{userId}")
+    public ResponseEntity<Response<UserDto>> activateUserById(@PathVariable String userId) {
+        Response<UserDto> response = userService.changeActiveStatusToTrue(userId);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @Operation(summary = "Change Active Status To False Of User By Id", security = @SecurityRequirement(name = "bearerAuth"))
+    @PatchMapping("/deactivate/{userId}")
+    public ResponseEntity<Response<UserDto>> deactivateUserById(@PathVariable String userId) {
+        Response<UserDto> response = userService.changeActiveStatusToFalse(userId);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @Operation(summary = "Change Password Of User By Id", security = @SecurityRequirement(name = "bearerAuth"))
+    @PatchMapping ("/password/{userId}")
+    public ResponseEntity<Response<String>> deactivateUserById(@PathVariable String userId, @RequestBody PasswordChangeDto passwordChangeDto) {
+        Response<String> response = userService.changeSelfPassword(userId, passwordChangeDto.getNewPassword());
+        return ResponseEntity.ok().body(response);
+    }
+
+    @Operation(summary = "Update User By Id", security = @SecurityRequirement(name = "bearerAuth"))
+    @PatchMapping ("/{userId}")
+    public ResponseEntity<Response<UserDto>> updateUserById(@PathVariable String userId, @RequestBody UserCreationDto userCreationDto) {
+        Response<UserDto> response = userService.updateUserById(userId, userCreationDto);
+        return ResponseEntity.ok().body(response);
+    }
 }

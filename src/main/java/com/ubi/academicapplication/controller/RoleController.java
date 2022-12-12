@@ -3,22 +3,16 @@ package com.ubi.academicapplication.controller;
 import java.util.List;
 import java.util.Set;
 
+import com.ubi.academicapplication.dto.user.UserCreationDto;
+import com.ubi.academicapplication.dto.user.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.ubi.academicapplication.dto.responsedto.Response;
-import com.ubi.academicapplication.dto.roledto.RoleCreationDto;
-import com.ubi.academicapplication.dto.roledto.RoleDto;
-import com.ubi.academicapplication.dto.roledto.RoleUserDto;
-import com.ubi.academicapplication.mapper.RoleMapper;
+import com.ubi.academicapplication.dto.response.Response;
+import com.ubi.academicapplication.dto.role.RoleCreationDto;
+import com.ubi.academicapplication.dto.role.RoleDto;
+import com.ubi.academicapplication.dto.role.RoleUserDto;
 import com.ubi.academicapplication.security.roleaccessinterface.IsPrincipal;
 import com.ubi.academicapplication.service.RoleService;
 
@@ -32,8 +26,6 @@ public class RoleController {
     @Autowired
     RoleService roleService;
 
-//    @Autowired
-//    RoleMapper roleMapper;
 
     @Operation(summary = "Create New Role", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping
@@ -62,6 +54,13 @@ public class RoleController {
     public ResponseEntity<Response<RoleDto>> deleteRoleByRoleType(@PathVariable String roleType) {
         Response<RoleDto> roleDto = roleService.deleteRole(roleType);
         return ResponseEntity.ok().body(roleDto);
+    }
+
+    @Operation(summary = "Update Role By Id", security = @SecurityRequirement(name = "bearerAuth"))
+    @PatchMapping("/{roleId}")
+    public ResponseEntity<Response<RoleDto>> updateUserById(@PathVariable String roleId, @RequestBody RoleCreationDto roleCreationDto) {
+        Response<RoleDto> response = roleService.updateRoleById(roleId, roleCreationDto);
+        return ResponseEntity.ok().body(response);
     }
 
 }

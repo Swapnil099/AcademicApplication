@@ -1,16 +1,19 @@
 package com.ubi.academicapplication.util;
 
-import com.ubi.academicapplication.dto.roledto.RoleCreationDto;
-import com.ubi.academicapplication.dto.userdto.UserCreationDto;
-import com.ubi.academicapplication.dto.userdto.UserDto;
+import com.ubi.academicapplication.dto.role.RoleCreationDto;
+import com.ubi.academicapplication.dto.user.UserCreationDto;
+import com.ubi.academicapplication.dto.user.UserDto;
+import com.ubi.academicapplication.entity.Role;
+import com.ubi.academicapplication.entity.User;
+import com.ubi.academicapplication.repository.RoleRepository;
+import com.ubi.academicapplication.repository.UserRepository;
 import com.ubi.academicapplication.service.RoleService;
 import com.ubi.academicapplication.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import java.util.HashSet;
-import java.util.Set;
 
 @Component
 public class DataLoaderUtil implements ApplicationRunner {
@@ -20,6 +23,12 @@ public class DataLoaderUtil implements ApplicationRunner {
 
     @Autowired
     private RoleService roleService;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     private void loadRolesInDatabase(){
         RoleCreationDto roleSuperAdmin = new RoleCreationDto("Super Admin","ROLE_SUPER_ADMIN");
@@ -36,45 +45,25 @@ public class DataLoaderUtil implements ApplicationRunner {
 
     private void loadUserInDatabase() {
         // adding super admin
-        UserCreationDto userCreationDTO = new UserCreationDto(
-                "superadmin",
-                "superadmin",
-                "ROLE_SUPER_ADMIN"
-        );
 
-        // adding edu HQ Admin
-        UserCreationDto userCreationDTO2 = new UserCreationDto(
-                "hqadmin",
-                "hqadmin",
-                "ROLE_EDUCATIONAL_INSTITUTE_HQ_ADMIN"
-        );
+        Role roleSuperAdmin = roleService.getRoleByRoleType("ROLE_SUPER_ADMIN");
+        Role roleEducationHQAdmin = roleService.getRoleByRoleType("ROLE_EDUCATIONAL_INSTITUTE_HQ_ADMIN");
+        Role roleRegionalAdmin = roleService.getRoleByRoleType("ROLE_REGIONAL_OFFICE_ADMIN");
+        Role rolePrincipal = roleService.getRoleByRoleType("ROLE_PRINCIPAL");
+        Role roleTeacher = roleService.getRoleByRoleType("ROLE_TEACHER");
 
-        // adding ROLE_REGIONAL_OFFICE_ADMIN
-        UserCreationDto userCreationDTO3 = new UserCreationDto(
-                "rgadmin",
-                "rgadmin",
-                "ROLE_REGIONAL_OFFICE_ADMIN"
-        );
+        User superAdminUser = new User("superadmin",passwordEncoder.encode("superadmin"),true,roleSuperAdmin);
+        User hqAdminUser = new User("hqadmin",passwordEncoder.encode("hqadmin"),true,roleEducationHQAdmin);
+        User rgAdminUser = new User("rgadmin",passwordEncoder.encode("rgadmin"),true,roleRegionalAdmin);
+        User principalUser = new User("principal",passwordEncoder.encode("principal"),true,rolePrincipal);
+        User teacherUser = new User("teacher",passwordEncoder.encode("teacher"),true,roleTeacher);
 
-        // adding ROLE_PRINCIPAL
-        UserCreationDto userCreationDTO4 = new UserCreationDto(
-                "principal",
-                "principal",
-                "ROLE_PRINCIPAL"
-        );
 
-        // adding ROLE_TEACHER
-        UserCreationDto userCreationDTO5 = new UserCreationDto(
-                "teacher",
-                "teacher",
-                "ROLE_TEACHER"
-        );
-
-        userService.createNewUser(userCreationDTO);
-        userService.createNewUser(userCreationDTO2);
-        userService.createNewUser(userCreationDTO3);
-        userService.createNewUser(userCreationDTO4);
-        userService.createNewUser(userCreationDTO5);
+        userRepository.save(superAdminUser);
+        userRepository.save(hqAdminUser);
+        userRepository.save(rgAdminUser);
+        userRepository.save(principalUser);
+        userRepository.save(teacherUser);
     }
 
     @Override

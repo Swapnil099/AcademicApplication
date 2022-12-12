@@ -1,4 +1,4 @@
-package com.ubi.academicapplication.dto.schooldto;
+package com.ubi.academicapplication.dto.school;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

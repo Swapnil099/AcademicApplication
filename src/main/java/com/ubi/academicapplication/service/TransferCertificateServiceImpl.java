@@ -1,7 +1,6 @@
 package com.ubi.academicapplication.service;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -14,8 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.ubi.academicapplication.dto.responsedto.Response;
-import com.ubi.academicapplication.entity.Student;
+import com.ubi.academicapplication.dto.response.Response;
 import com.ubi.academicapplication.entity.TransferCertificate;
 import com.ubi.academicapplication.error.CustomException;
 import com.ubi.academicapplication.error.HttpStatusCode;

@@ -1,9 +1,6 @@
-package com.ubi.academicapplication.dto.responsedto;
-
-import java.util.List;
+package com.ubi.academicapplication.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.ubi.academicapplication.entity.Student;
 import com.ubi.academicapplication.error.Result;
 
 import lombok.AllArgsConstructor;

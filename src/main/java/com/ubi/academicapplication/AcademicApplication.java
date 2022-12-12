@@ -14,8 +14,4 @@ public class AcademicApplication  {
 		SpringApplication.run(AcademicApplication.class, args);
 	}
 
-	@Bean
-	ModelMapper createModelMapperBean(){
-		return new ModelMapper();
-	}
 }

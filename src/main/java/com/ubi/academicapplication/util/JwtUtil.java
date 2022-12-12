@@ -18,6 +18,7 @@ public class JwtUtil {
     @Value("${SECRET_KEY}")
     private String secretKey;
 
+
     public String extractUsername(String token) throws Exception {
         return extractClaim(token, Claims::getSubject);
     }

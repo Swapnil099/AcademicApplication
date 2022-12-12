@@ -1,7 +1,8 @@
 package com.ubi.academicapplication.service;
-import com.ubi.academicapplication.dto.responsedto.Response;
-import com.ubi.academicapplication.dto.userdto.UserCreationDto;
-import com.ubi.academicapplication.dto.userdto.UserDto;
+import com.ubi.academicapplication.dto.response.Response;
+import com.ubi.academicapplication.dto.user.UserCreationDto;
+import com.ubi.academicapplication.dto.user.UserDto;
+import com.ubi.academicapplication.entity.User;
 
 import java.util.List;
 
@@ -9,15 +10,23 @@ public interface UserService {
 
     Response<List<UserDto>> getAllUsers();
 
-    Response<UserDto> createNewUser(UserCreationDto userCreationDTO);
+    Response<User> createNewUser(UserCreationDto userCreationDTO);
 
     Response<UserDto> getUserById(String userId);
 
-    public UserDto getUserByUsername(String username);
+     UserDto getUserByUsername(String username);
 
-    public Response<UserDto> deleteUserById(String userId);
+     Response<UserDto> deleteUserById(String userId);
 
-    public boolean isUsernamePasswordValid(String username,String password);
+     boolean isUsernamePasswordValid(String username,String password);
 
-    public String getRoleByUsername(String username);
+     String getRoleByUsername(String username);
+
+     Response<UserDto> changeActiveStatusToTrue(String userId);
+
+     Response<UserDto> changeActiveStatusToFalse(String userId);
+
+     Response<String> changeSelfPassword(String userId, String newPassword);
+
+     Response<UserDto> updateUserById(String userId,UserCreationDto userCreationDto);
 }

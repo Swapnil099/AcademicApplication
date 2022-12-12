@@ -8,9 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ubi.academicapplication.dto.responsedto.Response;
+import com.ubi.academicapplication.dto.response.Response;
 import com.ubi.academicapplication.entity.Payment;
-import com.ubi.academicapplication.entity.Student;
 import com.ubi.academicapplication.error.CustomException;
 import com.ubi.academicapplication.error.HttpStatusCode;
 import com.ubi.academicapplication.error.Result;

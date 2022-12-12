@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 
-import com.ubi.academicapplication.dto.responsedto.Response;
+import com.ubi.academicapplication.dto.response.Response;
 import com.ubi.academicapplication.entity.TransferCertificate;
 
 public interface TransferCertificateService {

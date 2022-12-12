@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ubi.academicapplication.dto.responsedto.Response;
+import com.ubi.academicapplication.dto.response.Response;
 import com.ubi.academicapplication.entity.Student;
 import com.ubi.academicapplication.service.StudentServiceImpl;
 

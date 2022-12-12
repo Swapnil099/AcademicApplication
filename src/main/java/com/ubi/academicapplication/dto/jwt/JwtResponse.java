@@ -1,4 +1,5 @@
-package com.ubi.academicapplication.dto.roledto;
+package com.ubi.academicapplication.dto.jwt;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -6,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 
 @Data @RequiredArgsConstructor
 @AllArgsConstructor
-public class RoleCreationDto {
-    String roleName;
+public class JwtResponse {
+    String token;
     String roleType;
 }
