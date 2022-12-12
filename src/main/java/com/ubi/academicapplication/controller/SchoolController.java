@@ -20,9 +20,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+
 import com.ubi.academicapplication.dto.responsedto.Response;
 import com.ubi.academicapplication.dto.schooldto.SchoolDto;
 import com.ubi.academicapplication.dto.transfercertificate.TransferCertificateDto;
+
 import com.ubi.academicapplication.entity.School;
 import com.ubi.academicapplication.service.SchoolService;
 import com.ubi.academicapplication.service.TransferCertificateService;

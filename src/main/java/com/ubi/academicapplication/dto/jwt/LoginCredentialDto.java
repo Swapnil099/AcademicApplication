@@ -1,4 +1,4 @@
-package com.ubi.academicapplication.dto.jwtdto;
+package com.ubi.academicapplication.dto.jwt;
 
 import lombok.*;
 

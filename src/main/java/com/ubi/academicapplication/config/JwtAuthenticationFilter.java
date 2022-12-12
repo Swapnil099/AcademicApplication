@@ -63,6 +63,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         new Result<>());
             }
         }
+        if(username == null) {
+            throw new CustomException(
+                    HttpStatusCode.UNAUTHORIZED_EXCEPTION.getCode(),
+                    HttpStatusCode.UNAUTHORIZED_EXCEPTION,
+                    HttpStatusCode.UNAUTHORIZED_EXCEPTION.getMessage(),
+                    new Result<>());
+        }
         filterChain.doFilter(request, response);
     }
 
