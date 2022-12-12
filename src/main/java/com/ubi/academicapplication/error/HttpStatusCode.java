@@ -7,6 +7,8 @@ public enum HttpStatusCode {
 	
 	NO_STUDENT_NAME_FOUND(202,"No student name found"),
 	
+	NO_SCHOOL_NAME_FOUND(202, "No School Name Found"),
+	
 	NO_STUDENT_FOUND(108,"No Student Found"),
 	
 	NO_STUDENT_MATCH_WITH_ID(109,"No such student found with such id"),
@@ -107,6 +109,9 @@ public enum HttpStatusCode {
 
 	PAYMENT_DELETED(200,"Payment deleted successfully"),
 	PAYMENT_UPDATED(200,"Payment updated successfully"),
+	SCHOOL_DELETED(200,"School Deleted Successfully"),
+	SCHOOL_UPDATED(200,"School Updated Successfully"),
+	
 	
 	EDUCATIONAL_INSTITUTION_DELETED(200,"Educational Institution deleted successfully"),
 	EDUCATIONAL_INSTITUTION_UPDATED(200,"Educational Institution updated successfully");
