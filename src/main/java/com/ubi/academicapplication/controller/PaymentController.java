@@ -14,9 +14,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ubi.academicapplication.dto.response.Response;
+import com.ubi.academicapplication.dto.paymentdto.PaymentDto;
+import com.ubi.academicapplication.dto.responsedto.Response;
+
 import com.ubi.academicapplication.entity.Payment;
 import com.ubi.academicapplication.service.PaymentService;
 
@@ -34,9 +37,9 @@ public class PaymentController {
 
 	@Operation(summary = "Create New Payment", security = @SecurityRequirement(name = "bearerAuth"))
 	@PostMapping
-	public ResponseEntity<Response<Payment>> insertPayment(@RequestBody Payment payment) { // NOSONAR
+	public ResponseEntity<Response<PaymentDto>> insertPayment(@RequestBody PaymentDto paymentDto) { // NOSONAR
 
-		Response<Payment> response = this.paymentService.makePayment(payment);
+		Response<PaymentDto> response = this.paymentService.makePayment(paymentDto);
 
 		return ResponseEntity.ok().body(response);
 
@@ -44,8 +47,8 @@ public class PaymentController {
 
 	@Operation(summary = "Get Payment By Id", security = @SecurityRequirement(name = "bearerAuth"))
 	@GetMapping("/{id}")
-	public ResponseEntity<Response<Payment>> getSinglePayment(@PathVariable int id) {
-		Response<Payment> response = paymentService.getSingle(id);
+	public ResponseEntity<Response<PaymentDto>> getSinglePayment(@PathVariable int id) {
+		Response<PaymentDto> response = paymentService.getSingle(id);
 		if (response.getStatusCode() == 200) {
 			return ResponseEntity.status(HttpStatus.OK).body(response);
 		} else {
@@ -55,8 +58,10 @@ public class PaymentController {
 
 	@Operation(summary = "Get All Payment", security = @SecurityRequirement(name = "bearerAuth"))
 	@GetMapping()
-	public ResponseEntity<Response<List<Payment>>> getPayments() {
-		Response<List<Payment>> response = paymentService.getAllPayment();
+	public ResponseEntity<Response<List<PaymentDto>>> getPayments(
+			@RequestParam(value = "PageNumber", defaultValue = "0", required = false) Integer pageNumber,
+			@RequestParam(value = "PageSize", defaultValue = "5", required = false) Integer pageSize) {
+		Response<List<PaymentDto>> response = paymentService.getAllPayment(pageNumber, pageSize);
 		if (response.getStatusCode() == 200) {
 			return ResponseEntity.status(HttpStatus.OK).body(response);
 		} else {
@@ -64,22 +69,27 @@ public class PaymentController {
 		}
 
 	}
+	
+
 
 	@Operation(summary = "Delete Payment By Id", security = @SecurityRequirement(name = "bearerAuth"))
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Response<Payment>> deletePaymentById(@PathVariable("id") int id) {
+	public ResponseEntity<Response<PaymentDto>> deletePaymentById(@PathVariable("id") int id) {
 
-		Response<Payment> response=this.paymentService.deletePayment(id);
-		
+		Response<PaymentDto> response = this.paymentService.deletePayment(id);
+
 		return ResponseEntity.ok().body(response);
 
 	}
+	
+	
+
 
 	@Operation(summary = "Update Payment with Id", security = @SecurityRequirement(name = "bearerAuth"))
 	@PutMapping
-	public ResponseEntity<Response<Payment>> updatePayment(@RequestBody Payment pay) { // NOSONAR
+	public ResponseEntity<Response<PaymentDto>> updatePayment(@RequestBody PaymentDto pay) { // NOSONAR
 
-		Response<Payment> updatepayment = this.paymentService.updatePay(pay);
+		Response<PaymentDto> updatepayment = this.paymentService.updatePay(pay);
 
 		return ResponseEntity.ok().body(updatepayment);
 

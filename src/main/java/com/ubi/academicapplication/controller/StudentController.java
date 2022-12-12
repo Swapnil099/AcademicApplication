@@ -15,8 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ubi.academicapplication.dto.response.Response;
-import com.ubi.academicapplication.entity.Student;
+import com.ubi.academicapplication.dto.responsedto.Response;
+import com.ubi.academicapplication.dto.student.StudentDto;
+
 import com.ubi.academicapplication.service.StudentServiceImpl;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,34 +32,25 @@ public class StudentController {
 
 	@PostMapping
 	@Operation(summary = "Create New Student", security = @SecurityRequirement(name = "bearerAuth"))
-	public ResponseEntity<Response<Student>> addStudent(@RequestBody Student studentId) {
-		Response<Student> response = service.saveStudent(studentId);
+	public ResponseEntity<Response<StudentDto>> addStudent(@RequestBody StudentDto studentId) {
+		Response<StudentDto> response = service.saveStudent(studentId);
 		return ResponseEntity.ok().body(response);
 	}
 
-//	@Operation(summary = "Get All Student", security = @SecurityRequirement(name = "bearerAuth"))
-//	@GetMapping
-//	public ResponseEntity<Response<List<Student>>> getStudents() {
-//		Response<List<Student>> response = service.getStudents();
-//		return ResponseEntity.ok().body(response);
-//
-//	}
 	@Operation(summary = "Get All Student", security = @SecurityRequirement(name = "bearerAuth"))
 	@GetMapping
-	public ResponseEntity<Response<List<Student>>> getStudents(	@RequestParam(value = "PageNumber", defaultValue = "0", required = false) Integer pageNumber,
+	public ResponseEntity<Response<List<StudentDto>>> getStudents(
+			@RequestParam(value = "PageNumber", defaultValue = "0", required = false) Integer pageNumber,
 			@RequestParam(value = "PageSize", defaultValue = "5", required = false) Integer pageSize) {
-		Response<List<Student>> response = service.getStudents(pageNumber, pageSize);
+		Response<List<StudentDto>> response = service.getStudents(pageNumber, pageSize);
 		return ResponseEntity.ok().body(response);
 
 	}
-	
-	
-	
 
 	@DeleteMapping("/{id}")
 	@Operation(summary = "Delete Student By Id", security = @SecurityRequirement(name = "bearerAuth"))
-	public ResponseEntity<Response<Student>> deleteStudent(@PathVariable int id) {
-		Response<Student> response = service.deleteById(id);
+	public ResponseEntity<Response<StudentDto>> deleteStudent(@PathVariable int id) {
+		Response<StudentDto> response = service.deleteById(id);
 		return ResponseEntity.ok().body(response);
 
 	}
@@ -77,8 +69,8 @@ public class StudentController {
 //
 	@PutMapping
 	@Operation(summary = "Update Student", security = @SecurityRequirement(name = "bearerAuth"))
-	public ResponseEntity<Response> updateStudent(@RequestBody Student student) {
-		Response<Student> response = service.updateStudent(student);
+	public ResponseEntity<Response> updateStudent(@RequestBody StudentDto student) {
+		Response<StudentDto> response = service.updateStudent(student);
 		return ResponseEntity.ok().body(response);
 	}
 

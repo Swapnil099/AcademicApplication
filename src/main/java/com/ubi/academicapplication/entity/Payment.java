@@ -1,6 +1,6 @@
 package com.ubi.academicapplication.entity;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,6 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,9 +29,9 @@ public class Payment {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 
-	
+	@JsonFormat(pattern="yyyy-MM-dd")
 	@Column(name = "paymentDate")
-	private Date date;
+	private LocalDate date;
 
 	@Column(name = "totalFees")
 	private Double totalFees;
@@ -40,9 +42,9 @@ public class Payment {
 	@Column(name = "balanceFees")
 	private Double balanceFees;
 
-
+	@JsonFormat(pattern="yyyy-MM-dd")
 	@Column(name = "dueDate")
-	private Date dueDate;
+	private LocalDate dueDate;
 
 	@Column(name = "paymentDescription")
 	private String description;

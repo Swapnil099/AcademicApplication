@@ -2,28 +2,22 @@ package com.ubi.academicapplication.service;
 
 import java.util.List;
 
-import org.springframework.data.domain.Page;
-
-import com.ubi.academicapplication.dto.response.ClassDto;
-import com.ubi.academicapplication.dto.response.Response;
-import com.ubi.academicapplication.entity.ClassDetail;
+import com.ubi.academicapplication.dto.classdto.ClassDto;
+import com.ubi.academicapplication.dto.responsedto.Response;
 
 
 public interface ClassService {
 
-	public ClassDetail addClassDetails(ClassDto classDto);
+	Response<ClassDto> addClassDetails(ClassDto classDto);
+	
+	Response<List<ClassDto>> getClassDetails(Integer PageNumber, Integer PageSize);
 
-	public Response <List<ClassDetail>> getClassDetails();
+	public Response<ClassDto> getClassById(Long classidL);
+	
+	public Response<ClassDto> deleteClassById(Long classidL);
 
-	public Response getClassById(Long classidL);
-
-	public void deleteClassById(Long classidL);
-
-	public ClassDetail updateClassDetails(ClassDetail classDetail);
-
-	public Page<ClassDetail> findClassWithPagination(int offset,int pageSize);
-
-	//		public List<ClassDetail> findClassWithSorting(String field);
+	Response<ClassDto> updateClassDetails(ClassDto classDto);
+	
 
 }
 

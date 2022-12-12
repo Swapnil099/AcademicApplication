@@ -1,6 +1,9 @@
 package com.ubi.academicapplication.controller;
 
+import java.text.ParseException;
 import java.util.List;
+
+import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,11 +17,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ubi.academicapplication.dto.response.Response;
+
+import com.ubi.academicapplication.dto.responsedto.Response;
+import com.ubi.academicapplication.dto.schooldto.SchoolDto;
+import com.ubi.academicapplication.dto.transfercertificate.TransferCertificateDto;
+
 import com.ubi.academicapplication.entity.School;
 import com.ubi.academicapplication.service.SchoolService;
+import com.ubi.academicapplication.service.TransferCertificateService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -34,76 +43,50 @@ public class SchoolController {
 	@Autowired
 	private SchoolService schoolService;
 	
-	@PostMapping
 	@Operation(summary = "Create New School", security = @SecurityRequirement(name = "bearerAuth"))
-	public Response<School> saveSchool(@RequestBody School schools) {
+	@PostMapping
+	public ResponseEntity<Response<SchoolDto>> addSchool(@Valid @RequestBody SchoolDto schoolDto) {
+		Response<SchoolDto> schoolResponse = schoolService.addSchool(schoolDto);
+		return ResponseEntity.ok().body(schoolResponse);
 
-		Response<School> school = this.schoolService.saveSchool(schools);
-
-		return school;
 	}
-	
-	@GetMapping("/{id}")
-	@Operation(summary = "Get School By Id", security = @SecurityRequirement(name = "bearerAuth"))
-	public ResponseEntity<Response> getsingleSchool(@PathVariable int id)
+
+	@Operation(summary = "Get All Schools ", security = @SecurityRequirement(name = "bearerAuth"))
+	@GetMapping
+	public ResponseEntity<Response<List<SchoolDto>>> getAllSchools(	
+			@RequestParam(value = "PageNumber", defaultValue = "0", required = false) Integer pageNumber,
+			@RequestParam(value = "PageSize", defaultValue = "5", required = false) Integer pageSize) {
+		Response<List<SchoolDto>> response = schoolService.getAllSchools(pageNumber, pageSize);
+		return ResponseEntity.ok().body(response);
+
+	}
+	@Operation(summary = "Delete School By Id", security = @SecurityRequirement(name = "bearerAuth"))
+	@DeleteMapping("/{schoolId}")
+	public ResponseEntity<Response<SchoolDto>> deleteSchoolById(@PathVariable("schoolId") int schoolId) 
 	{
-		Response response=schoolService.getsingleSchool(id);
-	     if(response.getStatusCode()==200)
-	     {
-	    	 return ResponseEntity.status(HttpStatus.OK).body(response);
-	     }
-	     else
-	     {
-	    	 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response); 
-	     }
+		Response<SchoolDto> response = schoolService.deleteSchoolById(schoolId);
+		return ResponseEntity.ok().body(response);
 	}
 	
-	@GetMapping()
-	@Operation(summary = "Get All Schools", security = @SecurityRequirement(name = "bearerAuth"))
-	public ResponseEntity<Response<List<School>>> getSchools() {
-	     Response<List<School>> response=schoolService.getAllSchools();
-	     if(response.getStatusCode()==200)
-	     {
-	    	 return ResponseEntity.status(HttpStatus.OK).body(response);
-	     }
-	     else
-	     {
-	    	 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response); 
-	     }
-	
-	}
-	
-	@PutMapping
-	@Operation(summary = "Update School", security = @SecurityRequirement(name = "bearerAuth"))
-	public ResponseEntity<School> updateSchool(@RequestBody School school) { 
-		
-
-		School updateSchool = this.schoolService.updateSchool(school);
-
-		return new ResponseEntity<>(updateSchool, HttpStatus.CREATED);
-	}
-	
-	@DeleteMapping("/{id}")
-	@Operation(summary = "Delete the School", security = @SecurityRequirement(name = "bearerAuth"))
-	public void deleteSchoolById(@PathVariable("id") int id) {
-
-		this.schoolService.deleteSchool(id);
+	@Operation(summary = "Get Single School By Id", security = @SecurityRequirement(name = "bearerAuth"))
+	@GetMapping("/school/{id}")
+	public ResponseEntity<Response<SchoolDto>> getSchoolById(@PathVariable int id) {
+	  Response<SchoolDto> response=schoolService.getSchoolById(id);
+	  return ResponseEntity.ok().body(response);
 	}
 
-	@GetMapping("/name/{name}")
+	@Operation(summary = "Update School By Id", security = @SecurityRequirement(name = "bearerAuth"))
+	@PutMapping("/{schoolId}")
+	public ResponseEntity<Response<SchoolDto>> updateSchool(@Valid @RequestBody SchoolDto schoolDto) throws ParseException { // NOSONAR
+	  Response<SchoolDto> response=schoolService.updateSchool(schoolDto);
+	  return ResponseEntity.ok().body(response);
+	}
+
 	@Operation(summary = "Get School By Name", security = @SecurityRequirement(name = "bearerAuth"))
-	public ResponseEntity<Response> getschoolByName(@PathVariable("name") String name)
-	{
-		Response response=schoolService.getschoolByName(name);
-	     if(response.getStatusCode()==200)
-	     {
-	    	 return ResponseEntity.status(HttpStatus.OK).body(response);
-	     }
-	     else
-	    	 
-	     {
-	    	 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response); 
-	     }
+	@GetMapping("/{name}")
+	public ResponseEntity<Response<SchoolDto>> getSchoolByName(@PathVariable("name") String schoolName) {
+	  Response<SchoolDto> response=schoolService.getSchoolByName(schoolName);
+	  return ResponseEntity.ok().body(response);
 	}
 	
 }
