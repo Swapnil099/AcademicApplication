@@ -2,29 +2,23 @@ package com.ubi.academicapplication.service;
 
 import java.util.List;
 
+import com.ubi.academicapplication.dto.paymentdto.PaymentDto;
 import com.ubi.academicapplication.dto.responsedto.Response;
 import com.ubi.academicapplication.entity.Payment;
 import com.ubi.academicapplication.entity.Student;
 
 public interface PaymentService {
 
-	Response<Payment> makePayment(Payment payment);
+	Response<PaymentDto> makePayment(PaymentDto paymentDto);
 
-	Response<Payment> getSingle(int id);
+	Response<PaymentDto> getSingle(int id);
 
-	Response<List<Payment>> getAllPayment();
+	Response<List<PaymentDto>> getAllPayment(Integer PageNumber, Integer PageSize);
 	
-	Response<Payment> updatePay(Payment pay);
+	Response<PaymentDto> updatePay(PaymentDto pay);
 
-	public Response<Payment> deletePayment(int id);
+	public Response<PaymentDto> deletePayment(int id);
 
 	
-//	Response<PaymentDto> makePayment(PaymentDto payment);
-//
-//	PaymentDto getSingleUser(int id);
-//
-//	List<PaymentDto> getAllUser();
-//
-//	PaymentDto updatePay(PaymentDto payDto);
 
 }
