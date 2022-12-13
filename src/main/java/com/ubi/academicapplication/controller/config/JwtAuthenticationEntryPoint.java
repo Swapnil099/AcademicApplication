@@ -1,4 +1,4 @@
-package com.ubi.academicapplication.config;
+package com.ubi.academicapplication.controller.config;
 
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;

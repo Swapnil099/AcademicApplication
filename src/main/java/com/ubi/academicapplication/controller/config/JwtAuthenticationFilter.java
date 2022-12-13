@@ -1,4 +1,4 @@
-package com.ubi.academicapplication.config;
+package com.ubi.academicapplication.controller.config;
 
 import com.ubi.academicapplication.error.CustomException;
 import com.ubi.academicapplication.error.HttpStatusCode;
