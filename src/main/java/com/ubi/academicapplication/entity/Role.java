@@ -28,7 +28,7 @@ public class Role {
 
 	@OneToMany(mappedBy = "role",cascade = CascadeType.ALL)
 	@JsonIgnore
-	private Set<User> users;
+	private Set<UserInfo> users;
 
     public Role(String roleName, String roleType) {
     	this.roleName = roleName;

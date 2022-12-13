@@ -8,13 +8,12 @@ import com.ubi.academicapplication.entity.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.ubi.academicapplication.dto.response.Response;
 import com.ubi.academicapplication.dto.user.UserCreationDto;
 import com.ubi.academicapplication.dto.user.UserDto;
-import com.ubi.academicapplication.entity.User;
+import com.ubi.academicapplication.entity.UserInfo;
 import com.ubi.academicapplication.error.CustomException;
 import com.ubi.academicapplication.error.HttpStatusCode;
 import com.ubi.academicapplication.error.Result;
@@ -45,7 +44,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Response<List<UserDto>> getAllUsers() {
-        List<User> users = userRepository.findAll();
+        List<UserInfo> users = userRepository.findAll();
         List<UserDto> allUsers = users.stream().map(userMapper::toDto).collect(Collectors.toList());
         Response<List<UserDto>> response = new Response<>();
         response.setStatusCode(HttpStatusCode.SUCCESSFUL.getCode());
@@ -55,8 +54,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Response<User> createNewUser(UserCreationDto userCreationDTO) {
-        Response<User> response = new Response<>();
+    public Response<UserInfo> createNewUser(UserCreationDto userCreationDTO) {
+        Response<UserInfo> response = new Response<>();
         if(this.getUserByUsername(userCreationDTO.getUsername()) != null){
             throw new CustomException(
                     HttpStatusCode.RESOURCE_ALREADY_EXISTS.getCode(),
@@ -65,8 +64,8 @@ public class UserServiceImpl implements UserService {
                     result);
         }
 
-        User user = userMapper.toUser(userCreationDTO);
-        User userWithPreEncodePassword = new User(user.getUsername(),user.getPassword(),user.getIsEnabled(),user.getRole());
+        UserInfo user = userMapper.toUser(userCreationDTO);
+        UserInfo userWithPreEncodePassword = new UserInfo(user.getUsername(),user.getPassword(),user.getIsEnabled(),user.getRole());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
         userWithPreEncodePassword.setId(user.getId());
@@ -78,7 +77,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Response<UserDto> getUserById(String userId) {
-        Optional<User> currUser = userRepository.findById(Long.parseLong(userId));
+        Optional<UserInfo> currUser = userRepository.findById(Long.parseLong(userId));
         Response<UserDto> response = new Response<>();
         if(!currUser.isPresent()) {
             throw new CustomException(HttpStatusCode.RESOURCE_NOT_FOUND.getCode(),
@@ -86,7 +85,7 @@ public class UserServiceImpl implements UserService {
                     HttpStatusCode.RESOURCE_NOT_FOUND.getMessage(),
                     result);
         }
-        User user = currUser.get();
+        UserInfo user = currUser.get();
         UserDto userDto = userMapper.toDto(user);
         response.setStatusCode(HttpStatusCode.SUCCESSFUL.getCode());
         response.setMessage(HttpStatusCode.SUCCESSFUL.getMessage());
@@ -95,14 +94,14 @@ public class UserServiceImpl implements UserService {
     }
 
     public UserDto getUserByUsername(String username){
-        User user = userRepository.findByUsername(username);
+        UserInfo user = userRepository.findByUsername(username);
         if(user == null) return null;
         return userMapper.toDto(user);
     }
 
     @Override
     public Response<UserDto> deleteUserById(String userId) {
-        Optional<User> currUser = userRepository.findById(Long.parseLong(userId));
+        Optional<UserInfo> currUser = userRepository.findById(Long.parseLong(userId));
         if(!currUser.isPresent()) {
             throw new CustomException(HttpStatusCode.RESOURCE_NOT_FOUND.getCode(),
                     HttpStatusCode.RESOURCE_NOT_FOUND,
@@ -119,7 +118,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean isUsernamePasswordValid(String username,String password){
-        User user = userRepository.findByUsername(username);
+        UserInfo user = userRepository.findByUsername(username);
         return (user != null && passwordEncoder.matches(password,user.getPassword()));
     }
 
@@ -137,9 +136,9 @@ public class UserServiceImpl implements UserService {
                     HttpStatusCode.RESOURCE_NOT_FOUND.getMessage(),
                     result);
         }
-        User user = userRepository.getReferenceById(Long.parseLong(userId));
+        UserInfo user = userRepository.getReferenceById(Long.parseLong(userId));
         user.setIsEnabled(true);
-        User updatedUser = userRepository.save(user);
+        UserInfo updatedUser = userRepository.save(user);
         return new Response<>(new Result<>(userMapper.toDto(updatedUser)));
     }
 
@@ -151,16 +150,16 @@ public class UserServiceImpl implements UserService {
                     HttpStatusCode.RESOURCE_NOT_FOUND.getMessage(),
                     result);
         }
-        User user = userRepository.getReferenceById(Long.parseLong(userId));
+        UserInfo user = userRepository.getReferenceById(Long.parseLong(userId));
         user.setIsEnabled(false);
-        User updatedUser = userRepository.save(user);
+        UserInfo updatedUser = userRepository.save(user);
         return new Response<>(new Result<>(userMapper.toDto(updatedUser)));
     }
 
     @Override
     public Response<String> changeSelfPassword(String userId,String newPassword) {
-        Optional<User> currUser = userRepository.findById(Long.parseLong(userId));
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Optional<UserInfo> currUser = userRepository.findById(Long.parseLong(userId));
+        UserInfo user = (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if(!currUser.isPresent()){
             throw new CustomException(HttpStatusCode.RESOURCE_NOT_FOUND.getCode(),
                     HttpStatusCode.RESOURCE_NOT_FOUND,
@@ -187,15 +186,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Response<UserDto> updateUserById(String userId, UserCreationDto userCreationDto) {
-        Optional<User> currUser = userRepository.findById(Long.parseLong(userId));
+        Optional<UserInfo> currUser = userRepository.findById(Long.parseLong(userId));
         if(!currUser.isPresent()){
             throw new CustomException(HttpStatusCode.RESOURCE_NOT_FOUND.getCode(),
                     HttpStatusCode.RESOURCE_NOT_FOUND,
                     HttpStatusCode.RESOURCE_NOT_FOUND.getMessage(),
                     result);
         }
-        User user = currUser.get();
-        User userByNewUsername = userRepository.findByUsername(userCreationDto.getUsername());
+        UserInfo user = currUser.get();
+        UserInfo userByNewUsername = userRepository.findByUsername(userCreationDto.getUsername());
         if(userByNewUsername != null && !user.getUsername().equals(userCreationDto.getUsername())){
             throw new CustomException(HttpStatusCode.USERNAME_NOT_AVAILAIBLE.getCode(),
                     HttpStatusCode.USERNAME_NOT_AVAILAIBLE,

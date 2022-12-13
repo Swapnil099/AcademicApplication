@@ -2,7 +2,7 @@ package com.ubi.academicapplication.service;
 import com.ubi.academicapplication.dto.response.Response;
 import com.ubi.academicapplication.dto.user.UserCreationDto;
 import com.ubi.academicapplication.dto.user.UserDto;
-import com.ubi.academicapplication.entity.User;
+import com.ubi.academicapplication.entity.UserInfo;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ public interface UserService {
 
     Response<List<UserDto>> getAllUsers();
 
-    Response<User> createNewUser(UserCreationDto userCreationDTO);
+    Response<UserInfo> createNewUser(UserCreationDto userCreationDTO);
 
     Response<UserDto> getUserById(String userId);
 

@@ -3,7 +3,7 @@ package com.ubi.academicapplication.controller;
 import java.util.List;
 
 import com.ubi.academicapplication.dto.user.PasswordChangeDto;
-import com.ubi.academicapplication.entity.User;
+import com.ubi.academicapplication.entity.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import com.ubi.academicapplication.dto.response.Response;
 import com.ubi.academicapplication.dto.user.UserCreationDto;
 import com.ubi.academicapplication.dto.user.UserDto;
-import com.ubi.academicapplication.security.roleaccessinterface.IsPrincipal;
+import com.ubi.academicapplication.security.roleaccessinterface.*;
 import com.ubi.academicapplication.service.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,8 +26,8 @@ public class UserController {
 
     @Operation(summary = "Create New User", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping
-    public ResponseEntity<Response<User>> createUser(@RequestBody UserCreationDto userCreationDTO){
-        Response<User> userResponse = userService.createNewUser(userCreationDTO);
+    public ResponseEntity<Response<UserInfo>> createUser(@RequestBody UserCreationDto userCreationDTO){
+        Response<UserInfo> userResponse = userService.createNewUser(userCreationDTO);
         return ResponseEntity.ok().body(userResponse);
     }
 
@@ -76,6 +76,7 @@ public class UserController {
 
     @Operation(summary = "Update User By Id", security = @SecurityRequirement(name = "bearerAuth"))
     @PatchMapping ("/{userId}")
+    @IsSuperAdmin
     public ResponseEntity<Response<UserDto>> updateUserById(@PathVariable String userId, @RequestBody UserCreationDto userCreationDto) {
         Response<UserDto> response = userService.updateUserById(userId, userCreationDto);
         return ResponseEntity.ok().body(response);

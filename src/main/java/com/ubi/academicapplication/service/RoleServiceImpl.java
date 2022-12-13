@@ -12,7 +12,7 @@ import com.ubi.academicapplication.dto.role.RoleCreationDto;
 import com.ubi.academicapplication.dto.role.RoleDto;
 import com.ubi.academicapplication.dto.role.RoleUserDto;
 import com.ubi.academicapplication.entity.Role;
-import com.ubi.academicapplication.entity.User;
+import com.ubi.academicapplication.entity.UserInfo;
 import com.ubi.academicapplication.error.CustomException;
 import com.ubi.academicapplication.error.HttpStatusCode;
 import com.ubi.academicapplication.error.Result;
@@ -109,7 +109,7 @@ public class RoleServiceImpl implements RoleService {
                     HttpStatusCode.RESOURCE_NOT_FOUND.getMessage(),
                     result);
         }
-        Set<User> users = role.getUsers();
+        Set<UserInfo> users = role.getUsers();
         Set<RoleUserDto> roleUsers = roleMapper.toRoleUsers(users);
         Response<Set<RoleUserDto>> response = new Response<>();
         response.setMessage(HttpStatusCode.SUCCESSFUL.getMessage());

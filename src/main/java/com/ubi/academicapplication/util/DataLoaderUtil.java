@@ -1,11 +1,9 @@
 package com.ubi.academicapplication.util;
 
 import com.ubi.academicapplication.dto.role.RoleCreationDto;
-import com.ubi.academicapplication.dto.user.UserCreationDto;
 import com.ubi.academicapplication.dto.user.UserDto;
 import com.ubi.academicapplication.entity.Role;
-import com.ubi.academicapplication.entity.User;
-import com.ubi.academicapplication.repository.RoleRepository;
+import com.ubi.academicapplication.entity.UserInfo;
 import com.ubi.academicapplication.repository.UserRepository;
 import com.ubi.academicapplication.service.RoleService;
 import com.ubi.academicapplication.service.UserService;
@@ -52,11 +50,11 @@ public class DataLoaderUtil implements ApplicationRunner {
         Role rolePrincipal = roleService.getRoleByRoleType("ROLE_PRINCIPAL");
         Role roleTeacher = roleService.getRoleByRoleType("ROLE_TEACHER");
 
-        User superAdminUser = new User("superadmin",passwordEncoder.encode("superadmin"),true,roleSuperAdmin);
-        User hqAdminUser = new User("hqadmin",passwordEncoder.encode("hqadmin"),true,roleEducationHQAdmin);
-        User rgAdminUser = new User("rgadmin",passwordEncoder.encode("rgadmin"),true,roleRegionalAdmin);
-        User principalUser = new User("principal",passwordEncoder.encode("principal"),true,rolePrincipal);
-        User teacherUser = new User("teacher",passwordEncoder.encode("teacher"),true,roleTeacher);
+        UserInfo superAdminUser = new UserInfo("superadmin",passwordEncoder.encode("superadmin"),true,roleSuperAdmin);
+        UserInfo hqAdminUser = new UserInfo("hqadmin",passwordEncoder.encode("hqadmin"),true,roleEducationHQAdmin);
+        UserInfo rgAdminUser = new UserInfo("rgadmin",passwordEncoder.encode("rgadmin"),true,roleRegionalAdmin);
+        UserInfo principalUser = new UserInfo("principal",passwordEncoder.encode("principal"),true,rolePrincipal);
+        UserInfo teacherUser = new UserInfo("teacher",passwordEncoder.encode("teacher"),true,roleTeacher);
 
 
         userRepository.save(superAdminUser);

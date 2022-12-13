@@ -1,6 +1,6 @@
 package com.ubi.academicapplication.service;
 
-import com.ubi.academicapplication.entity.User;
+import com.ubi.academicapplication.entity.UserInfo;
 import com.ubi.academicapplication.error.CustomException;
 import com.ubi.academicapplication.error.HttpStatusCode;
 import com.ubi.academicapplication.repository.UserRepository;
@@ -18,7 +18,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username);
+        UserInfo user = userRepository.findByUsername(username);
         if(user == null){
             throw new CustomException(HttpStatusCode.RESOURCE_NOT_FOUND.getCode(),
                     HttpStatusCode.RESOURCE_NOT_FOUND,

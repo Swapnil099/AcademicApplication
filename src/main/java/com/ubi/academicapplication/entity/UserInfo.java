@@ -9,11 +9,10 @@ import javax.persistence.*;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Entity
 @Getter @Setter @AllArgsConstructor @NoArgsConstructor
-public class User implements UserDetails {
+public class UserInfo implements UserDetails {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,7 +31,7 @@ public class User implements UserDetails {
 	@JoinColumn(name="roleId",referencedColumnName = "id", nullable=true)
 	private Role role;
 
-	public User(String username, String password,Boolean activeStatus, Role role) {
+	public UserInfo(String username, String password, Boolean activeStatus, Role role) {
 		this.username = username;
 		this.password = password;
 		this.isEnabled = activeStatus;
