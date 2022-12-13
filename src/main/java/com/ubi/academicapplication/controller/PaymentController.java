@@ -2,6 +2,7 @@ package com.ubi.academicapplication.controller;
 
 import java.util.List;
 
+import com.ubi.academicapplication.dto.response.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ubi.academicapplication.dto.paymentdto.PaymentDto;
-import com.ubi.academicapplication.dto.responsedto.Response;
 
-import com.ubi.academicapplication.entity.Payment;
 import com.ubi.academicapplication.service.PaymentService;
 
 import io.swagger.v3.oas.annotations.Operation;

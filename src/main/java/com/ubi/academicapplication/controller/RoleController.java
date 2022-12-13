@@ -3,8 +3,6 @@ package com.ubi.academicapplication.controller;
 import java.util.List;
 import java.util.Set;
 
-import com.ubi.academicapplication.dto.user.UserCreationDto;
-import com.ubi.academicapplication.dto.user.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

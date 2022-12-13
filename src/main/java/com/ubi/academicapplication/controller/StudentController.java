@@ -2,6 +2,7 @@ package com.ubi.academicapplication.controller;
 
 import java.util.List;
 
+import com.ubi.academicapplication.dto.response.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ubi.academicapplication.dto.responsedto.Response;
 import com.ubi.academicapplication.dto.student.StudentDto;
 
 import com.ubi.academicapplication.service.StudentServiceImpl;
