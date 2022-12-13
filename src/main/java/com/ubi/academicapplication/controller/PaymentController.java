@@ -2,7 +2,6 @@ package com.ubi.academicapplication.controller;
 
 import java.util.List;
 
-
 import com.ubi.academicapplication.dto.response.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,8 +68,6 @@ public class PaymentController {
 		}
 
 	}
-	
-
 
 	@Operation(summary = "Delete Payment By Id", security = @SecurityRequirement(name = "bearerAuth"))
 	@DeleteMapping("/{id}")
@@ -81,9 +78,6 @@ public class PaymentController {
 		return ResponseEntity.ok().body(response);
 
 	}
-	
-	
-
 
 	@Operation(summary = "Update Payment with Id", security = @SecurityRequirement(name = "bearerAuth"))
 	@PutMapping

@@ -1,0 +1,180 @@
+package com.ubi.academicapplication.service;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+import com.ubi.academicapplication.dto.educationaldto.EducationalInstitutionDto;
+import com.ubi.academicapplication.dto.response.Response;
+import com.ubi.academicapplication.entity.EducationalInstitution;
+import com.ubi.academicapplication.error.CustomException;
+import com.ubi.academicapplication.error.HttpStatusCode;
+import com.ubi.academicapplication.error.Result;
+import com.ubi.academicapplication.mapper.EducationalInstitutionMapper;
+import com.ubi.academicapplication.repository.EducationalInstitutionRepository;
+
+@Service
+public class EducationalInstitutionServiceImpl implements EducationalInstitutionService {
+
+	@Autowired
+	private EducationalInstitutionRepository educationalInstitutionRepository;
+
+	@Autowired
+	private EducationalInstitutionMapper educationalInstitutionMapper;
+
+	Logger logger = LoggerFactory.getLogger(EducationalInstitutionServiceImpl.class);
+
+	@Override
+	public Response<EducationalInstitutionDto> addEducationalInstitution(
+			EducationalInstitutionDto educationalInstitutionDto) {
+
+		Result<EducationalInstitutionDto> res = new Result<>();
+
+		Response<EducationalInstitutionDto> response = new Response<>();
+		Optional<EducationalInstitution> tempeducationalInstitution = educationalInstitutionRepository
+				.findById(educationalInstitutionDto.getId());
+		if (tempeducationalInstitution.isPresent()) {
+			throw new CustomException(HttpStatusCode.NO_EDUCATIONAL_INSTITUTION_FOUND.getCode(),
+					HttpStatusCode.NO_EDUCATIONAL_INSTITUTION_FOUND,
+					HttpStatusCode.NO_EDUCATIONAL_INSTITUTION_FOUND.getMessage(), res);
+		}
+		EducationalInstitution saveEducationalInstitution = educationalInstitutionRepository
+				.save(educationalInstitutionMapper.dtoToEntity(educationalInstitutionDto));
+		response.setStatusCode(HttpStatusCode.RESOURCE_CREATED_SUCCESSFULLY.getCode());
+		response.setMessage(HttpStatusCode.RESOURCE_CREATED_SUCCESSFULLY.getMessage());
+		response.setResult(new Result<EducationalInstitutionDto>(
+				educationalInstitutionMapper.entityToDto(saveEducationalInstitution)));
+		return response;
+
+	}
+
+	@Override
+	public Response<EducationalInstitutionDto> getSingleEducationalInstitution(int id) {
+
+		Response<EducationalInstitutionDto> getEducationalInstitution = new Response<>();
+		Optional<EducationalInstitution> educationalInst = null;
+
+		educationalInst = this.educationalInstitutionRepository.findById(id);
+		Result<EducationalInstitutionDto> educationalResult = new Result<>();
+		if (!educationalInst.isPresent()) {
+			throw new CustomException(HttpStatusCode.NO_EDUCATIONAL_INSTITUTION_MATCH_WITH_ID.getCode(),
+					HttpStatusCode.NO_EDUCATIONAL_INSTITUTION_MATCH_WITH_ID,
+					HttpStatusCode.NO_EDUCATIONAL_INSTITUTION_MATCH_WITH_ID.getMessage(), educationalResult);
+		}
+		educationalResult.setData(educationalInstitutionMapper.entityToDto(educationalInst.get()));
+		getEducationalInstitution.setStatusCode(HttpStatusCode.EDUCATIONAL_INSTITUTION_RETRIVED_SUCCESSFULLY.getCode());
+		getEducationalInstitution.setMessage(HttpStatusCode.EDUCATIONAL_INSTITUTION_RETRIVED_SUCCESSFULLY.getMessage());
+		getEducationalInstitution.setResult(educationalResult);
+		return getEducationalInstitution;
+	}
+
+	@Override
+	public Response<EducationalInstitutionDto> getEducationalInstituteByName(String educationalInstitutionName) {
+
+		Result<EducationalInstitutionDto> res = new Result<>();
+		res.setData(null);
+		Response<EducationalInstitutionDto> getEducationalInstitutionName = new Response<>();
+		Optional<EducationalInstitution> educationalInst = null;
+		educationalInst = this.educationalInstitutionRepository
+				.findByeducationalInstitutionName(educationalInstitutionName);
+		Result<EducationalInstitutionDto> educationalInstitutionResult = new Result<>();
+		if (!educationalInst.isPresent()) {
+			throw new CustomException(HttpStatusCode.NO_EDUCATIONAL_INSTITUTION_NAME_FOUND.getCode(),
+					HttpStatusCode.NO_EDUCATIONAL_INSTITUTION_NAME_FOUND,
+					HttpStatusCode.NO_EDUCATIONAL_INSTITUTION_NAME_FOUND.getMessage(), res);
+		}
+		educationalInstitutionResult.setData(educationalInstitutionMapper.entityToDto(educationalInst.get()));
+		getEducationalInstitutionName
+				.setStatusCode(HttpStatusCode.EDUCATIONAL_INSTITUTION_RETRIVED_SUCCESSFULLY.getCode());
+		getEducationalInstitutionName
+				.setMessage(HttpStatusCode.EDUCATIONAL_INSTITUTION_RETRIVED_SUCCESSFULLY.getMessage());
+		getEducationalInstitutionName.setResult(educationalInstitutionResult);
+		return getEducationalInstitutionName;
+	}
+
+	@Override
+	public Response<List<EducationalInstitutionDto>> getAllEducationalInstitutions(Integer pageNumber,
+			Integer pageSize) {
+
+		Result<List<EducationalInstitutionDto>> allEducationalResult = new Result<>();
+		Pageable paging = PageRequest.of(pageNumber, pageSize);
+		Response<List<EducationalInstitutionDto>> getListofEducationalInstitution = new Response<>();
+
+		Page<EducationalInstitution> list = this.educationalInstitutionRepository.findAll(paging);
+		List<EducationalInstitutionDto> educationalInstitutionDtos = educationalInstitutionMapper
+				.entitiesToDtos(list.toList());
+
+		if (list.getSize() == 0) {
+			throw new CustomException(HttpStatusCode.NO_PAYMENT_FOUND.getCode(), HttpStatusCode.NO_PAYMENT_FOUND,
+					HttpStatusCode.NO_PAYMENT_FOUND.getMessage(), allEducationalResult);
+		}
+		allEducationalResult.setData(educationalInstitutionDtos);
+		getListofEducationalInstitution.setStatusCode(HttpStatusCode.PAYMENT_RETRIVED_SUCCESSFULLY.getCode());
+		getListofEducationalInstitution.setMessage(HttpStatusCode.PAYMENT_RETRIVED_SUCCESSFULLY.getMessage());
+		getListofEducationalInstitution.setResult(allEducationalResult);
+		return getListofEducationalInstitution;
+	}
+
+	@Override
+	public Response<EducationalInstitutionDto> deleteEducationalInstitution(int id) {
+
+		Result<EducationalInstitutionDto> res = new Result<>();
+		res.setData(null);
+		Optional<EducationalInstitution> educationalInst = educationalInstitutionRepository.findById(id);
+		if (!educationalInst.isPresent()) {
+			throw new CustomException(HttpStatusCode.RESOURCE_NOT_FOUND.getCode(), HttpStatusCode.RESOURCE_NOT_FOUND,
+					HttpStatusCode.RESOURCE_NOT_FOUND.getMessage(), res);
+		}
+		educationalInstitutionRepository.deleteById(id);
+		Response<EducationalInstitutionDto> response = new Response<>();
+		response.setMessage(HttpStatusCode.EDUCATIONAL_INSTITUTION_DELETED.getMessage());
+		response.setStatusCode(HttpStatusCode.EDUCATIONAL_INSTITUTION_DELETED.getCode());
+		response.setResult(
+				new Result<EducationalInstitutionDto>(educationalInstitutionMapper.entityToDto(educationalInst.get())));
+		return response;
+	}
+
+	@Override
+	public Response<EducationalInstitutionDto> updateEducationalInstitution(
+			EducationalInstitutionDto educationalInstitutionDto) {
+
+		Result<EducationalInstitutionDto> res = new Result<>();
+
+		res.setData(null);
+		Optional<EducationalInstitution> existingEducationalContainer = educationalInstitutionRepository
+				.findById(educationalInstitutionDto.getId());
+		if (!existingEducationalContainer.isPresent()) {
+			throw new CustomException(HttpStatusCode.NO_EDUCATIONAL_INSTITUTION_FOUND.getCode(),
+					HttpStatusCode.NO_EDUCATIONAL_INSTITUTION_FOUND,
+					HttpStatusCode.NO_EDUCATIONAL_INSTITUTION_FOUND.getMessage(), res);
+		}
+		EducationalInstitutionDto existingEducationalInstitution = educationalInstitutionMapper
+				.entityToDto(existingEducationalContainer.get());
+		existingEducationalInstitution
+				.setEducationalInstitutionCode(educationalInstitutionDto.getEducationalInstitutionCode());
+		existingEducationalInstitution
+				.setEducationalInstitutionName(educationalInstitutionDto.getEducationalInstitutionName());
+		existingEducationalInstitution
+				.setEducationalInstitutionType(educationalInstitutionDto.getEducationalInstitutionType());
+		existingEducationalInstitution.setExemptionFlag(educationalInstitutionDto.getExemptionFlag());
+		existingEducationalInstitution.setState(educationalInstitutionDto.getState());
+		existingEducationalInstitution.setStrength(educationalInstitutionDto.getStrength());
+		existingEducationalInstitution.setVvnAccount(educationalInstitutionDto.getVvnAccount());
+
+		EducationalInstitution updateEducationalInst = educationalInstitutionRepository
+				.save(educationalInstitutionMapper.dtoToEntity(existingEducationalInstitution));
+		Response<EducationalInstitutionDto> response = new Response<>();
+		response.setMessage(HttpStatusCode.EDUCATIONAL_INSTITUTION_UPDATED.getMessage());
+		response.setStatusCode(HttpStatusCode.EDUCATIONAL_INSTITUTION_UPDATED.getCode());
+		response.setResult(new Result<>(educationalInstitutionMapper.entityToDto(updateEducationalInst)));
+		return response;
+	}
+
+}
