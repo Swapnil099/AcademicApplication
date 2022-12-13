@@ -12,7 +12,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-
 import com.ubi.academicapplication.dto.paymentdto.PaymentDto;
 import com.ubi.academicapplication.entity.Payment;
 import com.ubi.academicapplication.error.CustomException;
@@ -55,7 +54,6 @@ public class PaymentServiceImpl implements PaymentService {
 	public Response<PaymentDto> getSingle(int id) {
 		Response<PaymentDto> getPayment = new Response<PaymentDto>();
 		Optional<Payment> pay = null;
-//		res.setData(pay);
 		pay = this.paymentRepository.findById(id);
 		Result<PaymentDto> paymentResult = new Result<>();
 		if (!pay.isPresent()) {
@@ -74,12 +72,10 @@ public class PaymentServiceImpl implements PaymentService {
 	public Response<List<PaymentDto>> getAllPayment(Integer PageNumber, Integer PageSize) {
 		Result<List<PaymentDto>> allPaymentResult = new Result<>();
 		Pageable paging = PageRequest.of(PageNumber, PageSize);
-		Response<List<PaymentDto>> getListofPayment = new Response<List<PaymentDto>>();
-		// List<Payment> list = (List<Payment>) this.paymentRepository.findAll();
+		Response<List<PaymentDto>> getListofPayment = new Response<>();
 		Page<Payment> list = this.paymentRepository.findAll(paging);
 		List<PaymentDto> paymentDtos = paymentMapper.entitiesToDtos(list.toList());
-		// res.setData(list.toList());
-		// Result<List<Payment>> allPaymentResult = new Result<>();
+
 		if (list.getSize() == 0) {
 			throw new CustomException(HttpStatusCode.NO_PAYMENT_FOUND.getCode(), HttpStatusCode.NO_PAYMENT_FOUND,
 					HttpStatusCode.NO_PAYMENT_FOUND.getMessage(), allPaymentResult);
