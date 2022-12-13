@@ -1,4 +1,4 @@
-package com.ubi.academicapplication.config;
+package com.ubi.academicapplication.controller.config;
 
 import com.ubi.academicapplication.util.AutogeneratePassword;
 import org.modelmapper.ModelMapper;
