@@ -4,6 +4,8 @@ import java.text.ParseException;
 import java.util.List;
 import java.util.Optional;
 
+import com.ubi.academicapplication.dto.response.Response;
+import com.ubi.academicapplication.dto.school.SchoolDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,14 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 
-import com.ubi.academicapplication.dto.responsedto.Response;
-import com.ubi.academicapplication.dto.schooldto.SchoolDto;
-import com.ubi.academicapplication.dto.student.StudentDto;
-import com.ubi.academicapplication.dto.transfercertificate.TransferCertificateDto;
-
 import com.ubi.academicapplication.entity.School;
-import com.ubi.academicapplication.entity.Student;
-import com.ubi.academicapplication.entity.TransferCertificate;
 import com.ubi.academicapplication.error.CustomException;
 import com.ubi.academicapplication.error.HttpStatusCode;
 import com.ubi.academicapplication.error.Result;

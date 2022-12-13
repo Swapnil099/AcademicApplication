@@ -4,13 +4,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import com.ubi.academicapplication.dto.school.SchoolDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
-
-import com.ubi.academicapplication.dto.schooldto.SchoolDto;
-import com.ubi.academicapplication.dto.student.StudentDto;
 import com.ubi.academicapplication.entity.School;
-import com.ubi.academicapplication.entity.Student;
 
 @Component
 public class SchoolMapper {
