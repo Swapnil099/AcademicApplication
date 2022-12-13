@@ -1,8 +1,8 @@
 package com.ubi.academicapplication.mapper;
 
-import com.ubi.academicapplication.dto.roledto.RoleCreationDto;
-import com.ubi.academicapplication.dto.roledto.RoleDto;
-import com.ubi.academicapplication.dto.roledto.RoleUserDto;
+import com.ubi.academicapplication.dto.role.RoleCreationDto;
+import com.ubi.academicapplication.dto.role.RoleDto;
+import com.ubi.academicapplication.dto.role.RoleUserDto;
 import com.ubi.academicapplication.entity.Role;
 import com.ubi.academicapplication.entity.User;
 import org.springframework.stereotype.Component;

@@ -28,6 +28,7 @@ public class SecurityConfiguration {
     @Autowired
     private JwtAuthenticationEntryPoint unauthorizedHandler;
 
+
     private static final String[] PUBLIC_URLS = {"/v3/api-docs/**",
             "/v2/api-docs/**",
             "/swagger-resources/**",
@@ -36,6 +37,9 @@ public class SecurityConfiguration {
 
     @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
+
+    @Autowired
+    private FilterChainExceptionHandler filterChainExceptionHandler;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -47,6 +51,7 @@ public class SecurityConfiguration {
                 .and().authorizeHttpRequests().anyRequest().authenticated();
 
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(filterChainExceptionHandler,JwtAuthenticationFilter.class);
 
         return http.build();
     }

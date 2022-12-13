@@ -43,10 +43,10 @@ public class User implements UserDetails {
 	@JoinColumn(name="roleId",referencedColumnName = "id", nullable=true)
 	private Role role;
 
-	public User(String username, String password, Role role) {
+	public User(String username, String password,Boolean activeStatus, Role role) {
 		this.username = username;
 		this.password = password;
-		this.isEnabled = true;
+		this.isEnabled = activeStatus;
 		this.role = role;
 	}
 

@@ -1,18 +1,16 @@
 package com.ubi.academicapplication.service;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ubi.academicapplication.dto.responsedto.Response;
-import com.ubi.academicapplication.dto.roledto.RoleCreationDto;
-import com.ubi.academicapplication.dto.roledto.RoleDto;
-import com.ubi.academicapplication.dto.roledto.RoleUserDto;
+import com.ubi.academicapplication.dto.response.Response;
+import com.ubi.academicapplication.dto.role.RoleCreationDto;
+import com.ubi.academicapplication.dto.role.RoleDto;
+import com.ubi.academicapplication.dto.role.RoleUserDto;
 import com.ubi.academicapplication.entity.Role;
 import com.ubi.academicapplication.entity.User;
 import com.ubi.academicapplication.error.CustomException;
@@ -117,6 +115,35 @@ public class RoleServiceImpl implements RoleService {
         response.setMessage(HttpStatusCode.SUCCESSFUL.getMessage());
         response.setStatusCode(HttpStatusCode.SUCCESSFUL.getCode());
         response.setResult(new Result<Set<RoleUserDto>>(roleUsers));
+        return response;
+    }
+
+    @Override
+    public Response<RoleDto> updateRoleById(String roleId,RoleCreationDto roleCreationDto) {
+        Role roleWithGivenRoleType = roleRepository.getRoleByRoleType(roleCreationDto.getRoleType());
+        if(roleWithGivenRoleType != null) {
+            throw new CustomException(
+                    HttpStatusCode.ROLETYPE_NOT_AVAILAIBLE.getCode(),
+                    HttpStatusCode.ROLETYPE_NOT_AVAILAIBLE,
+                    HttpStatusCode.ROLETYPE_NOT_AVAILAIBLE.getMessage(),
+                    result);
+        }
+        Role role = roleRepository.getReferenceById(Long.parseLong(roleId));
+        if(role == null){
+            throw new CustomException(HttpStatusCode.RESOURCE_NOT_FOUND.getCode(),
+                    HttpStatusCode.RESOURCE_NOT_FOUND,
+                    HttpStatusCode.RESOURCE_NOT_FOUND.getMessage(),
+                    result);
+        }
+
+        role.setRoleName(roleCreationDto.getRoleName());
+        role.setRoleType(roleCreationDto.getRoleType());
+        roleRepository.save(role);
+
+        Response response = new Response<>();
+        response.setStatusCode(HttpStatusCode.SUCCESSFUL.getCode());
+        response.setMessage(HttpStatusCode.SUCCESSFUL.getMessage());
+        response.setResult(new Result<>(roleMapper.toDto(role)));
         return response;
     }
 }

@@ -1,4 +1,4 @@
-package com.ubi.academicapplication.dto.roledto;
+package com.ubi.academicapplication.dto.role;
 
 import lombok.*;
 

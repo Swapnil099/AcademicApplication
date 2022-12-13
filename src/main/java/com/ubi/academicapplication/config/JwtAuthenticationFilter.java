@@ -30,11 +30,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         final String requestTokenHeader = request.getHeader("Authorization");
-
         String username = null;
         String jwtToken = null;
 
-        if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
+        if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ") && !request.getRequestURI().equals("/authenticate")) {
 
         	jwtToken = requestTokenHeader.substring(7);
             try {
@@ -63,6 +62,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         new Result<>());
             }
         }
+
+//        if(username == null && !request.getRequestURI().matches("/swagger-ui/*") && !request.getRequestURI().equals("/authenticate")) {
+//            throw new CustomException(
+//                    HttpStatusCode.UNAUTHORIZED_EXCEPTION.getCode(),
+//                    HttpStatusCode.UNAUTHORIZED_EXCEPTION,
+//                    HttpStatusCode.UNAUTHORIZED_EXCEPTION.getMessage(),
+//                    new Result<>());
+//        }
         filterChain.doFilter(request, response);
     }
 

@@ -5,15 +5,15 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.ubi.academicapplication.entity.Role;
-import com.ubi.academicapplication.repository.RoleRepository;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import com.ubi.academicapplication.dto.responsedto.Response;
-import com.ubi.academicapplication.dto.userdto.UserCreationDto;
-import com.ubi.academicapplication.dto.userdto.UserDto;
+import com.ubi.academicapplication.dto.response.Response;
+import com.ubi.academicapplication.dto.user.UserCreationDto;
+import com.ubi.academicapplication.dto.user.UserDto;
 import com.ubi.academicapplication.entity.User;
 import com.ubi.academicapplication.error.CustomException;
 import com.ubi.academicapplication.error.HttpStatusCode;
@@ -50,13 +50,13 @@ public class UserServiceImpl implements UserService {
         Response<List<UserDto>> response = new Response<>();
         response.setStatusCode(HttpStatusCode.SUCCESSFUL.getCode());
         response.setMessage(HttpStatusCode.SUCCESSFUL.getMessage());
-        response.setResult(new Result<List<UserDto>>(allUsers));
+        response.setResult(new Result<>(allUsers));
         return response;
     }
 
     @Override
-    public Response<UserDto> createNewUser(UserCreationDto userCreationDTO) {
-        Response<UserDto> response = new Response<>();
+    public Response<User> createNewUser(UserCreationDto userCreationDTO) {
+        Response<User> response = new Response<>();
         if(this.getUserByUsername(userCreationDTO.getUsername()) != null){
             throw new CustomException(
                     HttpStatusCode.RESOURCE_ALREADY_EXISTS.getCode(),
@@ -66,20 +66,13 @@ public class UserServiceImpl implements UserService {
         }
 
         User user = userMapper.toUser(userCreationDTO);
-        Role role = roleService.getRoleFromString(userCreationDTO.getRoleType());
+        User userWithPreEncodePassword = new User(user.getUsername(),user.getPassword(),user.getIsEnabled(),user.getRole());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        User currUser = userRepository.save(user);
-        if(currUser == null) {
-            throw new CustomException(
-                    HttpStatusCode.INTERNAL_SERVER_ERROR.getCode(),
-                    HttpStatusCode.INTERNAL_SERVER_ERROR,
-                    HttpStatusCode.INTERNAL_SERVER_ERROR.getMessage(),
-                    result);
-        }
-        UserDto userDto = userMapper.toDto(currUser);
+        userRepository.save(user);
+        userWithPreEncodePassword.setId(user.getId());
         response.setStatusCode(HttpStatusCode.RESOURCE_CREATED_SUCCESSFULLY.getCode());
         response.setMessage(HttpStatusCode.RESOURCE_CREATED_SUCCESSFULLY.getMessage());
-        response.setResult(new Result<UserDto>(userDto));
+        response.setResult(new Result<>(userWithPreEncodePassword));
         return response;
     }
 
@@ -97,7 +90,7 @@ public class UserServiceImpl implements UserService {
         UserDto userDto = userMapper.toDto(user);
         response.setStatusCode(HttpStatusCode.SUCCESSFUL.getCode());
         response.setMessage(HttpStatusCode.SUCCESSFUL.getMessage());
-        response.setResult(new Result<UserDto>(userDto));
+        response.setResult(new Result<>(userDto));
         return response;
     }
 
@@ -120,7 +113,7 @@ public class UserServiceImpl implements UserService {
         Response<UserDto> response = new Response<>();
         response.setMessage(HttpStatusCode.SUCCESSFUL.getMessage());
         response.setStatusCode(HttpStatusCode.SUCCESSFUL.getCode());
-        response.setResult(new Result<UserDto>(userMapper.toDto(currUser.get())));
+        response.setResult(new Result<>(userMapper.toDto(currUser.get())));
         return response;
     }
 
@@ -135,4 +128,97 @@ public class UserServiceImpl implements UserService {
         UserDto user = this.getUserByUsername(username);
         return user.getRoleType();
     }
+
+    @Override
+    public Response<UserDto> changeActiveStatusToTrue(String userId) {
+        if(this.getUserById(userId).getResult().getData() == null){
+            throw new CustomException(HttpStatusCode.RESOURCE_NOT_FOUND.getCode(),
+                    HttpStatusCode.RESOURCE_NOT_FOUND,
+                    HttpStatusCode.RESOURCE_NOT_FOUND.getMessage(),
+                    result);
+        }
+        User user = userRepository.getReferenceById(Long.parseLong(userId));
+        user.setIsEnabled(true);
+        User updatedUser = userRepository.save(user);
+        return new Response<>(new Result<>(userMapper.toDto(updatedUser)));
+    }
+
+    @Override
+    public Response<UserDto> changeActiveStatusToFalse(String userId) {
+        if(this.getUserById(userId).getResult().getData() == null){
+            throw new CustomException(HttpStatusCode.RESOURCE_NOT_FOUND.getCode(),
+                    HttpStatusCode.RESOURCE_NOT_FOUND,
+                    HttpStatusCode.RESOURCE_NOT_FOUND.getMessage(),
+                    result);
+        }
+        User user = userRepository.getReferenceById(Long.parseLong(userId));
+        user.setIsEnabled(false);
+        User updatedUser = userRepository.save(user);
+        return new Response<>(new Result<>(userMapper.toDto(updatedUser)));
+    }
+
+    @Override
+    public Response<String> changeSelfPassword(String userId,String newPassword) {
+        Optional<User> currUser = userRepository.findById(Long.parseLong(userId));
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(!currUser.isPresent()){
+            throw new CustomException(HttpStatusCode.RESOURCE_NOT_FOUND.getCode(),
+                    HttpStatusCode.RESOURCE_NOT_FOUND,
+                    HttpStatusCode.RESOURCE_NOT_FOUND.getMessage(),
+                    result);
+        }
+
+        if(!user.getId().equals(currUser.get().getId())){
+            throw new CustomException(HttpStatusCode.UNAUTHORIZED_EXCEPTION.getCode(),
+                    HttpStatusCode.UNAUTHORIZED_EXCEPTION,
+                    HttpStatusCode.UNAUTHORIZED_EXCEPTION.getMessage(),
+                    result);
+        }
+        newPassword = passwordEncoder.encode(newPassword);
+        user.setPassword(newPassword);
+        userRepository.save(user);
+
+        Response response = new Response<>();
+        response.setStatusCode(HttpStatusCode.SUCCESSFUL.getCode());
+        response.setMessage(HttpStatusCode.SUCCESSFUL.getMessage());
+        response.setResult(new Result<>("PASSWORD CHANGED SUCCESSFULLY"));
+        return response;
+    }
+
+    @Override
+    public Response<UserDto> updateUserById(String userId, UserCreationDto userCreationDto) {
+        Optional<User> currUser = userRepository.findById(Long.parseLong(userId));
+        if(!currUser.isPresent()){
+            throw new CustomException(HttpStatusCode.RESOURCE_NOT_FOUND.getCode(),
+                    HttpStatusCode.RESOURCE_NOT_FOUND,
+                    HttpStatusCode.RESOURCE_NOT_FOUND.getMessage(),
+                    result);
+        }
+        User user = currUser.get();
+        User userByNewUsername = userRepository.findByUsername(userCreationDto.getUsername());
+        if(userByNewUsername != null && !user.getUsername().equals(userCreationDto.getUsername())){
+            throw new CustomException(HttpStatusCode.USERNAME_NOT_AVAILAIBLE.getCode(),
+                    HttpStatusCode.USERNAME_NOT_AVAILAIBLE,
+                    HttpStatusCode.USERNAME_NOT_AVAILAIBLE.getMessage(),
+                    result);
+        }
+        user.setUsername(userCreationDto.getUsername());
+        user.setIsEnabled(userCreationDto.getIsActivate());
+        Role role = roleService.getRoleByRoleType(userCreationDto.getRoleType());
+        if(role == null){
+            throw new CustomException(HttpStatusCode.ROLE_NOT_EXISTS.getCode(),
+                    HttpStatusCode.ROLE_NOT_EXISTS,
+                    HttpStatusCode.ROLE_NOT_EXISTS.getMessage(),
+                    result);
+        }
+        user.setRole(role);
+        userRepository.save(user);
+
+        Response response = new Response<>();
+        response.setStatusCode(HttpStatusCode.SUCCESSFUL.getCode());
+        response.setMessage(HttpStatusCode.SUCCESSFUL.getMessage());
+        response.setResult(new Result<>(userMapper.toDto(user)));
+        return response;
+    }
+
 }
