@@ -25,7 +25,10 @@ public enum HttpStatusCode {
     
     NO_CLASS_FOUND(108,"No class found"),
 	
+	PAYMENT_RETRIVED_SUCCESSFULLY(200,"Payment Retrived"),
 	
+	NO_CONTACTINFO_FOUND(108,"No contact info found"),
+
 	 NO_EDUCATIONAL_INSTITUTION_FOUND(108,"No Educational Institution Found"),
 		
 	NO_EDUCATIONAL_INSTITUTION_MATCH_WITH_ID(109,"No Educational Institution found with given Id "),
@@ -34,9 +37,9 @@ public enum HttpStatusCode {
 		
 	EDUCATIONAL_INSTITUTION_RETRIVED_SUCCESSFULLY(200,"Educational Institution Retrived"),
 		
-
-
 	NO_TRANSFERCERTIFICATE_FOUND(108, "No Transfer Certificate Found"),
+	
+	NO_CONTACTINFO_MATCH_WITH_ID(109,"No such contact info found with such id"),
 
 
 	NO_SCHOOL_MATCH_WITH_ID(109, "No School Found with Given ID"),
@@ -86,12 +89,16 @@ public enum HttpStatusCode {
 	NOT_ACCEPTABLE_ERROR(406, "Request Not accpetable"),
 
 	SUCCESSFUL(200, "Request Successfull"),
+	
+	CONTACTINFO_DELETED(200,"contact info deleted successfully"),
 
 	TRANSFER_CERTIFICATE_DELETED(200, "Transfer Certificate Deleted Successfully"),
 
 	RETREIVED_SUCCESSFULLY(200, "Data Retrieved Successfully"),
 
 	STUDENT_DELETED(200, "Student Deleted Successfully"),
+	
+	CONTACTINFO_UPDATED(200,"Contact info updated successfully"),
 
 
 	STUDENT_UPDATED(200, "Student Updated Successfully"),
