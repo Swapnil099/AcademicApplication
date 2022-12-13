@@ -33,9 +33,6 @@ public class TransferCertificate {
 private int id;
 
 @NotNull
-
-//@DateTimeFormat(pattern="dd/MM/yyyy")
-//private Date dateOfIssue;
 @JsonFormat(pattern="yyyy-MM-dd")
 private LocalDate dateOfIssue;
 
