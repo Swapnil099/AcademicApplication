@@ -21,7 +21,10 @@ public interface EducationalInstitutionService {
 
 	Response<EducationalInstitutionDto> updateEducationalInstitution(
 			EducationalInstitutionDto educationalInstitutionDto);
+
 	Response<EducationalRegionDto> addRegion(EIRegionMappingDto eIRegionMappingDto);
+
+	Response<EducationalRegionDto> getEduInstwithRegion(int id);
 
 
 }
