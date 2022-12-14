@@ -31,8 +31,6 @@ public class TransferCertificateServiceImpl implements TransferCertificateServic
 
 	@Autowired
 	private TransferCertificateRepository transferCertificateRepository;
-	//@Autowired
-	//Result res;
 
     Logger logger = LoggerFactory.getLogger(TransferCertificateServiceImpl.class);
     
@@ -47,8 +45,7 @@ public class TransferCertificateServiceImpl implements TransferCertificateServic
 		Response<TransferCertificateDto> response = new Response<>();
 		Optional<TransferCertificateDto> tempCertificate =Optional.empty();
 		
-	//	res.setData(null);
-		  if(tempCertificate.isPresent()){
+		if(tempCertificate.isPresent()){
 	            throw new CustomException(HttpStatusCode.RESOURCE_ALREADY_EXISTS.getCode(),HttpStatusCode.RESOURCE_ALREADY_EXISTS, HttpStatusCode.RESOURCE_ALREADY_EXISTS.getMessage(),res);
 		  }
 		  TransferCertificate savedTransferCertificate = transferCertificateRepository.save(transferCertificateMapper.dtoToEntity(transferCertificateDto));
@@ -60,26 +57,7 @@ public class TransferCertificateServiceImpl implements TransferCertificateServic
 	
 
     
-    
-    
-   /* @Override
-	public Response<List<TransferCertificate>> getAllTransferCertificate(Integer PageNumber, Integer PageSize) {
-		
-    	res.setData(null);
-		Pageable paging = PageRequest.of(PageNumber, PageSize);
-		Response<List<TransferCertificate>> getListofTransferCertificate = new Response<>();
-		Page<TransferCertificate> list = this.transferCertificateRepository.findAll(paging);
-		res.setData(list.toList());
-		Result<List<TransferCertificate>> result = new Result<>();
-		if (list.getSize() == 0) {
-			throw new CustomException(HttpStatusCode.NO_ENTRY_FOUND.getCode(), HttpStatusCode.NO_ENTRY_FOUND,
-					HttpStatusCode.NO_ENTRY_FOUND.getMessage(), res);
-		}
 
-		getListofTransferCertificate.setStatusCode(200);
-		getListofTransferCertificate.setResult(res);
-		return getListofTransferCertificate;
-	} */
     @Override
     public Response<List<TransferCertificateDto>> getAllTransferCertificate(Integer PageNumber, Integer PageSize) {
     	Result<List<TransferCertificateDto>> res=new Result<>();
@@ -106,8 +84,7 @@ public class TransferCertificateServiceImpl implements TransferCertificateServic
     	Result<TransferCertificateDto> res=new Result<>();
     	res.setData(null);
     		Response<TransferCertificateDto> getTransferCertificate = new Response<TransferCertificateDto>();
-    		Optional<TransferCertificate> tc = null;
-    		tc = this.transferCertificateRepository.findById(transferCertificateId);
+    		Optional<TransferCertificate> tc = this.transferCertificateRepository.findById(transferCertificateId);
     		Result<TransferCertificateDto> transferCertificateResult = new Result<>();
     		if (!tc.isPresent()) {
     			throw new CustomException(HttpStatusCode.NO_STUDENT_MATCH_WITH_ID.getCode(),
@@ -118,22 +95,7 @@ public class TransferCertificateServiceImpl implements TransferCertificateServic
     		getTransferCertificate.setResult(transferCertificateResult);
     		return getTransferCertificate;
     	}
-    	
-    	
- 	  /* Response<TransferCertificate> getTransferCertificate = new Response<TransferCertificate>();
- 		Optional<TransferCertificate> transferCertificate = null;
- 		transferCertificate = this.transferCertificateRepository.findById(transferCertificateId);
- 		Result<TransferCertificate> transferCertificateResult = new Result<>();
- 		if (!transferCertificate.isPresent()) {
- 			throw new CustomException(HttpStatusCode.NO_TRANSFERCERTIFICATE_MATCH_WITH_ID.getCode(),
- 					HttpStatusCode.NO_TRANSFERCERTIFICATE_MATCH_WITH_ID, HttpStatusCode.NO_TRANSFERCERTIFICATE_MATCH_WITH_ID.getMessage(), res);
- 		}
- 		transferCertificateResult.setData(transferCertificate.get());
- 		getTransferCertificate.setStatusCode(HttpStatusCode.RETREIVED_SUCCESSFULLY.getCode());
- 		getTransferCertificate.setMessage(HttpStatusCode.RETREIVED_SUCCESSFULLY.getMessage());
- 		getTransferCertificate.setResult(transferCertificateResult);
- 		return getTransferCertificate;*/
-    
+
 
 	
 
@@ -141,7 +103,6 @@ public class TransferCertificateServiceImpl implements TransferCertificateServic
 	public Response<TransferCertificateDto> updateTransferCertificate(TransferCertificateDto transferCertificateDto) throws ParseException {
 		Result<TransferCertificateDto> res=new Result<>();
 		res.setData(null);
-		//Response<TransferCertificate> response = new Response<>();
 		Optional<TransferCertificate> existingTransferCertificateContainer = transferCertificateRepository.findById(transferCertificateDto.getId());
 		if (!existingTransferCertificateContainer.isPresent()) {
 			throw new CustomException(HttpStatusCode.NO_TRANSFERCERTIFICATE_FOUND.getCode(), HttpStatusCode.NO_TRANSFERCERTIFICATE_FOUND,
@@ -152,9 +113,6 @@ public class TransferCertificateServiceImpl implements TransferCertificateServic
 		existingTransferCertificate.setDateOfIssue(transferCertificateDto.getDateOfIssue());
 		TransferCertificate updateTransferCertificate = transferCertificateRepository.save(transferCertificateMapper.dtoToEntity(existingTransferCertificate));
 		Response<TransferCertificateDto> response = new Response<>();
-	//	System.out.println(existingTransferCertificate);
-		//System.out.println(updateTransferCertificate);
-
 		response.setMessage(HttpStatusCode.TRANSFER_CERTIFICATE_UPDATED.getMessage());
 		response.setStatusCode(HttpStatusCode.TRANSFER_CERTIFICATE_UPDATED.getCode());
 		response.setResult(new Result<>(transferCertificateMapper.entityToDto(updateTransferCertificate)));

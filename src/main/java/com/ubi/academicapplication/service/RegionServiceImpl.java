@@ -66,8 +66,7 @@ public class RegionServiceImpl implements RegionService {
 	@Override
 	public Response<RegionDto> getRegionById(int id) {
 		Response<RegionDto> getRegion = new Response<RegionDto>();
-		Optional<Region> region = null;
-		region = this.regionRepository.findById(id);
+		Optional<Region> region = this.regionRepository.findById(id);
 		Result<RegionDto> regionResult = new Result<>();
 		if (!region.isPresent()) {
 			throw new CustomException(HttpStatusCode.REGION_NOT_FOUND.getCode(),
