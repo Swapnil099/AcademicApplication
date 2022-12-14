@@ -67,9 +67,7 @@ public class EducationalInstitutionServiceImpl implements EducationalInstitution
 	public Response<EducationalInstitutionDto> getSingleEducationalInstitution(int id) {
 
 		Response<EducationalInstitutionDto> getEducationalInstitution = new Response<>();
-		Optional<EducationalInstitution> educationalInst = null;
-
-		educationalInst = this.educationalInstitutionRepository.findById(id);
+		Optional<EducationalInstitution> educationalInst =this.educationalInstitutionRepository.findById(id);
 		Result<EducationalInstitutionDto> educationalResult = new Result<>();
 		if (!educationalInst.isPresent()) {
 			throw new CustomException(HttpStatusCode.NO_EDUCATIONAL_INSTITUTION_MATCH_WITH_ID.getCode(),
@@ -89,8 +87,7 @@ public class EducationalInstitutionServiceImpl implements EducationalInstitution
 		Result<EducationalInstitutionDto> res = new Result<>();
 		res.setData(null);
 		Response<EducationalInstitutionDto> getEducationalInstitutionName = new Response<>();
-		Optional<EducationalInstitution> educationalInst = null;
-		educationalInst = this.educationalInstitutionRepository
+		Optional<EducationalInstitution> educationalInst =this.educationalInstitutionRepository
 				.findByeducationalInstitutionName(educationalInstitutionName);
 		Result<EducationalInstitutionDto> educationalInstitutionResult = new Result<>();
 		if (!educationalInst.isPresent()) {

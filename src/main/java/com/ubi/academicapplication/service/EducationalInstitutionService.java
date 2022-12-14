@@ -26,4 +26,5 @@ public interface EducationalInstitutionService {
 
 	Response<EducationalRegionDto> getEduInstwithRegion(int id);
 
+
 }
