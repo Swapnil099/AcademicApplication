@@ -69,8 +69,7 @@ public class StudentServiceImpl implements StudentService {
 	public Response<StudentDto> getStudentById(int id) {
 		res.setData(null);
 		Response<StudentDto> getStudent = new Response<StudentDto>();
-		Optional<Student> std = null;
-		std = this.repository.findById(id);
+		Optional<Student> std = this.repository.findById(id);
 		Result<StudentDto> studentResult = new Result<>();
 		if (!std.isPresent()) {
 			throw new CustomException(HttpStatusCode.NO_STUDENT_MATCH_WITH_ID.getCode(),
