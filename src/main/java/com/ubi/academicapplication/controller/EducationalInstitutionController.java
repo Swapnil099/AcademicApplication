@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ubi.academicapplication.dto.educationaldto.EducationalInstitutionDto;
+import com.ubi.academicapplication.dto.regionDto.EIRegionMappingDto;
+import com.ubi.academicapplication.dto.regionDto.EducationalRegionDto;
 import com.ubi.academicapplication.dto.response.Response;
 import com.ubi.academicapplication.service.EducationalInstitutionService;
 
@@ -108,5 +110,13 @@ public class EducationalInstitutionController {
 		return ResponseEntity.ok().body(updateEducationalInst);
 
 	}
+	
+	@Operation(summary = "Map EducationalInstitute and  Region", security = @SecurityRequirement(name = "bearerAuth"))
+	@PostMapping("/addRegion")
+	private ResponseEntity<Response<EducationalRegionDto>> addRegion(@RequestBody EIRegionMappingDto eduRegionDto) {
+		Response<EducationalRegionDto> response=educationalInstitutionService.addRegion(eduRegionDto);
+		 return ResponseEntity.ok().body(response);
+	}
+	
 
 }

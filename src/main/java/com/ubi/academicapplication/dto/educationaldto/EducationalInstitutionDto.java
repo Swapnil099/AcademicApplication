@@ -8,21 +8,21 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EducationalInstitutionDto {
-	
-private int id;
-	
+
+	private int id;
+
 	private String educationalInstitutionCode;
-	
+
 	private String educationalInstitutionName;
-	
+
 	private String educationalInstitutionType;
-	
+
 	private Long strength;
-	
+
 	private String state;
-	
+
 	private String exemptionFlag;
-	
+
 	private Long vvnAccount;
 
 }
