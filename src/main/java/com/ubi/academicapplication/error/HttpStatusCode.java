@@ -20,12 +20,9 @@ public enum HttpStatusCode {
 	
 	PAYMENT_RETRIVED_SUCCESSFULLY(200,"Payment Retrived"),
 	
-    
     NO_CLASSCODE_FOUND(202,"No class code found"),
     
     NO_CLASS_FOUND(108,"No class found"),
-	
-	PAYMENT_RETRIVED_SUCCESSFULLY(200,"Payment Retrived"),
 	
 	NO_CONTACTINFO_FOUND(108,"No contact info found"),
 

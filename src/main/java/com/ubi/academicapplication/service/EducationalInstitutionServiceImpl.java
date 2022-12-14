@@ -1,6 +1,5 @@
 package com.ubi.academicapplication.service;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -34,7 +33,7 @@ public class EducationalInstitutionServiceImpl implements EducationalInstitution
 
 	@Autowired
 	private EducationalInstitutionMapper educationalInstitutionMapper;
-	
+
 	@Autowired
 	private RegionRepository regionRepository;
 
@@ -192,15 +191,13 @@ public class EducationalInstitutionServiceImpl implements EducationalInstitution
 		int regionId = eIRegionMappingDto.getRegionid();
 		Response<EducationalRegionDto> response = new Response<>();
 		Result<EducationalRegionDto> res = new Result<>();
-		EducationalInstitution eduInstitute=educationalInstitutionRepository.getReferenceById(eduId);
-		Region region=regionRepository.getReferenceById(regionId);
+		EducationalInstitution eduInstitute = educationalInstitutionRepository.getReferenceById(eduId);
+		Region region = regionRepository.getReferenceById(regionId);
 		Set<Region> setOfRegion = eduInstitute.getRegion();
-		for(Region currRegion:setOfRegion) {
-			if(currRegion.getId() == region.getId()) {
-				throw new CustomException(HttpStatusCode.MAPPING_ALREADY_EXIST.getCode(), 
-						HttpStatusCode.MAPPING_ALREADY_EXIST, 
-						HttpStatusCode.MAPPING_ALREADY_EXIST.getMessage(), 
-						res);
+		for (Region currRegion : setOfRegion) {
+			if (currRegion.getId() == region.getId()) {
+				throw new CustomException(HttpStatusCode.MAPPING_ALREADY_EXIST.getCode(),
+						HttpStatusCode.MAPPING_ALREADY_EXIST, HttpStatusCode.MAPPING_ALREADY_EXIST.getMessage(), res);
 			}
 		}
 		eduInstitute.getRegion().add(region);
@@ -212,6 +209,32 @@ public class EducationalInstitutionServiceImpl implements EducationalInstitution
 		response.setMessage(HttpStatusCode.SUCCESSFUL.getMessage());
 		response.setResult(new Result<EducationalRegionDto>(educationalRegionDto));
 		return response;
+	}
+
+	@Override
+	public Response<EducationalRegionDto> getEduInstwithRegion(int id) {
+
+		Response<EducationalRegionDto> response = new Response<>();
+		Result<EducationalRegionDto> res = new Result<>();
+
+		Optional<EducationalInstitution> educationalInst = this.educationalInstitutionRepository.findById(id);
+
+		if (!educationalInst.isPresent()) {
+			throw new CustomException(HttpStatusCode.NO_EDUCATIONAL_INSTITUTION_MATCH_WITH_ID.getCode(),
+					HttpStatusCode.NO_EDUCATIONAL_INSTITUTION_MATCH_WITH_ID,
+					HttpStatusCode.NO_EDUCATIONAL_INSTITUTION_MATCH_WITH_ID.getMessage(), res);
+		}
+		EducationalRegionDto educationalRegionDto = new EducationalRegionDto();
+		educationalRegionDto.setEducationalInstitute(educationalInst.get());
+		educationalRegionDto.setRegions(educationalInst.get().getRegion());
+
+		res.setData(educationalRegionDto);
+
+		response.setStatusCode(HttpStatusCode.EDUCATIONAL_INSTITUTION_RETRIVED_SUCCESSFULLY.getCode());
+		response.setMessage(HttpStatusCode.EDUCATIONAL_INSTITUTION_RETRIVED_SUCCESSFULLY.getMessage());
+		response.setResult(res);
+		return response;
+
 	}
 
 }

@@ -110,13 +110,19 @@ public class EducationalInstitutionController {
 		return ResponseEntity.ok().body(updateEducationalInst);
 
 	}
-	
+
 	@Operation(summary = "Map EducationalInstitute and  Region", security = @SecurityRequirement(name = "bearerAuth"))
 	@PostMapping("/addRegion")
 	private ResponseEntity<Response<EducationalRegionDto>> addRegion(@RequestBody EIRegionMappingDto eduRegionDto) {
-		Response<EducationalRegionDto> response=educationalInstitutionService.addRegion(eduRegionDto);
-		 return ResponseEntity.ok().body(response);
+		Response<EducationalRegionDto> response = educationalInstitutionService.addRegion(eduRegionDto);
+		return ResponseEntity.ok().body(response);
 	}
-	
+
+	@Operation(summary = "Get Region In EducationalInstitute", security = @SecurityRequirement(name = "bearerAuth"))
+	@GetMapping("/getEduInst/{id}")
+	private ResponseEntity<Response<EducationalRegionDto>> getRegionInEduIst(@PathVariable int id) {
+		Response<EducationalRegionDto> response = educationalInstitutionService.getEduInstwithRegion(id);
+		return ResponseEntity.ok().body(response);
+	}
 
 }
