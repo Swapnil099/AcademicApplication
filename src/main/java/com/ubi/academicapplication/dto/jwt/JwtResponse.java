@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 @Data @RequiredArgsConstructor
 @AllArgsConstructor
 public class JwtResponse {
+	long id;
     String token;
     String roleType;
 }

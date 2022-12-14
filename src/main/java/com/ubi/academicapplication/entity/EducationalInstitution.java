@@ -1,18 +1,31 @@
 package com.ubi.academicapplication.entity;
 
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class EducationalInstitution {
 	
 	@Id
@@ -32,6 +45,18 @@ public class EducationalInstitution {
 	private String exemptionFlag;
 	
 	private Long vvnAccount;
+	
+	
+	@ManyToMany(cascade=CascadeType.ALL)
+	@JoinTable(name="EI_REGION_TABLE",
+	joinColumns= {
+			@JoinColumn(name="educationalInstitution_id",referencedColumnName="id")
+	},
+	inverseJoinColumns= {
+			@JoinColumn(name="region_id",referencedColumnName="id")
+	})
+	@JsonIgnore
+	private Set<Region> region;
 	
 	
 	

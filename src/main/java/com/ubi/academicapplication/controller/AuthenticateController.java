@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ubi.academicapplication.dto.jwt.JwtResponse;
 import com.ubi.academicapplication.dto.jwt.LoginCredentialDto;
 import com.ubi.academicapplication.dto.response.Response;
+import com.ubi.academicapplication.dto.user.UserDto;
 import com.ubi.academicapplication.error.CustomException;
 import com.ubi.academicapplication.error.HttpStatusCode;
 import com.ubi.academicapplication.error.Result;
@@ -56,11 +57,12 @@ public class AuthenticateController {
         }
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         String roleName = userService.getRoleByUsername(username);
+        UserDto userDto = userService.getUserByUsername(username);
         String token = jwtUtil.generateToken(userDetails);
 
         response.setStatusCode(HttpStatusCode.SUCCESSFUL.getCode());
         response.setMessage(HttpStatusCode.SUCCESSFUL.getMessage());
-        response.setResult(new Result<>(new JwtResponse(token,roleName)));
+        response.setResult(new Result<>(new JwtResponse(userDto.getId(),token,roleName)));
         return response;
     }
 

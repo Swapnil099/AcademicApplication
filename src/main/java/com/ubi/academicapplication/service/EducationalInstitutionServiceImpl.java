@@ -1,7 +1,9 @@
 package com.ubi.academicapplication.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,13 +14,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.ubi.academicapplication.dto.educationaldto.EducationalInstitutionDto;
+import com.ubi.academicapplication.dto.regionDto.EIRegionMappingDto;
+import com.ubi.academicapplication.dto.regionDto.EducationalRegionDto;
 import com.ubi.academicapplication.dto.response.Response;
 import com.ubi.academicapplication.entity.EducationalInstitution;
+import com.ubi.academicapplication.entity.Region;
 import com.ubi.academicapplication.error.CustomException;
 import com.ubi.academicapplication.error.HttpStatusCode;
 import com.ubi.academicapplication.error.Result;
 import com.ubi.academicapplication.mapper.EducationalInstitutionMapper;
 import com.ubi.academicapplication.repository.EducationalInstitutionRepository;
+import com.ubi.academicapplication.repository.RegionRepository;
 
 @Service
 public class EducationalInstitutionServiceImpl implements EducationalInstitutionService {
@@ -28,6 +34,9 @@ public class EducationalInstitutionServiceImpl implements EducationalInstitution
 
 	@Autowired
 	private EducationalInstitutionMapper educationalInstitutionMapper;
+	
+	@Autowired
+	private RegionRepository regionRepository;
 
 	Logger logger = LoggerFactory.getLogger(EducationalInstitutionServiceImpl.class);
 
@@ -174,6 +183,34 @@ public class EducationalInstitutionServiceImpl implements EducationalInstitution
 		response.setMessage(HttpStatusCode.EDUCATIONAL_INSTITUTION_UPDATED.getMessage());
 		response.setStatusCode(HttpStatusCode.EDUCATIONAL_INSTITUTION_UPDATED.getCode());
 		response.setResult(new Result<>(educationalInstitutionMapper.entityToDto(updateEducationalInst)));
+		return response;
+	}
+
+	@Override
+	public Response<EducationalRegionDto> addRegion(EIRegionMappingDto eIRegionMappingDto) {
+		int eduId = eIRegionMappingDto.getEducationalInstitutionId();
+		int regionId = eIRegionMappingDto.getRegionid();
+		Response<EducationalRegionDto> response = new Response<>();
+		Result<EducationalRegionDto> res = new Result<>();
+		EducationalInstitution eduInstitute=educationalInstitutionRepository.getReferenceById(eduId);
+		Region region=regionRepository.getReferenceById(regionId);
+		Set<Region> setOfRegion = eduInstitute.getRegion();
+		for(Region currRegion:setOfRegion) {
+			if(currRegion.getId() == region.getId()) {
+				throw new CustomException(HttpStatusCode.MAPPING_ALREADY_EXIST.getCode(), 
+						HttpStatusCode.MAPPING_ALREADY_EXIST, 
+						HttpStatusCode.MAPPING_ALREADY_EXIST.getMessage(), 
+						res);
+			}
+		}
+		eduInstitute.getRegion().add(region);
+		region.getEducationalInstitiute().add(eduInstitute);
+		regionRepository.save(region);
+		educationalInstitutionRepository.save(eduInstitute);
+		EducationalRegionDto educationalRegionDto = educationalInstitutionMapper.toEducationalRegionDto(eduInstitute);
+		response.setStatusCode(HttpStatusCode.SUCCESSFUL.getCode());
+		response.setMessage(HttpStatusCode.SUCCESSFUL.getMessage());
+		response.setResult(new Result<EducationalRegionDto>(educationalRegionDto));
 		return response;
 	}
 

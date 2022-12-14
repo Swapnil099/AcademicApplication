@@ -8,7 +8,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 import com.ubi.academicapplication.dto.educationaldto.EducationalInstitutionDto;
+import com.ubi.academicapplication.dto.regionDto.EducationalRegionDto;
 import com.ubi.academicapplication.entity.EducationalInstitution;
+import com.ubi.academicapplication.entity.Region;
 
 @Component
 public class EducationalInstitutionMapper {
@@ -33,5 +35,12 @@ public class EducationalInstitutionMapper {
 		return educationalInstitutionDtos.stream().filter(Objects::nonNull).map(this::dtoToEntity)
 				.collect(Collectors.toList());
 	}
+	
+	public EducationalRegionDto toEducationalRegionDto(EducationalInstitution educationalInstitute)
+	{
+		return new EducationalRegionDto(educationalInstitute,educationalInstitute.getRegion());
+	}
+	
+	
 
 }

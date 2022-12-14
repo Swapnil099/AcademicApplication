@@ -3,6 +3,8 @@ package com.ubi.academicapplication.service;
 import java.util.List;
 
 import com.ubi.academicapplication.dto.educationaldto.EducationalInstitutionDto;
+import com.ubi.academicapplication.dto.regionDto.EIRegionMappingDto;
+import com.ubi.academicapplication.dto.regionDto.EducationalRegionDto;
 import com.ubi.academicapplication.dto.response.Response;
 
 public interface EducationalInstitutionService {
@@ -19,5 +21,5 @@ public interface EducationalInstitutionService {
 
 	Response<EducationalInstitutionDto> updateEducationalInstitution(
 			EducationalInstitutionDto educationalInstitutionDto);
-
+	Response<EducationalRegionDto> addRegion(EIRegionMappingDto eIRegionMappingDto);
 }
