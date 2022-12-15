@@ -11,10 +11,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.ubi.academicapplication.model.Authority;
 
 import lombok.AllArgsConstructor;
@@ -23,6 +25,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity(name="user_details")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Getter @Setter @AllArgsConstructor @NoArgsConstructor
 public class User implements UserDetails {
 
@@ -78,4 +81,7 @@ public class User implements UserDetails {
 		return true;
 	}
 
+	@OneToOne
+    @JoinColumn(name = "contact_id", referencedColumnName = "contactInfoId")
+    private ContactInfo contactInfo;
 }

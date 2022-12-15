@@ -10,6 +10,10 @@ public enum HttpStatusCode {
 	
 	NO_STUDENT_FOUND(108,"No Student Found"),
 	
+	USER_RETRIVED_SUCCESSFULLY(200,"User Retrived"),
+	
+	NO_USER_MATCH_WITH_ID(109,"No User found with given Id "),
+	
 	NO_STUDENT_MATCH_WITH_ID(109,"No such student found with such id"),
 	
 	NO_CLASS_MATCH_WITH_ID(109,"No such class found with such id"),
