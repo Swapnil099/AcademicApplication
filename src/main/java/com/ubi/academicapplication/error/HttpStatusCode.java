@@ -38,7 +38,8 @@ public enum HttpStatusCode {
 	
 	NO_CONTACTINFO_MATCH_WITH_ID(109,"No such contact info found with such id"),
 
-
+	NO_TRANSFER_CERTIFICATE_MATCH_WITH_ID(109,"No such Transfer Certificate found with such id"),
+	
 	NO_SCHOOL_MATCH_WITH_ID(109, "No School Found with Given ID"),
 
 	NO_SCHOOL_FOUND(108, "No School Found"),
