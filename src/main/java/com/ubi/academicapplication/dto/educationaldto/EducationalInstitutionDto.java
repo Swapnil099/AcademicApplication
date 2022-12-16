@@ -3,10 +3,12 @@ package com.ubi.academicapplication.dto.educationaldto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class EducationalInstitutionDto {
 
 	private int id;

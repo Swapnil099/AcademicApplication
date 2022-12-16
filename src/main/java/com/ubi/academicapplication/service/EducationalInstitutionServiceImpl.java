@@ -22,6 +22,7 @@ import com.ubi.academicapplication.error.CustomException;
 import com.ubi.academicapplication.error.HttpStatusCode;
 import com.ubi.academicapplication.error.Result;
 import com.ubi.academicapplication.mapper.EducationalInstitutionMapper;
+import com.ubi.academicapplication.mapper.RegionMapper;
 import com.ubi.academicapplication.repository.EducationalInstitutionRepository;
 import com.ubi.academicapplication.repository.RegionRepository;
 
@@ -33,6 +34,9 @@ public class EducationalInstitutionServiceImpl implements EducationalInstitution
 
 	@Autowired
 	private EducationalInstitutionMapper educationalInstitutionMapper;
+	
+	@Autowired
+	private RegionMapper regionMapper;
 
 	@Autowired
 	private RegionRepository regionRepository;
@@ -204,9 +208,11 @@ public class EducationalInstitutionServiceImpl implements EducationalInstitution
 		EducationalRegionDto educationalRegionDto = educationalInstitutionMapper.toEducationalRegionDto(eduInstitute);
 		response.setStatusCode(HttpStatusCode.SUCCESSFUL.getCode());
 		response.setMessage(HttpStatusCode.SUCCESSFUL.getMessage());
-		response.setResult(new Result<EducationalRegionDto>(educationalRegionDto));
+		response.setResult(new Result<>(educationalRegionDto));
 		return response;
 	}
+
+
 
 	@Override
 	public Response<EducationalRegionDto> getEduInstwithRegion(int id) {
@@ -222,14 +228,14 @@ public class EducationalInstitutionServiceImpl implements EducationalInstitution
 					HttpStatusCode.NO_EDUCATIONAL_INSTITUTION_MATCH_WITH_ID.getMessage(), res);
 		}
 		EducationalRegionDto educationalRegionDto = new EducationalRegionDto();
-		educationalRegionDto.setEducationalInstitute(educationalInst.get());
-		educationalRegionDto.setRegions(educationalInst.get().getRegion());
+		educationalRegionDto.setEducationalInstituteDto(educationalInstitutionMapper.entityToDto(educationalInst.get()));
+		educationalRegionDto.setRegionDto(regionMapper.entitiesToDto(educationalInst.get().getRegion()));
 
 		res.setData(educationalRegionDto);
 
 		response.setStatusCode(HttpStatusCode.EDUCATIONAL_INSTITUTION_RETRIVED_SUCCESSFULLY.getCode());
 		response.setMessage(HttpStatusCode.EDUCATIONAL_INSTITUTION_RETRIVED_SUCCESSFULLY.getMessage());
-		response.setResult(res);
+		response.setResult(new Result<>(educationalRegionDto));
 		return response;
 
 	}

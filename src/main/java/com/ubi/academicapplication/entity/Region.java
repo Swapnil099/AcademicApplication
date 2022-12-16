@@ -5,7 +5,6 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,6 +18,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
+
+
 
 @Getter
 @Setter
@@ -40,8 +42,6 @@ public class Region {
 	private String name;
 	
 	@ManyToMany(mappedBy="region",cascade = CascadeType.ALL)
-	
-	@JsonIgnore
 	private Set<EducationalInstitution> educationalInstitiute;
 	
 }
