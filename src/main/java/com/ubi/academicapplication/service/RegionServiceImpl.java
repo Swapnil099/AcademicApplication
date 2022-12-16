@@ -1,11 +1,10 @@
 package com.ubi.academicapplication.service;
 
 import java.io.ByteArrayInputStream;
-
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
-import com.ubi.academicapplication.dto.response.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,11 +14,14 @@ import org.springframework.stereotype.Service;
 import com.ubi.academicapplication.csv.CsvHelper;
 import com.ubi.academicapplication.dto.paymentdto.PaymentDto;
 import com.ubi.academicapplication.dto.regionDto.RegionDto;
+import com.ubi.academicapplication.dto.response.Response;
+import com.ubi.academicapplication.entity.EducationalInstitution;
 import com.ubi.academicapplication.entity.Region;
 import com.ubi.academicapplication.error.CustomException;
 import com.ubi.academicapplication.error.HttpStatusCode;
 import com.ubi.academicapplication.error.Result;
 import com.ubi.academicapplication.mapper.RegionMapper;
+import com.ubi.academicapplication.repository.EducationalInstitutionRepository;
 import com.ubi.academicapplication.repository.RegionRepository;
 
 @Service
@@ -30,7 +32,11 @@ public class RegionServiceImpl implements RegionService {
 
 	@Autowired
 	private RegionMapper regionMapper;
-
+	
+	
+	@Autowired
+	private EducationalInstitutionRepository educationalInstitutionRepository;
+	
 	@Override
 	public Response<RegionDto> addRegion(RegionDto regionDto) {
 		Result<RegionDto> res = new Result<>();
@@ -92,7 +98,14 @@ public class RegionServiceImpl implements RegionService {
 			throw new CustomException(HttpStatusCode.RESOURCE_NOT_FOUND.getCode(), HttpStatusCode.RESOURCE_NOT_FOUND,
 					HttpStatusCode.RESOURCE_NOT_FOUND.getMessage(), res);
 		}
-		regionRepository.deleteById(id);
+		
+		for(EducationalInstitution eduInsti:region.get().getEducationalInstitiute()) {
+			eduInsti.getRegion().remove(region.get());
+			educationalInstitutionRepository.save(eduInsti);
+		}
+		region.get().setEducationalInstitiute(new HashSet<>());
+		regionRepository.save(region.get());
+		regionRepository.deleteById(id);	
 		Response<RegionDto> response = new Response<>();
 		response.setMessage(HttpStatusCode.REGION_DELETED_SUCCESSFULLY.getMessage());
 		response.setStatusCode(HttpStatusCode.REGION_DELETED_SUCCESSFULLY.getCode());

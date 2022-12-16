@@ -48,7 +48,7 @@ public class EducationalInstitution {
 	private Long vvnAccount;
 	
 	
-	@ManyToMany(cascade=CascadeType.ALL)
+	@ManyToMany(cascade=CascadeType.MERGE)
 	@JoinTable(name="EI_REGION_TABLE",
 	joinColumns= {
 			@JoinColumn(name="educationalInstitution_id",referencedColumnName="id")
