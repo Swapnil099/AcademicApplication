@@ -156,6 +156,24 @@ public class RegionServiceImpl implements RegionService {
         ByteArrayInputStream out = CsvHelper.regionCSV(region);
 	    return out;
 	  }
+
+	@Override
+	public Response<RegionDto> getRegionByName(String name) {
+		Response<RegionDto> getRegion = new Response<RegionDto>();
+		Region region = regionRepository.getRegionByName(name);
+		Result<RegionDto> regionResult = new Result<>();
+		if (region==null) {
+			throw new CustomException(HttpStatusCode.REGION_NOT_FOUND.getCode(),
+					HttpStatusCode.REGION_NOT_FOUND, HttpStatusCode.REGION_NOT_FOUND.getMessage(),
+					regionResult);
+		}
+		
+		regionResult.setData(regionMapper.toDto(region));
+		getRegion.setStatusCode(HttpStatusCode.REGION_RETREIVED_SUCCESSFULLY.getCode());
+		getRegion.setMessage(HttpStatusCode.REGION_RETREIVED_SUCCESSFULLY.getMessage());
+		getRegion.setResult(regionResult);
+		return getRegion;
+	}
 	
 
 }

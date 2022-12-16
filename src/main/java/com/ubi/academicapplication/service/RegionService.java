@@ -19,4 +19,6 @@ public interface RegionService {
 	Response<RegionDto> updateRegionDetails(RegionDto regionDto);
 	
 	ByteArrayInputStream load();
+	
+	Response<RegionDto> getRegionByName(String name);
 }
