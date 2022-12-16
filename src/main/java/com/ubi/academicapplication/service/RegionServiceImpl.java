@@ -42,9 +42,23 @@ public class RegionServiceImpl implements RegionService {
 		Result<RegionDto> res = new Result<>();
 		Response<RegionDto> response = new Response<>();
 		Optional<Region> tempRegion = regionRepository.findById(regionDto.getId());
-		if (tempRegion.isPresent()) {
+		Region regionName=regionRepository.getRegionByName(regionDto.getName());
+		Region regionCode=regionRepository.getRegionByCode(regionDto.getCode());
+		if (tempRegion.isPresent()){
 			throw new CustomException(HttpStatusCode.RESOURCE_NOT_FOUND.getCode(), HttpStatusCode.RESOURCE_NOT_FOUND,
 					HttpStatusCode.RESOURCE_NOT_FOUND.getMessage(), res);
+		}
+		if(regionName!=null)
+		{
+			throw new CustomException(HttpStatusCode.RESOURCE_ALREADY_EXISTS.getCode(),
+					HttpStatusCode.RESOURCE_ALREADY_EXISTS,HttpStatusCode.RESOURCE_ALREADY_EXISTS.getMessage(),
+					res);
+		}
+		if(regionCode!=null)
+		{
+			throw new CustomException(HttpStatusCode.RESOURCE_ALREADY_EXISTS.getCode(),
+					HttpStatusCode.RESOURCE_ALREADY_EXISTS,HttpStatusCode.RESOURCE_ALREADY_EXISTS.getMessage(),
+					res);
 		}
 		Region saveRegion = regionRepository.save(regionMapper.dtoToEntity(regionDto));
 		response.setStatusCode(HttpStatusCode.RESOURCE_CREATED_SUCCESSFULLY.getCode());
