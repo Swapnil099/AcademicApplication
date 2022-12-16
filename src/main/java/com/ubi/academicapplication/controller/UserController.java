@@ -3,6 +3,8 @@ package com.ubi.academicapplication.controller;
 import java.util.List;
 
 import com.ubi.academicapplication.dto.user.PasswordChangeDto;
+import com.ubi.academicapplication.dto.user.UserContactInfoDto;
+import com.ubi.academicapplication.dto.user.UserContactInfoMappingDto;
 import com.ubi.academicapplication.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -80,4 +82,19 @@ public class UserController {
         Response<UserDto> response = userService.updateUserById(userId, userCreationDto);
         return ResponseEntity.ok().body(response);
     }
+    
+    @Operation(summary = "Map User and  ContactInfo", security = @SecurityRequirement(name = "bearerAuth"))
+	@PostMapping("/addContactInfo")
+    public ResponseEntity<Response<UserContactInfoDto>> addContactInfo(@RequestBody UserContactInfoMappingDto userContactDto) {
+    	System.out.println(userContactDto.toString());
+		Response<UserContactInfoDto> response=userService.addContactInfo(userContactDto);
+		 return ResponseEntity.ok().body(response);
+	}
+    
+    @Operation(summary = "Get ContactInfo In User", security = @SecurityRequirement(name = "bearerAuth"))
+	@GetMapping("/getUser/{id}")
+    public ResponseEntity<Response<UserContactInfoDto>> getContactInfowithUser(@PathVariable Long id) {
+		Response<UserContactInfoDto> response = userService.getContactInfowithUser(id);
+		return ResponseEntity.ok().body(response);
+	}
 }

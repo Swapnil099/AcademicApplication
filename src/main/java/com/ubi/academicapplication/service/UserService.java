@@ -1,5 +1,7 @@
 package com.ubi.academicapplication.service;
 import com.ubi.academicapplication.dto.response.Response;
+import com.ubi.academicapplication.dto.user.UserContactInfoDto;
+import com.ubi.academicapplication.dto.user.UserContactInfoMappingDto;
 import com.ubi.academicapplication.dto.user.UserCreationDto;
 import com.ubi.academicapplication.dto.user.UserDto;
 import com.ubi.academicapplication.entity.User;
@@ -29,4 +31,8 @@ public interface UserService {
      Response<String> changeSelfPassword(String userId, String newPassword);
 
      Response<UserDto> updateUserById(String userId,UserCreationDto userCreationDto);
+     
+     Response<UserContactInfoDto> addContactInfo(UserContactInfoMappingDto userContactInfoMappingDto);
+     
+     Response<UserContactInfoDto> getContactInfowithUser(Long id);
 }

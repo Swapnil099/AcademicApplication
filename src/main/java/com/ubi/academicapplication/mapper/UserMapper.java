@@ -1,13 +1,16 @@
 package com.ubi.academicapplication.mapper;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.ubi.academicapplication.dto.contactinfodto.ContactInfoDto;
+import com.ubi.academicapplication.dto.user.UserContactInfoDto;
 import com.ubi.academicapplication.dto.user.UserCreationDto;
 import com.ubi.academicapplication.dto.user.UserDto;
 import com.ubi.academicapplication.entity.Role;
 import com.ubi.academicapplication.entity.User;
 import com.ubi.academicapplication.service.RoleService;
 import com.ubi.academicapplication.util.AutogeneratePassword;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 @Service
 public class UserMapper {
@@ -15,6 +18,9 @@ public class UserMapper {
     @Autowired
     RoleService roleService;
 
+    @Autowired
+    ContactInfoMapper contactInfoMapper;
+    
     @Autowired
     AutogeneratePassword autogeneratePassword;
 
@@ -33,4 +39,15 @@ public class UserMapper {
                 role
         );
     }
+   /* public UserContactInfoDto toUserContactInfoDto(User user)
+	{
+    	UserDto userDto= this.toDto(user);
+    	ContactInfoDto contactInfoDto= contactInfoMapper.entityToDto(user.getContactInfo());
+		return new UserContactInfoDto(userDto,contactInfoDto);
+	}*/
+    
+    public UserContactInfoDto toUserContactInfoDto(User user)
+	{
+		return new UserContactInfoDto(user,user.getContactInfo());
+	}
 }
