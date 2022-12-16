@@ -87,8 +87,8 @@ public class TransferCertificateServiceImpl implements TransferCertificateServic
     		Optional<TransferCertificate> tc = this.transferCertificateRepository.findById(transferCertificateId);
     		Result<TransferCertificateDto> transferCertificateResult = new Result<>();
     		if (!tc.isPresent()) {
-    			throw new CustomException(HttpStatusCode.NO_STUDENT_MATCH_WITH_ID.getCode(),
-    					HttpStatusCode.NO_STUDENT_MATCH_WITH_ID, HttpStatusCode.NO_STUDENT_MATCH_WITH_ID.getMessage(), res);
+    			throw new CustomException(HttpStatusCode.NO_TRANSFER_CERTIFICATE_MATCH_WITH_ID.getCode(),
+    					HttpStatusCode.NO_TRANSFER_CERTIFICATE_MATCH_WITH_ID, HttpStatusCode.NO_TRANSFER_CERTIFICATE_MATCH_WITH_ID.getMessage(), res);
     		}
     		transferCertificateResult.setData(transferCertificateMapper.entityToDto(tc.get()));
     		getTransferCertificate.setStatusCode(200);
