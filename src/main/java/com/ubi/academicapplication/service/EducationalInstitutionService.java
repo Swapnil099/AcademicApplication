@@ -1,5 +1,6 @@
 package com.ubi.academicapplication.service;
 
+import java.io.ByteArrayInputStream;
 import java.util.List;
 
 import com.ubi.academicapplication.dto.educationaldto.EducationalInstitutionDto;
@@ -25,6 +26,8 @@ public interface EducationalInstitutionService {
 	Response<EducationalRegionDto> addRegion(EIRegionMappingDto eIRegionMappingDto);
 
 	Response<EducationalRegionDto> getEduInstwithRegion(int id);
+	
+	ByteArrayInputStream load();
 
 
 }

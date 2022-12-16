@@ -5,7 +5,11 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -123,6 +127,20 @@ public class EducationalInstitutionController {
 	public ResponseEntity<Response<EducationalRegionDto>> getRegionInEduIst(@PathVariable int id) {
 		Response<EducationalRegionDto> response = educationalInstitutionService.getEduInstwithRegion(id);
 		return ResponseEntity.ok().body(response);
+	}
+	
+	
+	@Operation(summary="Download file ",security=@SecurityRequirement(name= "bearerAuth"))
+	@GetMapping("/download")
+	public ResponseEntity<Resource> getCSVFileData()
+	{
+	    String filename = "education.csv";
+	    InputStreamResource file = new InputStreamResource(educationalInstitutionService.load());
+
+	    return ResponseEntity.ok()
+	        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
+	        .contentType(MediaType.parseMediaType("application/csv"))
+	        .body(file);
 	}
 
 }
