@@ -10,7 +10,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
@@ -18,7 +17,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 
 
@@ -41,7 +39,7 @@ public class Region {
 	@Column(name="regionName")
 	private String name;
 	
-	@ManyToMany(mappedBy="region",cascade = CascadeType.ALL)
+	@ManyToMany(mappedBy="region",cascade = CascadeType.MERGE)
 	private Set<EducationalInstitution> educationalInstitiute;
 	
 }
