@@ -10,16 +10,11 @@ import java.util.List;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.QuoteMode;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.ubi.academicapplication.entity.EducationalInstitution;
 import com.ubi.academicapplication.entity.Region;
-import com.ubi.academicapplication.mapper.EducationalInstitutionMapper;
 
 public class CsvHelper {
-
-	@Autowired
-	static EducationalInstitutionMapper educationalInstitutionMapper;
 
 	public static ByteArrayInputStream regionCSV(List<Region> region) {
 		final CSVFormat format = CSVFormat.DEFAULT.withQuoteMode(QuoteMode.MINIMAL);
