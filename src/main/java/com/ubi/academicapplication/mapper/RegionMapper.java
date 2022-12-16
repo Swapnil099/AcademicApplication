@@ -2,6 +2,7 @@ package com.ubi.academicapplication.mapper;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -21,6 +22,10 @@ public class RegionMapper {
 
 	public List<RegionDto> entitiesToDtos(List<Region> region) {
 		return region.stream().filter(Objects::nonNull).map(this::entityToDto).collect(Collectors.toList());
+	}
+	
+	public Set<RegionDto> entitiesToDto(Set<Region> region) {
+		return region.stream().filter(Objects::nonNull).map(this::entityToDto).collect(Collectors.toSet());
 	}
 
 	public Region dtoToEntity(RegionDto regionDto) {

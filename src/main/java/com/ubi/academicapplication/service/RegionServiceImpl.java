@@ -1,5 +1,7 @@
 package com.ubi.academicapplication.service;
 
+import java.io.ByteArrayInputStream;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -10,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.ubi.academicapplication.csv.CsvHelper;
 import com.ubi.academicapplication.dto.paymentdto.PaymentDto;
 import com.ubi.academicapplication.dto.regionDto.RegionDto;
 import com.ubi.academicapplication.entity.Region;
@@ -118,5 +121,14 @@ public class RegionServiceImpl implements RegionService {
 		response.setResult(new Result<>(regionMapper.entityToDto(updateRegion)));
 		return response;
 	}
+
+
+	@Override
+	public ByteArrayInputStream load() {
+		List<Region> region=regionRepository.findAll();
+        ByteArrayInputStream out = CsvHelper.regionCSV(region);
+	    return out;
+	  }
+	
 
 }

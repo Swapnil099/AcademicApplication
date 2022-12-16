@@ -6,7 +6,11 @@ import com.ubi.academicapplication.dto.response.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -86,6 +90,19 @@ public class RegionController {
 
 		return ResponseEntity.ok().body(response);
 
+	}
+	
+	@Operation(summary="Download file ",security=@SecurityRequirement(name= "bearerAuth"))
+	@GetMapping("/download")
+	public ResponseEntity<Resource> getCSVFileData()
+	{
+	    String filename = "region.csv";
+	    InputStreamResource file = new InputStreamResource(regionService.load());
+
+	    return ResponseEntity.ok()
+	        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
+	        .contentType(MediaType.parseMediaType("application/csv"))
+	        .body(file);
 	}
 
 }

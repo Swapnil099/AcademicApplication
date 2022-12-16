@@ -1,5 +1,6 @@
 package com.ubi.academicapplication.service;
 
+import java.io.ByteArrayInputStream;
 import java.util.List;
 
 import com.ubi.academicapplication.dto.regionDto.RegionDto;
@@ -16,4 +17,6 @@ public interface RegionService {
 	public Response<RegionDto> deleteRegionById(int id);
 
 	Response<RegionDto> updateRegionDetails(RegionDto regionDto);
+	
+	ByteArrayInputStream load();
 }

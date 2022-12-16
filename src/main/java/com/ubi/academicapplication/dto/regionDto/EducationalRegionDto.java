@@ -2,8 +2,7 @@ package com.ubi.academicapplication.dto.regionDto;
 
 import java.util.Set;
 
-import com.ubi.academicapplication.entity.EducationalInstitution;
-import com.ubi.academicapplication.entity.Region;
+import com.ubi.academicapplication.dto.educationaldto.EducationalInstitutionDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,6 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EducationalRegionDto {
-	private EducationalInstitution educationalInstitute;
-	private Set<Region> regions;
+	private EducationalInstitutionDto educationalInstituteDto; 
+	private Set<RegionDto> regionDto;
 }
