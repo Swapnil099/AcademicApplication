@@ -1,5 +1,6 @@
 package com.ubi.academicapplication.service;
 
+import java.io.ByteArrayInputStream;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -12,6 +13,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.ubi.academicapplication.csv.CsvHelper;
+import com.ubi.academicapplication.csv.EducationalInstitutionCsvHelper;
 import com.ubi.academicapplication.dto.educationaldto.EducationalInstitutionDto;
 import com.ubi.academicapplication.dto.regionDto.EIRegionMappingDto;
 import com.ubi.academicapplication.dto.regionDto.EducationalRegionDto;
@@ -239,5 +242,14 @@ public class EducationalInstitutionServiceImpl implements EducationalInstitution
 		return response;
 
 	}
+	
+	
+	@Override
+	public ByteArrayInputStream load() {
+		List<EducationalInstitution> eduInst=educationalInstitutionRepository.findAll();
+        ByteArrayInputStream out = EducationalInstitutionCsvHelper.educationCSV(eduInst);
+	    return out;
+	  }
+	
 
 }
