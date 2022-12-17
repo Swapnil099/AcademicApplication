@@ -24,22 +24,27 @@ public class Student {
 	@GeneratedValue
 	private int studentId;
 	private String studentName;
+
+	@JsonFormat(pattern = "yyyy-MM-dd")
+	private LocalDate dateOfBirth;
+
 	private boolean studentStatus;
 	private String category;
+	private String minority;
 	private String fatherName;
 	private String fatherOccupation;
 	private String motherName;
 	private String motherOccupation;
 	private String gender;
-	
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	private LocalDate joiningDate;
-	
 	private String status;
 	private String verifiedByTeacher;
 	private String verifiedByPrincipal;
 	private String verifiedByRegion;
+	private Boolean isActivate;
+	private String currentStatus;
+	
 	
 
-	
 }
