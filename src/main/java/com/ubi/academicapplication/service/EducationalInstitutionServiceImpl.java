@@ -52,11 +52,32 @@ public class EducationalInstitutionServiceImpl implements EducationalInstitution
 		Response<EducationalInstitutionDto> response = new Response<>();
 		Optional<EducationalInstitution> tempeducationalInstitution = educationalInstitutionRepository
 				.findById(educationalInstitutionDto.getId());
+		
+        EducationalInstitution educationalInstitutionName=educationalInstitutionRepository.getEducationalInstitutionByeducationalInstitutionName(educationalInstitutionDto.getEducationalInstitutionName());
+		
+		EducationalInstitution educationalInstitutionCode=educationalInstitutionRepository.getEducationalInstitutionByeducationalInstitutionCode(educationalInstitutionDto.getEducationalInstitutionCode());
+		
+
 		if (tempeducationalInstitution.isPresent()) {
 			throw new CustomException(HttpStatusCode.NO_EDUCATIONAL_INSTITUTION_FOUND.getCode(),
 					HttpStatusCode.NO_EDUCATIONAL_INSTITUTION_FOUND,
 					HttpStatusCode.NO_EDUCATIONAL_INSTITUTION_FOUND.getMessage(), res);
 		}
+		
+		if(educationalInstitutionName !=null)
+		{
+			throw new CustomException(HttpStatusCode.EDUCATIONAL_INSTITUTION_NAME_ALREADY_EXISTS.getCode(),
+					HttpStatusCode.EDUCATIONAL_INSTITUTION_NAME_ALREADY_EXISTS,
+					HttpStatusCode.EDUCATIONAL_INSTITUTION_NAME_ALREADY_EXISTS.getMessage(), res);
+		}
+		
+		if(educationalInstitutionCode!=null)
+		{
+			throw new CustomException(HttpStatusCode.EDUCATIONAL_INSTITUTION_CODE_ALREADY_EXISTS.getCode(),
+					HttpStatusCode.EDUCATIONAL_INSTITUTION_CODE_ALREADY_EXISTS,
+					HttpStatusCode.EDUCATIONAL_INSTITUTION_CODE_ALREADY_EXISTS.getMessage(), res);
+		}
+		
 		EducationalInstitution saveEducationalInstitution = educationalInstitutionRepository
 				.save(educationalInstitutionMapper.dtoToEntity(educationalInstitutionDto));
 		response.setStatusCode(HttpStatusCode.RESOURCE_CREATED_SUCCESSFULLY.getCode());

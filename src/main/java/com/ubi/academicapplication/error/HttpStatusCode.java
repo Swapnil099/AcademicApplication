@@ -36,7 +36,13 @@ public enum HttpStatusCode {
 		
 	NO_EDUCATIONAL_INSTITUTION_NAME_FOUND(202,"No Educational Institution Name Found"),
 		
-	EDUCATIONAL_INSTITUTION_RETRIVED_SUCCESSFULLY(200,"Educational Institution Retrived"),
+    EDUCATIONAL_INSTITUTION_RETRIVED_SUCCESSFULLY(200,"Educational Institution Retrived"),
+	
+    EDUCATIONAL_INSTITUTION_NAME_ALREADY_EXISTS(110, "Educational Institution Name Already exists"),
+	
+	EDUCATIONAL_INSTITUTION_CODE_ALREADY_EXISTS(110, "Educational Institution Code Already exists"),
+
+
 		
 	NO_TRANSFERCERTIFICATE_FOUND(108, "No Transfer Certificate Found"),
 	
