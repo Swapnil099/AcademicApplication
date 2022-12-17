@@ -104,5 +104,16 @@ public class RegionController {
 	        .contentType(MediaType.parseMediaType("application/csv"))
 	        .body(file);
 	}
+	
+	@Operation(summary = "Get Region By Region Name", security = @SecurityRequirement(name = "bearerAuth"))
+	@GetMapping("/region/{name}")
+	public ResponseEntity<Response<RegionDto>> getSingleRegion(@RequestParam String name) {
+		Response<RegionDto> response = regionService.getRegionByName(name);
+		if (response.getStatusCode() == 200) {
+			return ResponseEntity.status(HttpStatus.OK).body(response);
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+		}
+	}
 
 }

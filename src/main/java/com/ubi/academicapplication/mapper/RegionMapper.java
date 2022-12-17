@@ -19,6 +19,11 @@ public class RegionMapper {
 	public RegionDto entityToDto(Region region) {
 		return modelMapper.map(region, RegionDto.class);
 	}
+	
+	public RegionDto toDto( Region region)
+	{
+		return new RegionDto(region.getId(),region.getCode(),region.getName());
+	}
 
 	public List<RegionDto> entitiesToDtos(List<Region> region) {
 		return region.stream().filter(Objects::nonNull).map(this::entityToDto).collect(Collectors.toList());
