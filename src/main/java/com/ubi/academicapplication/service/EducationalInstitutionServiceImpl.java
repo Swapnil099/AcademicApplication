@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.ubi.academicapplication.csv.CsvHelper;
@@ -145,12 +146,12 @@ public class EducationalInstitutionServiceImpl implements EducationalInstitution
 				.entitiesToDtos(list.toList());
 
 		if (list.getSize() == 0) {
-			throw new CustomException(HttpStatusCode.NO_PAYMENT_FOUND.getCode(), HttpStatusCode.NO_PAYMENT_FOUND,
-					HttpStatusCode.NO_PAYMENT_FOUND.getMessage(), allEducationalResult);
+			throw new CustomException(HttpStatusCode.NO_EDUCATIONAL_INSTITUTION_FOUND.getCode(), HttpStatusCode.NO_EDUCATIONAL_INSTITUTION_FOUND,
+					HttpStatusCode.NO_EDUCATIONAL_INSTITUTION_FOUND.getMessage(), allEducationalResult);
 		}
 		allEducationalResult.setData(educationalInstitutionDtos);
-		getListofEducationalInstitution.setStatusCode(HttpStatusCode.PAYMENT_RETRIVED_SUCCESSFULLY.getCode());
-		getListofEducationalInstitution.setMessage(HttpStatusCode.PAYMENT_RETRIVED_SUCCESSFULLY.getMessage());
+		getListofEducationalInstitution.setStatusCode(HttpStatusCode.EDUCATIONAL_INSTITUTION_RETRIVED_SUCCESSFULLY.getCode());
+		getListofEducationalInstitution.setMessage(HttpStatusCode.EDUCATIONAL_INSTITUTION_RETRIVED_SUCCESSFULLY.getMessage());
 		getListofEducationalInstitution.setResult(allEducationalResult);
 		return getListofEducationalInstitution;
 	}
@@ -271,6 +272,28 @@ public class EducationalInstitutionServiceImpl implements EducationalInstitution
         ByteArrayInputStream out = EducationalInstitutionCsvHelper.educationCSV(eduInst);
 	    return out;
 	  }
+
+	@Override
+	public Response<List<EducationalInstitutionDto>> getEduInstwithSort(String field) {
+	
+		Result<List<EducationalInstitutionDto>> allEducationalResult = new Result<>();
+	//	Pageable paging = PageRequest.of(pageNumber, pageSize);
+		Response<List<EducationalInstitutionDto>> getListofEducationalInstitution = new Response<>();
+
+		List<EducationalInstitution> list = this.educationalInstitutionRepository.findAll(Sort.by(Sort.Direction.ASC,field));
+		List<EducationalInstitutionDto> educationalInstitutionDtos = educationalInstitutionMapper
+				.entitiesToDtos(list);
+
+		if (list.size() == 0) {
+			throw new CustomException(HttpStatusCode.NO_EDUCATIONAL_INSTITUTION_FOUND.getCode(), HttpStatusCode.NO_EDUCATIONAL_INSTITUTION_FOUND,
+					HttpStatusCode.NO_EDUCATIONAL_INSTITUTION_FOUND.getMessage(), allEducationalResult);
+		}
+		allEducationalResult.setData(educationalInstitutionDtos);
+		getListofEducationalInstitution.setStatusCode(HttpStatusCode.EDUCATIONAL_INSTITUTION_RETRIVED_SUCCESSFULLY.getCode());
+		getListofEducationalInstitution.setMessage(HttpStatusCode.EDUCATIONAL_INSTITUTION_RETRIVED_SUCCESSFULLY.getMessage());
+		getListofEducationalInstitution.setResult(allEducationalResult);
+		return getListofEducationalInstitution;
+	}
 	
 
 }
