@@ -125,5 +125,113 @@ public class StudentServiceImpl implements StudentService {
 		response.setResult(new Result<>(studentMapper.entityToDto(updateStudent)));
 		return response;
 	}
+	
+	@Override
+	public Response<StudentDto> changeActiveStatusToTrue(int id) {
+		
+		
+		res.setData(null);
+		Response<StudentDto> response = new Response<>();
+		
+		
+		if (this.getStudentById(id).getResult().getData() == null) {
+			throw new CustomException(HttpStatusCode.RESOURCE_NOT_FOUND.getCode(), HttpStatusCode.RESOURCE_NOT_FOUND,
+					HttpStatusCode.RESOURCE_NOT_FOUND.getMessage(), res);
+		}
+		
+		Student student = repository.getById(id);
+		student.setIsActivate(true);
+		Student updateStudent = repository.save(student);
+		response.setStatusCode(HttpStatusCode.RESOURCE_CREATED_SUCCESSFULLY.getCode());
+		response.setMessage(HttpStatusCode.RESOURCE_CREATED_SUCCESSFULLY.getMessage());
+		response.setResult(new Result<StudentDto>(studentMapper.entityToDto(updateStudent)));
+		return response;
+		
+//		Student student = repository.getById(id);
+//		student.setIsActivate(true);
+//		Student updateStudent = repository.save(student);
+//		return new Response<>(new Result<>(studentMapper.entityToDto(updateStudent)));
+	}
+
+	@Override
+	public Response<StudentDto> changeActiveStatusToFalse(int id) {
+		res.setData(null);
+		Response<StudentDto> response = new Response<>();
+		
+		if (this.getStudentById(id).getResult().getData() == null) {
+			throw new CustomException(HttpStatusCode.RESOURCE_NOT_FOUND.getCode(), HttpStatusCode.RESOURCE_NOT_FOUND,
+					HttpStatusCode.RESOURCE_NOT_FOUND.getMessage(), res);
+		}
+		
+		Student student = repository.getById(id);
+		student.setIsActivate(false);
+		Student updateStudent = repository.save(student);
+		response.setStatusCode(HttpStatusCode.RESOURCE_CREATED_SUCCESSFULLY.getCode());
+		response.setMessage(HttpStatusCode.RESOURCE_CREATED_SUCCESSFULLY.getMessage());
+		response.setResult(new Result<StudentDto>(studentMapper.entityToDto(updateStudent)));
+		return response;
+//		Student student = repository.getById(id);
+//		student.setIsActivate(true);
+//		Student updateStudent = repository.save(student);
+//		return new Response<>(new Result<>(studentMapper.entityToDto(updateStudent)));
+	}
+
+	@Override
+	public Response<StudentDto> changeCurrentStatusToPromoted(int id) {
+
+		res.setData(null);
+		Response<StudentDto> response = new Response<>();
+
+		if (this.getStudentById(id).getResult().getData() == null) {
+			throw new CustomException(HttpStatusCode.RESOURCE_NOT_FOUND.getCode(), HttpStatusCode.RESOURCE_NOT_FOUND,
+					HttpStatusCode.RESOURCE_NOT_FOUND.getMessage(), res);
+		}
+
+		Student student = repository.getById(id);
+		student.setCurrentStatus("Promoted");
+		Student updateStudent = repository.save(student);
+		response.setStatusCode(HttpStatusCode.RESOURCE_CREATED_SUCCESSFULLY.getCode());
+		response.setMessage(HttpStatusCode.RESOURCE_CREATED_SUCCESSFULLY.getMessage());
+		response.setResult(new Result<StudentDto>(studentMapper.entityToDto(student)));
+
+		return response;
+	}
+
+	@Override
+	public Response<StudentDto> changeCurrentStatusToDemoted(int id) {
+		res.setData(null);
+		Response<StudentDto> response = new Response<>();
+
+		if (this.getStudentById(id).getResult().getData() == null) {
+			throw new CustomException(HttpStatusCode.RESOURCE_NOT_FOUND.getCode(), HttpStatusCode.RESOURCE_NOT_FOUND,
+					HttpStatusCode.RESOURCE_NOT_FOUND.getMessage(), res);
+		}
+
+		Student student = repository.getById(id);
+		student.setCurrentStatus("Demoted");
+		Student updateStudent = repository.save(student);
+		response.setStatusCode(HttpStatusCode.RESOURCE_CREATED_SUCCESSFULLY.getCode());
+		response.setMessage(HttpStatusCode.RESOURCE_CREATED_SUCCESSFULLY.getMessage());
+		response.setResult(new Result<StudentDto>(studentMapper.entityToDto(student)));
+
+		return response;
+	}
+
+	@Override
+	public Response<List<StudentDto>> findByGenderAndCategoryAndMinority(String gender, String category,
+			String minority) {
+		res.setData(null);
+		List<Student> student = repository.findByGenderAndCategoryAndMinority(gender, category, minority);
+		if (student.size() == 0) {
+			throw new CustomException(HttpStatusCode.NO_ENTRY_FOUND.getCode(), HttpStatusCode.NO_ENTRY_FOUND,
+					HttpStatusCode.NO_ENTRY_FOUND.getMessage(), res);
+		}
+		Response<List<StudentDto>> getListofStudent = new Response<>();
+		getListofStudent.setStatusCode(200);
+		getListofStudent.setResult(new Result<>(studentMapper.entitiesToDtos(student)));
+		return getListofStudent;
+	}
+	
+	
 
 }
