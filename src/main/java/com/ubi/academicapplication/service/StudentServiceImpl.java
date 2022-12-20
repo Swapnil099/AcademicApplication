@@ -3,21 +3,21 @@ package com.ubi.academicapplication.service;
 import java.util.List;
 import java.util.Optional;
 
-import com.ubi.academicapplication.dto.response.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-
+import com.ubi.academicapplication.dto.response.Response;
 import com.ubi.academicapplication.dto.student.StudentDto;
-
+import com.ubi.academicapplication.entity.ClassDetail;
 import com.ubi.academicapplication.entity.Student;
 import com.ubi.academicapplication.error.CustomException;
 import com.ubi.academicapplication.error.HttpStatusCode;
 import com.ubi.academicapplication.error.Result;
 import com.ubi.academicapplication.mapper.StudentMapper;
+import com.ubi.academicapplication.repository.ClassRepository;
 import com.ubi.academicapplication.repository.StudentRepository;
 
 @Service
@@ -28,6 +28,9 @@ public class StudentServiceImpl implements StudentService {
 
 	@Autowired
 	private StudentMapper studentMapper;
+
+	@Autowired
+	ClassRepository classRepository;
 
 	@Autowired
 	private StudentRepository repository;
@@ -41,7 +44,13 @@ public class StudentServiceImpl implements StudentService {
 			throw new CustomException(HttpStatusCode.NO_STUDENT_NAME_FOUND.getCode(),
 					HttpStatusCode.NO_STUDENT_NAME_FOUND, HttpStatusCode.NO_STUDENT_NAME_FOUND.getMessage(), res);
 		}
-		Student savedStudent = repository.save(studentMapper.dtoToEntity(studentDto));
+
+//		studentDto.getClassId();
+		ClassDetail classDetail = classRepository.getReferenceById(studentDto.getClassId());
+		Student student = studentMapper.dtoToEntity(studentDto);
+		student.setClassDetail(classDetail);
+
+		Student savedStudent = repository.save(student);
 		response.setStatusCode(HttpStatusCode.RESOURCE_CREATED_SUCCESSFULLY.getCode());
 		response.setMessage(HttpStatusCode.RESOURCE_CREATED_SUCCESSFULLY.getMessage());
 		response.setResult(new Result<StudentDto>(studentMapper.entityToDto(savedStudent)));
@@ -66,7 +75,7 @@ public class StudentServiceImpl implements StudentService {
 		return getListofStudent;
 	}
 
-	public Response<StudentDto> getStudentById(int id) {
+	public Response<StudentDto> getStudentById(Long id) {
 		res.setData(null);
 		Response<StudentDto> getStudent = new Response<StudentDto>();
 		Optional<Student> std = this.repository.findById(id);
@@ -75,20 +84,29 @@ public class StudentServiceImpl implements StudentService {
 			throw new CustomException(HttpStatusCode.NO_STUDENT_MATCH_WITH_ID.getCode(),
 					HttpStatusCode.NO_STUDENT_MATCH_WITH_ID, HttpStatusCode.NO_STUDENT_MATCH_WITH_ID.getMessage(), res);
 		}
-		studentResult.setData(studentMapper.entityToDto(std.get()));
+
+//		ClassDetail classDetail = classRepository.getReferenceById(studentDto.getClassId());
+		StudentDto student = studentMapper.entityToDto(std.get());
+		student.setClassId(id);
+//		existingStudent.setClassId(studentDto.getClassId());
+//		student.setClassDetail(classDetail);
+
+		studentResult.setData(student);
 		getStudent.setStatusCode(200);
 		getStudent.setResult(studentResult);
 		return getStudent;
 	}
 
 	@Override
-	public Response<StudentDto> deleteById(int id) {
+	public Response<StudentDto> deleteById(Long id) {
 		res.setData(null);
 		Optional<Student> student = repository.findById(id);
+
 		if (!student.isPresent()) {
 			throw new CustomException(HttpStatusCode.RESOURCE_NOT_FOUND.getCode(), HttpStatusCode.RESOURCE_NOT_FOUND,
 					HttpStatusCode.RESOURCE_NOT_FOUND.getMessage(), res);
 		}
+
 		repository.deleteById(id);
 		Response<StudentDto> response = new Response<>();
 		response.setMessage(HttpStatusCode.STUDENT_DELETED.getMessage());
@@ -118,66 +136,61 @@ public class StudentServiceImpl implements StudentService {
 		existingStudent.setVerifiedByTeacher(studentDto.getVerifiedByTeacher());
 		existingStudent.setVerifiedByPrincipal(studentDto.getVerifiedByPrincipal());
 		existingStudent.setVerifiedByRegion(studentDto.getVerifiedByRegion());
-		Student updateStudent = repository.save(studentMapper.dtoToEntity(existingStudent));
+		ClassDetail classDetail = classRepository.getReferenceById(studentDto.getClassId());
+		Student student = studentMapper.dtoToEntity(existingStudent);
+		existingStudent.setClassId(studentDto.getClassId());
+		student.setClassDetail(classDetail);
+		Student updateStudent = repository.save(student);
 		Response<StudentDto> response = new Response<>();
 		response.setMessage(HttpStatusCode.STUDENT_UPDATED.getMessage());
 		response.setStatusCode(HttpStatusCode.STUDENT_UPDATED.getCode());
 		response.setResult(new Result<>(studentMapper.entityToDto(updateStudent)));
 		return response;
 	}
-	
+
 	@Override
-	public Response<StudentDto> changeActiveStatusToTrue(int id) {
-		
-		
+	public Response<StudentDto> changeActiveStatusToTrue(Long id) {
+
 		res.setData(null);
 		Response<StudentDto> response = new Response<>();
-		
-		
+
 		if (this.getStudentById(id).getResult().getData() == null) {
 			throw new CustomException(HttpStatusCode.RESOURCE_NOT_FOUND.getCode(), HttpStatusCode.RESOURCE_NOT_FOUND,
 					HttpStatusCode.RESOURCE_NOT_FOUND.getMessage(), res);
 		}
-		
-		Student student = repository.getById(id);
+
+		Student student = repository.getReferenceById(id);
 		student.setIsActivate(true);
 		Student updateStudent = repository.save(student);
 		response.setStatusCode(HttpStatusCode.RESOURCE_CREATED_SUCCESSFULLY.getCode());
 		response.setMessage(HttpStatusCode.RESOURCE_CREATED_SUCCESSFULLY.getMessage());
 		response.setResult(new Result<StudentDto>(studentMapper.entityToDto(updateStudent)));
 		return response;
-		
-//		Student student = repository.getById(id);
-//		student.setIsActivate(true);
-//		Student updateStudent = repository.save(student);
-//		return new Response<>(new Result<>(studentMapper.entityToDto(updateStudent)));
+
 	}
 
 	@Override
-	public Response<StudentDto> changeActiveStatusToFalse(int id) {
+	public Response<StudentDto> changeActiveStatusToFalse(Long id) {
 		res.setData(null);
 		Response<StudentDto> response = new Response<>();
-		
+
 		if (this.getStudentById(id).getResult().getData() == null) {
 			throw new CustomException(HttpStatusCode.RESOURCE_NOT_FOUND.getCode(), HttpStatusCode.RESOURCE_NOT_FOUND,
 					HttpStatusCode.RESOURCE_NOT_FOUND.getMessage(), res);
 		}
-		
-		Student student = repository.getById(id);
+
+		Student student = repository.getReferenceById(id);
 		student.setIsActivate(false);
 		Student updateStudent = repository.save(student);
 		response.setStatusCode(HttpStatusCode.RESOURCE_CREATED_SUCCESSFULLY.getCode());
 		response.setMessage(HttpStatusCode.RESOURCE_CREATED_SUCCESSFULLY.getMessage());
 		response.setResult(new Result<StudentDto>(studentMapper.entityToDto(updateStudent)));
 		return response;
-//		Student student = repository.getById(id);
-//		student.setIsActivate(true);
-//		Student updateStudent = repository.save(student);
-//		return new Response<>(new Result<>(studentMapper.entityToDto(updateStudent)));
+
 	}
 
 	@Override
-	public Response<StudentDto> changeCurrentStatusToPromoted(int id) {
+	public Response<StudentDto> changeCurrentStatusToPromoted(Long id) {
 
 		res.setData(null);
 		Response<StudentDto> response = new Response<>();
@@ -198,7 +211,7 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 	@Override
-	public Response<StudentDto> changeCurrentStatusToDemoted(int id) {
+	public Response<StudentDto> changeCurrentStatusToDemoted(Long id) {
 		res.setData(null);
 		Response<StudentDto> response = new Response<>();
 
@@ -207,7 +220,7 @@ public class StudentServiceImpl implements StudentService {
 					HttpStatusCode.RESOURCE_NOT_FOUND.getMessage(), res);
 		}
 
-		Student student = repository.getById(id);
+		Student student = repository.getReferenceById(id);
 		student.setCurrentStatus("Demoted");
 		Student updateStudent = repository.save(student);
 		response.setStatusCode(HttpStatusCode.RESOURCE_CREATED_SUCCESSFULLY.getCode());
@@ -231,7 +244,5 @@ public class StudentServiceImpl implements StudentService {
 		getListofStudent.setResult(new Result<>(studentMapper.entitiesToDtos(student)));
 		return getListofStudent;
 	}
-	
-	
 
 }

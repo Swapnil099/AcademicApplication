@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 public class StudentDto {
 	@Id
 	@GeneratedValue
-	private int studentId;
+	private Long studentId;
 	private String studentName;
 	
 	@JsonFormat(pattern = "yyyy-MM-dd")
@@ -41,4 +41,6 @@ public class StudentDto {
 	
 	private Boolean isActivate;
 	private String currentStatus;
+	
+	private Long classId;
 }

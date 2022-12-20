@@ -57,7 +57,7 @@ public class StudentController {
 
 	@DeleteMapping("/{id}")
 	@Operation(summary = "Delete Student By Id", security = @SecurityRequirement(name = "bearerAuth"))
-	public ResponseEntity<Response<StudentDto>> deleteStudent(@PathVariable int id) {
+	public ResponseEntity<Response<StudentDto>> deleteStudent(@PathVariable Long id) {
 		Response<StudentDto> response = service.deleteById(id);
 		return ResponseEntity.ok().body(response);
 
@@ -65,7 +65,7 @@ public class StudentController {
 
 	@GetMapping("{id}")
 	@Operation(summary = "Get Student By Id", security = @SecurityRequirement(name = "bearerAuth"))
-	public ResponseEntity<Response> getStudentById(@PathVariable("id") int id) {
+	public ResponseEntity<Response> getStudentById(@PathVariable("id") Long id) {
 		Response response = service.getStudentById(id);
 		if (response.getStatusCode() == 200) {
 			return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -85,14 +85,14 @@ public class StudentController {
 	
 	@Operation(summary = "Change Active Status To True Of Student By Id", security = @SecurityRequirement(name = "bearerAuth"))
 	@PatchMapping("/activate/{id}")
-	public ResponseEntity<Response<StudentDto>> activateStudentById(@PathVariable int id) {
+	public ResponseEntity<Response<StudentDto>> activateStudentById(@PathVariable Long id) {
 		Response<StudentDto> response = service.changeActiveStatusToTrue(id);
 		return ResponseEntity.ok().body(response);
 	}
 
 	@Operation(summary = "Change Active Status To True Of Student By Id", security = @SecurityRequirement(name = "bearerAuth"))
 	@PatchMapping("/deactivate/{id}")
-	public ResponseEntity<Response<StudentDto>> deactivateStudentById(@PathVariable int id) {
+	public ResponseEntity<Response<StudentDto>> deactivateStudentById(@PathVariable Long id) {
 		Response<StudentDto> response = service.changeActiveStatusToFalse(id);
 		return ResponseEntity.ok().body(response);
 	}
@@ -100,14 +100,14 @@ public class StudentController {
 	
 	@Operation(summary = "Change Current Status To Promoted Of Student By Id", security = @SecurityRequirement(name = "bearerAuth"))
 	@PatchMapping("/promoted/{id}")
-	public ResponseEntity<Response<StudentDto>> changeCurrentStatusToPromoted(@PathVariable int id) {
+	public ResponseEntity<Response<StudentDto>> changeCurrentStatusToPromoted(@PathVariable Long id) {
 		Response<StudentDto> response = service.changeCurrentStatusToPromoted( id);
 		return ResponseEntity.ok().body(response);
 	}
 
 	@Operation(summary = "Change Current Status To Domoted Of Student By Id", security = @SecurityRequirement(name = "bearerAuth"))
 	@PatchMapping("/demoted/{id}")
-	public ResponseEntity<Response<StudentDto>> changeCurrentStatusToDomoted(@PathVariable int id) {
+	public ResponseEntity<Response<StudentDto>> changeCurrentStatusToDomoted(@PathVariable Long id) {
 		Response<StudentDto> response = service.changeCurrentStatusToDemoted(id);
 		return ResponseEntity.ok().body(response);
 	}
