@@ -6,6 +6,7 @@ import com.ubi.academicapplication.dto.user.UserCreationDto;
 import com.ubi.academicapplication.dto.user.UserDto;
 import com.ubi.academicapplication.entity.User;
 
+import java.io.ByteArrayInputStream;
 import java.util.List;
 
 public interface UserService {
@@ -35,4 +36,6 @@ public interface UserService {
      Response<UserContactInfoDto> addContactInfo(UserContactInfoMappingDto userContactInfoMappingDto);
      
      Response<UserContactInfoDto> getContactInfowithUser(Long id);
+     
+     ByteArrayInputStream load();
 }
