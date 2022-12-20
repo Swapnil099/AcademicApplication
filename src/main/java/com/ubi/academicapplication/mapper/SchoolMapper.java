@@ -28,6 +28,10 @@ public class SchoolMapper {
 		return modelMapper.map(school, SchoolDto.class);
 	}
 
+	public Set<SchoolDto> entitiesToDtos(Set<School> school) {
+		return school.stream().filter(Objects::nonNull).map(this::entityToDto).collect(Collectors.toSet());
+	}
+
 	public List<SchoolDto> entitiesToDtos(List<School> school) {
 		return school.stream().filter(Objects::nonNull).map(this::entityToDto).collect(Collectors.toList());
 	}
