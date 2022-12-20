@@ -12,19 +12,19 @@ public interface StudentService {
 
 	Response<List<StudentDto>> getStudents(Integer PageNumber, Integer PageSize);
 
-	Response<StudentDto> getStudentById(int id);
+	Response<StudentDto> getStudentById(Long id);
 
-	public Response<StudentDto> deleteById(int id);
+	public Response<StudentDto> deleteById(Long id);
 
 	Response<StudentDto> updateStudent(StudentDto studentDto);
 	
-	Response<StudentDto> changeActiveStatusToTrue(int id);
+	Response<StudentDto> changeActiveStatusToTrue(Long id);
 
-    Response<StudentDto> changeActiveStatusToFalse(int id);
+    Response<StudentDto> changeActiveStatusToFalse(Long id);
     
-	Response<StudentDto> changeCurrentStatusToPromoted(int id);
+	Response<StudentDto> changeCurrentStatusToPromoted(Long id);
 
-	Response<StudentDto> changeCurrentStatusToDemoted(int id);
+	Response<StudentDto> changeCurrentStatusToDemoted(Long id);
 	
 	Response<List<StudentDto>> findByGenderAndCategoryAndMinority(String gender,String category, String minority);
 	

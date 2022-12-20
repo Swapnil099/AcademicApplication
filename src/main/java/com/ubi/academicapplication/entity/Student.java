@@ -2,9 +2,11 @@ package com.ubi.academicapplication.entity;
 
 import java.time.LocalDate;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -22,7 +24,7 @@ public class Student {
 
 	@Id
 	@GeneratedValue
-	private int studentId;
+	private Long studentId;
 	private String studentName;
 
 	@JsonFormat(pattern = "yyyy-MM-dd")
@@ -45,6 +47,7 @@ public class Student {
 	private Boolean isActivate;
 	private String currentStatus;
 	
-	
+	@ManyToOne(cascade = CascadeType.ALL )
+	private ClassDetail classDetail;
 
 }
