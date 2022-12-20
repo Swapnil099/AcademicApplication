@@ -18,6 +18,7 @@ public interface ClassService {
 
 	Response<ClassDto> updateClassDetails(ClassDto classDto);
 	
-
+	Response<ClassDto> getClassByName(String className);
+	
 }
 

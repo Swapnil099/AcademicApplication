@@ -2,13 +2,16 @@ package com.ubi.academicapplication.mapper;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 import com.ubi.academicapplication.dto.classdto.ClassDto;
+import com.ubi.academicapplication.dto.regionDto.RegionDto;
 import com.ubi.academicapplication.entity.ClassDetail;
+import com.ubi.academicapplication.entity.Region;
 
 @Component
 public class ClassMapper {
@@ -23,7 +26,9 @@ public class ClassMapper {
         return classDetail.stream().filter(Objects::nonNull).map(this::entityToDto).collect(Collectors.toList());
     }
  
- 
+ public List<ClassDto> entitiesToDto(List<ClassDetail> classDetail) {
+		return classDetail.stream().filter(Objects::nonNull).map(this::entityToDto).collect(Collectors.toList());
+	}
 
 	// DTO to entity Mapping
 	public ClassDetail dtoToEntity(ClassDto classDto) {
@@ -33,5 +38,5 @@ public class ClassMapper {
     public List<ClassDetail> dtosToEntities(List<ClassDto> classDtos) {
         return classDtos.stream().filter(Objects::nonNull).map(this::dtoToEntity).collect(Collectors.toList());
     }
-
+      
 }

@@ -130,6 +130,16 @@ public class EducationalInstitutionController {
 	}
 	
 	
+	//-----Sorting
+	
+	@Operation(summary = "Get EducationalInstitution in Sorting", security = @SecurityRequirement(name = "bearerAuth"))
+	@GetMapping("/sort/{field}")
+	public ResponseEntity<Response<List<EducationalInstitutionDto>>> getEduIstBySorting(@PathVariable String field) {
+		Response<List<EducationalInstitutionDto>> response = educationalInstitutionService.getEduInstwithSort(field);
+		return ResponseEntity.ok().body(response);
+	}
+	
+	
 	@Operation(summary="Download file ",security=@SecurityRequirement(name= "bearerAuth"))
 	@GetMapping("/download")
 	public ResponseEntity<Resource> getCSVFileData()

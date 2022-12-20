@@ -17,4 +17,18 @@ public interface StudentService {
 	public Response<StudentDto> deleteById(int id);
 
 	Response<StudentDto> updateStudent(StudentDto studentDto);
+	
+	Response<StudentDto> changeActiveStatusToTrue(int id);
+
+    Response<StudentDto> changeActiveStatusToFalse(int id);
+    
+	Response<StudentDto> changeCurrentStatusToPromoted(int id);
+
+	Response<StudentDto> changeCurrentStatusToDemoted(int id);
+	
+	Response<List<StudentDto>> findByGenderAndCategoryAndMinority(String gender,String category, String minority);
+	
+	
+	
+	
 }

@@ -18,8 +18,13 @@ public class StudentDto {
 	@GeneratedValue
 	private int studentId;
 	private String studentName;
+	
+	@JsonFormat(pattern = "yyyy-MM-dd")
+	private LocalDate dateOfBirth;
+	
 	private boolean studentStatus;
 	private String category;
+	private String minority;
 	private String fatherName;
 	private String fatherOccupation;
 	private String motherName;
@@ -33,4 +38,7 @@ public class StudentDto {
 	private String verifiedByTeacher;
 	private String verifiedByPrincipal;
 	private String verifiedByRegion;
+	
+	private Boolean isActivate;
+	private String currentStatus;
 }

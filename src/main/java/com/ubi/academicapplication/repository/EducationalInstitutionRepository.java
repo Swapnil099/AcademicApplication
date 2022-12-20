@@ -13,5 +13,10 @@ public interface EducationalInstitutionRepository extends JpaRepository<Educatio
 	
 	@Query
 	Optional<EducationalInstitution>findByeducationalInstitutionName(String educationalInstitutionName);
+	
+   EducationalInstitution getEducationalInstitutionByeducationalInstitutionName(String educationalInstitutionName);
+	
+	EducationalInstitution getEducationalInstitutionByeducationalInstitutionCode(String educationalInstitutionCode);
+
 
 }

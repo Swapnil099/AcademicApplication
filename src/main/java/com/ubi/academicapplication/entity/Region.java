@@ -48,6 +48,5 @@ public class Region {
 	@OneToMany(mappedBy="region" , cascade=CascadeType.ALL)
 	
 	private Set<School> school;
-	}
 	
-
+}

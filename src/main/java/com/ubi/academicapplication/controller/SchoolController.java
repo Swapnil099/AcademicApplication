@@ -5,6 +5,10 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.ubi.academicapplication.dto.classdto.SchholClassMappingDto;
+import com.ubi.academicapplication.dto.classdto.SchoolClassDto;
+import com.ubi.academicapplication.dto.regionDto.EIRegionMappingDto;
+import com.ubi.academicapplication.dto.regionDto.EducationalRegionDto;
 import com.ubi.academicapplication.dto.response.Response;
 import com.ubi.academicapplication.dto.school.SchoolDto;
 import org.slf4j.Logger;
@@ -82,5 +86,31 @@ public class SchoolController {
 	  Response<SchoolDto> response=schoolService.getSchoolByName(schoolName);
 	  return ResponseEntity.ok().body(response);
 	}
+	
+	@Operation(summary = "Map School and  Class", security = @SecurityRequirement(name = "bearerAuth"))
+	@PostMapping("/addClass")
+	public ResponseEntity<Response<SchoolClassDto>> addClass(@RequestBody SchholClassMappingDto schoolClassDto) {
+		Response<SchoolClassDto> response = schoolService.addClass(schoolClassDto);
+		return ResponseEntity.ok().body(response);
+	}
+
+	@Operation(summary = "Get Classes In Schools", security = @SecurityRequirement(name = "bearerAuth"))
+	@GetMapping("/getsch/{id}")
+	public ResponseEntity<Response<SchoolClassDto>> getClassInSchool(@PathVariable int id) {
+		Response<SchoolClassDto> response = schoolService.getSchoolwithClass(id);
+		return ResponseEntity.ok().body(response);
+	}
+
+	@Operation(summary = "Get School With Sorting", security = @SecurityRequirement(name = "bearerAuth"))
+	@GetMapping("/sort/{field}")
+	public ResponseEntity<Response<List<SchoolDto>>> getSchoolBySorting(@PathVariable String field) {
+		Response<List<SchoolDto>> response = schoolService.getSchoolwithSort(field);
+		return ResponseEntity.ok().body(response);
+	}
+	
+	
+	
+	
+	
 	
 }

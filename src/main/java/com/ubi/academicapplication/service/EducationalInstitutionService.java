@@ -27,7 +27,11 @@ public interface EducationalInstitutionService {
 
 	Response<EducationalRegionDto> getEduInstwithRegion(int id);
 	
+	Response<List<EducationalInstitutionDto>> getEduInstwithSort(String field);
+	
 	ByteArrayInputStream load();
+
+	
 
 
 }

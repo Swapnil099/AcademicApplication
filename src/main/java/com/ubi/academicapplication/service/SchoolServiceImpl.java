@@ -6,24 +6,34 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import com.ubi.academicapplication.dto.classdto.SchholClassMappingDto;
+import com.ubi.academicapplication.dto.classdto.SchoolClassDto;
 import com.ubi.academicapplication.dto.response.Response;
 import com.ubi.academicapplication.dto.school.SchoolDto;
+import com.ubi.academicapplication.dto.user.UserContactInfoDto;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
 
 import com.ubi.academicapplication.entity.EducationalInstitution;
 import com.ubi.academicapplication.entity.Region;
+import com.ubi.academicapplication.entity.ClassDetail;
 import com.ubi.academicapplication.entity.School;
+import com.ubi.academicapplication.entity.User;
 import com.ubi.academicapplication.error.CustomException;
 import com.ubi.academicapplication.error.HttpStatusCode;
 import com.ubi.academicapplication.error.Result;
+import com.ubi.academicapplication.mapper.ClassMapper;
 import com.ubi.academicapplication.mapper.SchoolMapper;
 import com.ubi.academicapplication.repository.RegionRepository;
+import com.ubi.academicapplication.repository.ClassRepository;
 import com.ubi.academicapplication.repository.SchoolRepository;
 
 
@@ -38,6 +48,12 @@ public class SchoolServiceImpl implements SchoolService{
 	@Autowired
 	private SchoolRepository schoolRepository;
 	
+	@Autowired
+	private ClassRepository classRepository;
+	
+	@Autowired
+	private ClassMapper classMapper;
+	
 	Logger logger = LoggerFactory.getLogger(SchoolServiceImpl.class);
 	
 	//@Autowired
@@ -47,86 +63,103 @@ public class SchoolServiceImpl implements SchoolService{
 	@Override
 	public Response<SchoolDto> addSchool(SchoolDto schoolDto) {
 	
-		Result<SchoolDto> res=new Result<>();
+		Result<SchoolDto> res = new Result<>();
+
 		Response<SchoolDto> response = new Response<>();
-		Optional<SchoolDto> savedSchool =Optional.empty();
+		Optional<School> tempSchools = schoolRepository.findById(schoolDto.getSchoolId());
 		
-	//	res.setData(null);
-		  if(savedSchool.isPresent()){
-	            throw new CustomException(HttpStatusCode.RESOURCE_ALREADY_EXISTS.getCode(),HttpStatusCode.RESOURCE_ALREADY_EXISTS, HttpStatusCode.RESOURCE_ALREADY_EXISTS.getMessage(),res);
-		  }
-		  School saveSchool = schoolRepository.save(schoolMapper.dtoToEntity(schoolDto));
-			response.setStatusCode(HttpStatusCode.RESOURCE_CREATED_SUCCESSFULLY.getCode());
-			response.setMessage(HttpStatusCode.RESOURCE_CREATED_SUCCESSFULLY.getMessage());
-			response.setResult(new Result<SchoolDto>(schoolMapper.entityToDto(saveSchool)));
-			return response;
+        School schoolName=schoolRepository.getSchoolByName(schoolDto.getName());
+		
+		School schoolCode=schoolRepository.getSchoolByCode(schoolDto.getCode());
+		
+
+		if (tempSchools.isPresent()) {
+			throw new CustomException(HttpStatusCode.NO_SCHOOL_FOUND.getCode(),
+					HttpStatusCode.NO_SCHOOL_FOUND,
+					HttpStatusCode.NO_SCHOOL_FOUND.getMessage(), res);
+		}
+		
+		if(schoolName !=null)
+		{
+			throw new CustomException(HttpStatusCode.SCHOOL_NAME_ALREADY_EXISTS.getCode(),
+					HttpStatusCode.SCHOOL_NAME_ALREADY_EXISTS,
+					HttpStatusCode.SCHOOL_NAME_ALREADY_EXISTS.getMessage(), res);
+		}
+		
+		if(schoolCode!=null)
+		{
+			throw new CustomException(HttpStatusCode.SCHOOL_CODE_ALREADY_EXISTS.getCode(),
+					HttpStatusCode.SCHOOL_CODE_ALREADY_EXISTS,
+					HttpStatusCode.SCHOOL_CODE_ALREADY_EXISTS.getMessage(), res);
+		}
+		
+		School saveSchool = schoolRepository.save(schoolMapper.dtoToEntity(schoolDto));
+		response.setStatusCode(HttpStatusCode.RESOURCE_CREATED_SUCCESSFULLY.getCode());
+		response.setMessage(HttpStatusCode.RESOURCE_CREATED_SUCCESSFULLY.getMessage());
+		response.setResult(new Result<SchoolDto>(schoolMapper.entityToDto(saveSchool)));
+		return response;
 	}
-	
+
 
 	@Override
 	public Response<List<SchoolDto>> getAllSchools(Integer PageNumber, Integer PageSize) {
 		
-		Result<List<SchoolDto>> res=new Result<>();
-    	res.setData(null);
+		Result<List<SchoolDto>> allSchoolResult = new Result<>();
 		Pageable paging = PageRequest.of(PageNumber, PageSize);
 		Response<List<SchoolDto>> getListofSchools = new Response<>();
+
 		Page<School> list = this.schoolRepository.findAll(paging);
+		List<SchoolDto> schoolDtos = schoolMapper.entitiesToDtos(list.toList());
 
-		List<SchoolDto> schoolDTOs =schoolMapper.entitiesToDtos(list.toList());
-
-		res.setData(schoolDTOs);
 		if (list.getSize() == 0) {
-			throw new CustomException(HttpStatusCode.NO_ENTRY_FOUND.getCode(), HttpStatusCode.NO_ENTRY_FOUND,
-					HttpStatusCode.NO_ENTRY_FOUND.getMessage(), res);
+			throw new CustomException(HttpStatusCode.NO_SCHOOL_FOUND.getCode(), HttpStatusCode.NO_SCHOOL_FOUND,
+					HttpStatusCode.NO_SCHOOL_FOUND.getMessage(), allSchoolResult);
 		}
-		getListofSchools.setStatusCode(200);
-		getListofSchools.setResult(res);
-		return getListofSchools;
-		
+		allSchoolResult.setData(schoolDtos);
+		getListofSchools.setStatusCode(HttpStatusCode.SCHOOL_RETRIVED_SUCCESSFULLY.getCode());
+		getListofSchools.setMessage(HttpStatusCode.SCHOOL_RETRIVED_SUCCESSFULLY.getMessage());
+		getListofSchools.setResult(allSchoolResult);
+		return getListofSchools;	
 	}
 
 	@Override
 	public Response<SchoolDto> getSchoolById(int schoolId) {
 		
-		Result<SchoolDto> res=new Result<>();
-    	res.setData(null);
-    		Response<SchoolDto> getSchool = new Response<SchoolDto>();
-    		Optional<School> school = null;
-    		school = this.schoolRepository.findById(schoolId);
-    		Result<SchoolDto> schoolResult = new Result<>();
-    		if (!school.isPresent()) {
-    			throw new CustomException(HttpStatusCode.NO_SCHOOL_MATCH_WITH_ID.getCode(),
-    					HttpStatusCode.NO_SCHOOL_MATCH_WITH_ID, HttpStatusCode.NO_SCHOOL_MATCH_WITH_ID.getMessage(), res);
-    		}
-    		schoolResult.setData(schoolMapper.entityToDto(school.get()));
-    		getSchool.setStatusCode(200);
-    		getSchool.setResult(schoolResult);
-    		return getSchool;
+		Response<SchoolDto> getSchool = new Response<>();
+		Optional<School> sch =this.schoolRepository.findById(schoolId);
+		Result<SchoolDto> schoolResult = new Result<>();
+		if (!sch.isPresent()) {
+			throw new CustomException(HttpStatusCode.NO_SCHOOL_MATCH_WITH_ID.getCode(),
+					HttpStatusCode.NO_SCHOOL_MATCH_WITH_ID,
+					HttpStatusCode.NO_SCHOOL_MATCH_WITH_ID.getMessage(), schoolResult);
+		}
+		schoolResult.setData(schoolMapper.entityToDto(sch.get()));
+		getSchool.setStatusCode(HttpStatusCode.SCHOOL_RETRIVED_SUCCESSFULLY.getCode());
+		getSchool.setMessage(HttpStatusCode.SCHOOL_RETRIVED_SUCCESSFULLY.getMessage());
+		getSchool.setResult(schoolResult);
+		return getSchool;
 		
 	}
 	
 	@Override
-	public Response<SchoolDto> getSchoolByName(String schoolName) {
+	public Response<SchoolDto> getSchoolByName(String name) {
 	
-		Result<SchoolDto> res=new Result<>();
-    	res.setData(null);
-    		Response<SchoolDto> getSchoolName = new Response<SchoolDto>();
-    		Optional<School> school = null;
-    		school = this.schoolRepository.findByName(schoolName);
-    		System.out.println("schools are" + school);
-    		Result<SchoolDto> schoolResult = new Result<>();
-    		if (!school.isPresent()) {
-    			throw new CustomException(HttpStatusCode.NO_SCHOOL_MATCH_WITH_NAME.getCode(),
-    					HttpStatusCode.NO_SCHOOL_MATCH_WITH_NAME, HttpStatusCode.NO_SCHOOL_MATCH_WITH_NAME.getMessage(), res);
-    		}
-    		schoolResult.setData(schoolMapper.entityToDto(school.get()));
-    		getSchoolName.setStatusCode(200);
-    		getSchoolName.setResult(schoolResult);
-    		return getSchoolName;
-		
-	}
-	
-	
+		Result<SchoolDto> res = new Result<>();
+		res.setData(null);
+		Response<SchoolDto> getSchoolName = new Response<>();
+		Optional<School> sch =this.schoolRepository.findByname(name);
+		Result<SchoolDto> schoolResult = new Result<>();
+		if (!sch.isPresent()) {
+			throw new CustomException(HttpStatusCode.NO_SCHOOL_NAME_FOUND.getCode(),
+					HttpStatusCode.NO_SCHOOL_NAME_FOUND,
+					HttpStatusCode.NO_SCHOOL_NAME_FOUND.getMessage(), res);
+		}
+		schoolResult.setData(schoolMapper.entityToDto(sch.get()));
+		getSchoolName.setStatusCode(HttpStatusCode.SCHOOL_RETRIVED_SUCCESSFULLY.getCode());
+		getSchoolName.setMessage(HttpStatusCode.SCHOOL_RETRIVED_SUCCESSFULLY.getMessage());
+		getSchoolName.setResult(schoolResult);
+		return getSchoolName;
+	}		
 
 	@Override
 	public Response<SchoolDto> deleteSchoolById(int schoolId) {
@@ -155,40 +188,119 @@ public class SchoolServiceImpl implements SchoolService{
 	@Override
 	public Response<SchoolDto> updateSchool(SchoolDto schoolDto) throws ParseException{
 		
-		Result<SchoolDto> res=new Result<>();
+		Result<SchoolDto> res = new Result<>();
+
 		res.setData(null);
-		//Response<School> response = new Response<>();
-		Optional<School> existingSchoolUpdation = schoolRepository.findById(schoolDto.getSchoolId());
-		if (!existingSchoolUpdation.isPresent()) {
-			throw new CustomException(HttpStatusCode.NO_SCHOOL_FOUND.getCode(), HttpStatusCode.NO_SCHOOL_FOUND,
+		Optional<School> existingSchool = schoolRepository.findById(schoolDto.getSchoolId());
+		if (!existingSchool.isPresent()) {
+			throw new CustomException(HttpStatusCode.NO_SCHOOL_FOUND.getCode(),
+					HttpStatusCode.NO_SCHOOL_FOUND,
 					HttpStatusCode.NO_SCHOOL_FOUND.getMessage(), res);
 		}
-     	SchoolDto existingSchool =schoolMapper.entityToDto(existingSchoolUpdation.get());
-
-     	existingSchool.setSchoolId(schoolDto.getSchoolId());
-		existingSchool.setCode(schoolDto.getCode());
-		existingSchool.setContact(schoolDto.getContact());
-		existingSchool.setEmail(schoolDto.getEmail());
-		existingSchool.setShift(schoolDto.getShift());
-		existingSchool.setStrength(schoolDto.getStrength());
-		existingSchool.setType(schoolDto.getType());
-		existingSchool.setVvnAccount(schoolDto.getVvnAccount());
-		existingSchool.setAddress(schoolDto.getAddress());
-		existingSchool.setName(schoolDto.getName());
-		existingSchool.setExemptionFlag(schoolDto.isExemptionFlag());
-		School updateSchool = schoolRepository.save(schoolMapper.dtoToEntity(existingSchool));
+		SchoolDto existingSchools = schoolMapper.entityToDto(existingSchool.get());
+		existingSchools.setCode(schoolDto.getCode());
+		existingSchools.setContact(schoolDto.getContact());
+		existingSchools.setAddress(schoolDto.getAddress());
+		existingSchools.setExemptionFlag(schoolDto.isExemptionFlag());
+		existingSchools.setName(schoolDto.getName());
+		existingSchools.setStrength(schoolDto.getStrength());
+		existingSchools.setVvnAccount(schoolDto.getVvnAccount());
+		existingSchools.setStrength(schoolDto.getStrength());
+		existingSchools.setShift(schoolDto.getShift());
+		existingSchools.setEmail(schoolDto.getEmail());
+		existingSchools.setSchoolId(schoolDto.getSchoolId());
+		
+		School updateSchool = schoolRepository
+				.save(schoolMapper.dtoToEntity(existingSchools));
 		Response<SchoolDto> response = new Response<>();
-	
-
 		response.setMessage(HttpStatusCode.SCHOOL_UPDATED.getMessage());
 		response.setStatusCode(HttpStatusCode.SCHOOL_UPDATED.getCode());
 		response.setResult(new Result<>(schoolMapper.entityToDto(updateSchool)));
 		return response;
+		
 	}
 
 
+	@Override
+	public Response<SchoolClassDto> addClass(SchholClassMappingDto schoolClassMappingDto) {
+		int schoolId = schoolClassMappingDto.getSchoolId();
+		long classId = schoolClassMappingDto.getClassId();
+		Response<SchoolClassDto> response = new Response<>();
+		Result<SchoolClassDto> res = new Result<>();
+		School school = schoolRepository.getReferenceById(schoolId);
+		ClassDetail classDetail = classRepository.getReferenceById(classId);
+		List<ClassDetail> setOfClasses = school.getClassDetail();
+		for (ClassDetail currentClass : setOfClasses) {
+			if (currentClass.getClassId() == classDetail.getClassId()) {
+				throw new CustomException(HttpStatusCode.MAPPING_ALREADY_EXIST.getCode(),
+						HttpStatusCode.MAPPING_ALREADY_EXIST, HttpStatusCode.MAPPING_ALREADY_EXIST.getMessage(), res);
+			}
+		}
+		school.getClassDetail().add(classDetail);
+		classDetail.setSchool(school);
+		//classDetail.getSchool().add(school);
+		//classDetail.getSchool().add(school);
+		classRepository.save(classDetail);
+		schoolRepository.save(school);
+		SchoolClassDto schoolClassDto = schoolMapper.toSchoolClassDto(school);
+		response.setStatusCode(HttpStatusCode.SUCCESSFUL.getCode());
+		response.setMessage(HttpStatusCode.SUCCESSFUL.getMessage());
+		response.setResult(new Result<>(schoolClassDto));
+		return response;
+	}
+
+	@Override
+	public Response<SchoolClassDto> getSchoolwithClass(int id) {
 	
+		Response<SchoolClassDto> response = new Response<>();
+		Result<SchoolClassDto> res = new Result<>();
+
+		Optional<School> school = this.schoolRepository.findById(id);
+		System.out.println("scholessssssssssssssssss"+school);
+
+		if (!school.isPresent()) {
+			
+			throw new CustomException(HttpStatusCode.NO_SCHOOL_MATCH_WITH_ID.getCode(),
+					HttpStatusCode.NO_SCHOOL_MATCH_WITH_ID,
+					HttpStatusCode.NO_SCHOOL_MATCH_WITH_ID.getMessage(), res);
+			
+		}
+		SchoolClassDto schoolClassDto = new SchoolClassDto();
+		schoolClassDto.setSchoolDto(schoolMapper.entityToDto(school.get()));
+		schoolClassDto.setClassDto(classMapper.entitiesToDto(school.get().getClassDetail()));
+
+		res.setData(schoolClassDto);
+		System.out.println("scholessssssssssssssssss"+schoolClassDto);	
+		response.setStatusCode(HttpStatusCode.SCHOOL_RETRIVED_SUCCESSFULLY.getCode());
+		response.setMessage(HttpStatusCode.SCHOOL_RETRIVED_SUCCESSFULLY.getMessage());
+		response.setResult(new Result<>(schoolClassDto));
+		
+		System.out.println("ssssssssssssssssssssssss"+response);
+		return response;		
+	}
+
+
+	@Override
+	public Response<List<SchoolDto>> getSchoolwithSort(String field) {
+		
+		Result<List<SchoolDto>> allSchoolResult = new Result<>();
+		//	Pageable paging = PageRequest.of(pageNumber, pageSize);
+			Response<List<SchoolDto>> getListofSchools = new Response<>();
+
+			List<School> list = this.schoolRepository.findAll(Sort.by(Sort.Direction.ASC,field));
+			List<SchoolDto> schoolDtos = schoolMapper.entitiesToDtos(list);
+
+			if (list.size() == 0) {
+				throw new CustomException(HttpStatusCode.NO_SCHOOL_FOUND.getCode(), HttpStatusCode.NO_SCHOOL_FOUND,
+						HttpStatusCode.NO_SCHOOL_FOUND.getMessage(), allSchoolResult);
+			}
+			allSchoolResult.setData(schoolDtos);
+			getListofSchools.setStatusCode(HttpStatusCode.SCHOOL_RETRIVED_SUCCESSFULLY.getCode());
+			getListofSchools.setMessage(HttpStatusCode.SCHOOL_RETRIVED_SUCCESSFULLY.getMessage());
+			getListofSchools.setResult(allSchoolResult);
+			return getListofSchools;
+		}
+	}
 	
-}
 
 
