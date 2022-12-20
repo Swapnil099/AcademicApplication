@@ -14,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.ubi.academicapplication.csv.CsvHelper;
+import com.ubi.academicapplication.csv.RegionCsvHelper;
 import com.ubi.academicapplication.dto.paymentdto.PaymentDto;
 import com.ubi.academicapplication.dto.regionDto.RegionDto;
 import com.ubi.academicapplication.dto.regionDto.RegionSchoolDto;
@@ -165,7 +166,7 @@ public class RegionServiceImpl implements RegionService {
 	@Override
 	public ByteArrayInputStream load() {
 		List<Region> region=regionRepository.findAll();
-        ByteArrayInputStream out = CsvHelper.regionCSV(region);
+        ByteArrayInputStream out = RegionCsvHelper.regionCSV(region);
 	    return out;
 	  }
 
