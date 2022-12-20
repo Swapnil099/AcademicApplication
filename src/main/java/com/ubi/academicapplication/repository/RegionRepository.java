@@ -10,4 +10,6 @@ public interface RegionRepository extends JpaRepository<Region,Integer> {
      Region getRegionByName(String name);
      
      Region getRegionByCode(String code);
+     
+     
 }

@@ -26,7 +26,7 @@ public enum HttpStatusCode {
 
     NO_CLASSCODE_FOUND(202,"No class code found"),
     
-    NO_CLASS_FOUND(108,"No class found"),
+    //NO_CLASS_FOUND(108,"No class found"),
 	
 	NO_CONTACTINFO_FOUND(108,"No contact info found"),
 
@@ -53,10 +53,14 @@ public enum HttpStatusCode {
 	NO_SCHOOL_MATCH_WITH_ID(109, "No School Found with Given ID"),
 
 	NO_SCHOOL_FOUND(108, "No School Found"),
+	
+	NO_CLASS_FOUND(108, "No Class Found"),
 
 	NO_SCHOOL_MATCH_WITH_NAME(110, "No School Found With Given NAME"),
 
-
+	SCHOOL_NAME_ALREADY_EXISTS(110, "School Name Already Exist"),
+	
+	SCHOOL_CODE_ALREADY_EXISTS(110, "School Code Already Exist"),
 
 	RESOURCE_NOT_FOUND(108, "Does not exist"),
 
@@ -111,7 +115,7 @@ public enum HttpStatusCode {
 
 	STUDENT_UPDATED(200, "Student Updated Successfully"),
 
-	CLASS_DELETED(200, "class deleted successfully"),
+	//CLASS_DELETED(200, "class deleted successfully"),
 
 	CLASS_UPDATED(200, "Class updated successfully"),
 
@@ -133,16 +137,19 @@ public enum HttpStatusCode {
 
 	TRANSFER_CERTIFICATE_UPDATED(200, "Transfer Certificate Updated Successfully"),
 
-	
-	
+	CLASS_RETREIVED_SUCCESSFULLY(200, "Class Retrieved Successfully"),
 
-
+	SCHOOL_RETRIVED_SUCCESSFULLY(200,"School Retrieved Successfully"),
 
 	REGION_RETREIVED_SUCCESSFULLY(200,"Region Retrieved Succesfully"),
 	
 	REGION_DELETED_SUCCESSFULLY(200,"Region Deleted SuccessFully"),
 	
+	CLASS_DELETED_SUCCESSFULLY(200, "Class Deleted Successfully"),
+	
 	REGION_NOT_FOUND(108,"No such region found"),
+	
+	CLASS_NOT_FOUND(108, "No Class Found"),
 	
 	REGION_UPDATED(200,"Region Updated Successfully"),
 	

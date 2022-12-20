@@ -5,16 +5,23 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-@Data
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Table(name = "class_data ")
 public class ClassDetail
 {
@@ -26,10 +33,15 @@ public class ClassDetail
 
 	@Column(name = "ClassCode")
 	private String classCode;
-
+ 
 	@Column(name = "ClassName")
 	private String className;
 
+	@ManyToOne
+	@JoinColumn(name = "schoolId" )
+	private School school;
+	
+		
 }
 
 

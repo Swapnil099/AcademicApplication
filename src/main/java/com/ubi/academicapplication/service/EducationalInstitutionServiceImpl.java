@@ -228,6 +228,8 @@ public class EducationalInstitutionServiceImpl implements EducationalInstitution
 		}
 		eduInstitute.getRegion().add(region);
 		region.getEducationalInstitiute().add(eduInstitute);
+		//region.getEducationalInstitiute().add(eduInstitute);
+		//region.getEducationalInstitiute().add(eduInstitute);
 		regionRepository.save(region);
 		educationalInstitutionRepository.save(eduInstitute);
 		EducationalRegionDto educationalRegionDto = educationalInstitutionMapper.toEducationalRegionDto(eduInstitute);

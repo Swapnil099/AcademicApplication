@@ -3,27 +3,12 @@ package com.ubi.academicapplication.service;
 import java.text.ParseException;
 import java.util.List;
 
+import com.ubi.academicapplication.dto.classdto.SchholClassMappingDto;
+import com.ubi.academicapplication.dto.classdto.SchoolClassDto;
 import com.ubi.academicapplication.dto.response.Response;
 import com.ubi.academicapplication.dto.school.SchoolDto;
 
-
-import com.ubi.academicapplication.entity.School;
-
 public interface SchoolService {
-
-	/*Response<School> saveSchool(School school);
-
-	Response<School> getsingleSchool(int id);
-
-	Response<List<School>> getAllSchools();
-	
-	School updateSchool(School school);
-
-    void deleteSchool(int id);
-	
-	Response getschoolByName(String name);
-	
-	*/
 	
 	Response<SchoolDto> addSchool(SchoolDto schoolDto);
 
@@ -31,11 +16,17 @@ public interface SchoolService {
 
 	Response<SchoolDto> getSchoolById(int schoolId);
 	
-	Response<SchoolDto> getSchoolByName(String schoolName);
+	Response<SchoolDto> getSchoolByName(String name);
 
 	public Response<SchoolDto> deleteSchoolById(int schoolId);
 
 	Response<SchoolDto> updateSchool(SchoolDto schoolDto) throws ParseException;
+	
+	Response<SchoolClassDto> addClass(SchholClassMappingDto schoolClassMappingDto);
+
+	Response<SchoolClassDto> getSchoolwithClass(int id);
+
+	Response<List<SchoolDto>> getSchoolwithSort(String field);
 	
 	
 }
