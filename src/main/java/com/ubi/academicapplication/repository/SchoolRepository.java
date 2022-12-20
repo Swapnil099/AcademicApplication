@@ -12,5 +12,11 @@ public interface SchoolRepository extends JpaRepository<School, Integer>{
 	@Query(value = "FROM School sd  WHERE sd.name = ?1")
 	Optional<com.ubi.academicapplication.entity.School> findByName(String name);
 
+   School getSchoolByName(String name);
+	
+	School getSchoolByCode(int code);
+
+	Optional<School> findByname(String name);
+
 	
 }

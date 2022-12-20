@@ -1,29 +1,36 @@
 package com.ubi.academicapplication.entity;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @Builder
 
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@ToString
 @Table(name = "School_Details")
 public class School {
 
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
     private int schoolId;
@@ -38,7 +45,7 @@ public class School {
 	private String email;
 	
 	@Column(name ="schoolContact")
-	private int contact;
+	private long contact;
 	
 	@Column(name ="schoolAddress")
 	private String address;
@@ -60,8 +67,8 @@ public class School {
 	@Column(name = "vvnFund")
 	private int vvnFund;
 
-	
-	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "school")
+	private List<ClassDetail> classDetail;
 	
 	
 	
