@@ -2,6 +2,7 @@ package com.ubi.academicapplication.mapper;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.ubi.academicapplication.dto.school.SchoolDto;
@@ -21,8 +22,8 @@ public class SchoolMapper {
 			return modelMapper.map(school, SchoolDto.class);
 		}
 	 
-	 public List<SchoolDto> entitiesToDtos(List<School> school) {
-	        return school.stream().filter(Objects::nonNull).map(this::entityToDto).collect(Collectors.toList());
+	 public Set<SchoolDto> entitiesToDtos(Set<School> school) {
+	        return school.stream().filter(Objects::nonNull).map(this::entityToDto).collect(Collectors.toSet());
 	    }
 	 
 	 
@@ -35,6 +36,10 @@ public class SchoolMapper {
 	    public List<School> dtosToEntities(List<SchoolDto> schoolDTOs) {
 	        return schoolDTOs.stream().filter(Objects::nonNull).map(this::dtoToEntity).collect(Collectors.toList());
 	    }
+
+		public List<SchoolDto> entitiesToDtos(List<School> list) {
+			 return list.stream().filter(Objects::nonNull).map(this::entityToDto).collect(Collectors.toList());
+		}
 	
 	
 	

@@ -10,6 +10,8 @@ public enum HttpStatusCode {
 	
 	NO_STUDENT_FOUND(108,"No Student Found"),
 	
+	NO_REGION_FOUND(108,"No Region Found"),
+	
 	USER_RETRIVED_SUCCESSFULLY(200,"User Retrived"),
 	
 	NO_USER_MATCH_WITH_ID(109,"No User found with given Id "),
@@ -42,6 +44,8 @@ public enum HttpStatusCode {
 	
 	NO_CONTACTINFO_MATCH_WITH_ID(109,"No such contact info found with such id"),
 
+	NO_REGION_MATCH_WITH_ID(109, "No Region Match with ID"),
+	
 	NO_TRANSFER_CERTIFICATE_MATCH_WITH_ID(109,"No such Transfer Certificate found with such id"),
 	
 	NO_SCHOOL_MATCH_WITH_ID(109, "No School Found with Given ID"),
@@ -129,7 +133,7 @@ public enum HttpStatusCode {
 
 	
 	
-
+	REGION_RETRIEVED_SUCCESSFULLY(200,"Region Retrieved Succesfully"),
 
 
 	REGION_RETREIVED_SUCCESSFULLY(200,"Region Retrieved Succesfully"),

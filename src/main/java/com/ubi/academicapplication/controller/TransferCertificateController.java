@@ -70,7 +70,7 @@ public class TransferCertificateController {
 	}
 
 	@Operation(summary = "Update Transfer Certificate By Id", security = @SecurityRequirement(name = "bearerAuth"))
-	@PutMapping("/{tcId}")
+	@PutMapping("/{transferCertificateId}")
 	public ResponseEntity<Response<TransferCertificateDto>> updateTransferCertificate(@Valid @RequestBody TransferCertificateDto transferCertificateDto) throws ParseException { // NOSONAR
 	  Response<TransferCertificateDto> response=transferCertificateService.updateTransferCertificate(transferCertificateDto);
 	  return ResponseEntity.ok().body(response);

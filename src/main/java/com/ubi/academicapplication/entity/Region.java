@@ -3,13 +3,14 @@ package com.ubi.academicapplication.entity;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
@@ -41,5 +42,12 @@ public class Region {
 	
 	@ManyToMany(mappedBy="region",cascade = CascadeType.MERGE)
 	private Set<EducationalInstitution> educationalInstitiute;
+
 	
-}
+	
+	@OneToMany(mappedBy="region" , cascade=CascadeType.ALL)
+	
+	private Set<School> school;
+	}
+	
+
