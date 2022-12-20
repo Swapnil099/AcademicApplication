@@ -25,6 +25,8 @@ public enum HttpStatusCode {
     NO_PAYMENT_MATCH_WITH_ID(109,"No Payment found with given Id "),
 	
 	PAYMENT_RETRIVED_SUCCESSFULLY(200,"Payment Retrived"),
+	
+	CONTACTINFO_RETRIEVED_SUCCESSFULLY(200,"Contact Info retrived successfully"),
 
     NO_CLASSCODE_FOUND(202,"No class code found"),
     

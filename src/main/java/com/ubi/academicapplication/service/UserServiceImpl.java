@@ -290,7 +290,7 @@ public class UserServiceImpl implements UserService {
 	 @Override
 		public ByteArrayInputStream load() {
 			List<User> user=userRepository.findAll();
-	        ByteArrayInputStream out = UserContactInfoCsvHelper.educationCSV(user);
+	        ByteArrayInputStream out = UserContactInfoCsvHelper.userCSV(user);
 		    return out;
 		  }
 }

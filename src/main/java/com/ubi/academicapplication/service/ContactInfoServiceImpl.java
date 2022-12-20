@@ -9,11 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.ubi.academicapplication.dto.contactinfodto.ContactInfoDto;
+import com.ubi.academicapplication.dto.regionDto.RegionDto;
 import com.ubi.academicapplication.dto.response.Response;
 import com.ubi.academicapplication.entity.ContactInfo;
+import com.ubi.academicapplication.entity.Region;
 import com.ubi.academicapplication.error.CustomException;
 import com.ubi.academicapplication.error.HttpStatusCode;
 import com.ubi.academicapplication.error.Result;
@@ -131,5 +134,26 @@ public class ContactInfoServiceImpl implements ContactInfoService {
 			response.setResult(new Result<>(contactInfoMapper.entityToDto(updateContact)));
 			return response;
 		}
+	   @Override
+	   public Response<List<ContactInfoDto>> getContactInfowithSort(String field) {
+
+	   	Result<List<ContactInfoDto>> allContactInfoResult = new Result<>();
+
+	   	Response<List<ContactInfoDto>> getListofContactInfo = new Response<>();
+
+	   	List<ContactInfo> list = this.contactInfoRepository.findAll(Sort.by(Sort.Direction.ASC,field));
+	   	List<ContactInfoDto> contactInfoDtos = contactInfoMapper
+	   			.entitiesToDtos(list);
+
+	   	if (list.size() == 0) {
+	   		throw new CustomException(HttpStatusCode.NO_CONTACTINFO_FOUND.getCode(), HttpStatusCode.NO_CONTACTINFO_FOUND,
+	   				HttpStatusCode.NO_CONTACTINFO_FOUND.getMessage(), allContactInfoResult);
+	   	}
+	   	allContactInfoResult.setData(contactInfoDtos);
+	   	getListofContactInfo.setStatusCode(HttpStatusCode.CONTACTINFO_RETRIEVED_SUCCESSFULLY.getCode());
+	   	getListofContactInfo.setMessage(HttpStatusCode.CONTACTINFO_RETRIEVED_SUCCESSFULLY.getMessage());
+	   	getListofContactInfo.setResult(allContactInfoResult);
+	   	return getListofContactInfo;
+	   }
 
 }
