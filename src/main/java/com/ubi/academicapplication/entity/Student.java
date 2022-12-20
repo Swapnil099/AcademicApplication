@@ -2,22 +2,29 @@ package com.ubi.academicapplication.entity;
 
 import java.time.LocalDate;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-@Data
+@Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity
+@ToString
 public class Student {
 
 	@Id
@@ -46,5 +53,8 @@ public class Student {
 	private String currentStatus;
 	
 	
+	@ManyToOne(cascade = CascadeType.ALL )
+//	@Column(name="class_fId")
+	private ClassDetail classDetail;
 
 }

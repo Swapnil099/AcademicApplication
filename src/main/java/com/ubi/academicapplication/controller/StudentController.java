@@ -34,9 +34,9 @@ public class StudentController {
 
 	@Autowired
 	private StudentServiceImpl service;
-	
-	  @Autowired
-	  StudentCSVService fileService;
+
+	@Autowired
+	StudentCSVService fileService;
 
 	@PostMapping
 	@Operation(summary = "Create New Student", security = @SecurityRequirement(name = "bearerAuth"))
@@ -82,7 +82,6 @@ public class StudentController {
 		return ResponseEntity.ok().body(response);
 	}
 
-	
 	@Operation(summary = "Change Active Status To True Of Student By Id", security = @SecurityRequirement(name = "bearerAuth"))
 	@PatchMapping("/activate/{id}")
 	public ResponseEntity<Response<StudentDto>> activateStudentById(@PathVariable int id) {
@@ -97,11 +96,10 @@ public class StudentController {
 		return ResponseEntity.ok().body(response);
 	}
 
-	
 	@Operation(summary = "Change Current Status To Promoted Of Student By Id", security = @SecurityRequirement(name = "bearerAuth"))
 	@PatchMapping("/promoted/{id}")
 	public ResponseEntity<Response<StudentDto>> changeCurrentStatusToPromoted(@PathVariable int id) {
-		Response<StudentDto> response = service.changeCurrentStatusToPromoted( id);
+		Response<StudentDto> response = service.changeCurrentStatusToPromoted(id);
 		return ResponseEntity.ok().body(response);
 	}
 
@@ -111,31 +109,25 @@ public class StudentController {
 		Response<StudentDto> response = service.changeCurrentStatusToDemoted(id);
 		return ResponseEntity.ok().body(response);
 	}
-	
+
 	@Operation(summary = "Download Csv", security = @SecurityRequirement(name = "bearerAuth"))
 	@GetMapping("/download")
-	  public ResponseEntity<Resource> getFile() {
-	    String filename = "Student.csv";
-	    InputStreamResource file = new InputStreamResource(fileService.load());
+	public ResponseEntity<Resource> getFile() {
+		String filename = "Student.csv";
+		InputStreamResource file = new InputStreamResource(fileService.load());
 
-	    return ResponseEntity.ok()
-	        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
-	        .contentType(MediaType.parseMediaType("application/csv"))
-	        .body(file);
-	  }
-	
-	
+		return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
+				.contentType(MediaType.parseMediaType("application/csv")).body(file);
+	}
+
 	@Operation(summary = "Get By field", security = @SecurityRequirement(name = "bearerAuth"))
 	@GetMapping("/field")
-	public ResponseEntity<Response<List<StudentDto>>> searchRecordsViaQueryField(@RequestParam  (defaultValue = "*")String gender,
-			@RequestParam (defaultValue = "*")String category, @RequestParam(defaultValue = "*") String minority) {
+	public ResponseEntity<Response<List<StudentDto>>> searchRecordsViaQueryField(
+			@RequestParam(defaultValue = "*") String gender, @RequestParam(defaultValue = "*") String category,
+			@RequestParam(defaultValue = "*") String minority) {
 
 		Response<List<StudentDto>> students = service.findByGenderAndCategoryAndMinority(gender, category, minority);
 		return ResponseEntity.ok().body(students);
 	}
-	
-	
-	
-	
-	
+
 }

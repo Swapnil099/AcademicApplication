@@ -2,22 +2,23 @@ package com.ubi.academicapplication.service;
 
 import java.util.List;
 
-import com.ubi.academicapplication.dto.classdto.ClassDto;
+import com.ubi.academicapplication.dto.classdto.ClassDetailDto;
 import com.ubi.academicapplication.dto.response.Response;
+import com.ubi.academicapplication.dto.student.StudentDto;
 
 
 public interface ClassService {
 
-	Response<ClassDto> addClassDetails(ClassDto classDto);
+	Response<ClassDetailDto> addClassDetails(ClassDetailDto classDto);
 	
-	Response<List<ClassDto>> getClassDetails(Integer PageNumber, Integer PageSize);
+	Response<List<ClassDetailDto>> getClassDetails(Integer PageNumber, Integer PageSize);
 
-	public Response<ClassDto> getClassById(Long classidL);
+	public Response<ClassDetailDto> getClassById(int classidL);
 	
-	public Response<ClassDto> deleteClassById(Long classidL);
+	public Response<ClassDetailDto> deleteClassById(int classidL);
 
-	Response<ClassDto> updateClassDetails(ClassDto classDto);
+	Response<ClassDetailDto> updateClassDetails(ClassDetailDto classDto);
 	
-
+	Response<List<StudentDto>> getClasswithStudent(int id);
 }
 
