@@ -4,25 +4,32 @@ import java.io.ByteArrayInputStream;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.ubi.academicapplication.csv.CsvHelper;
 import com.ubi.academicapplication.dto.paymentdto.PaymentDto;
 import com.ubi.academicapplication.dto.regionDto.RegionDto;
+import com.ubi.academicapplication.dto.regionDto.RegionSchoolDto;
+import com.ubi.academicapplication.dto.regionDto.RegionSchoolMappingDto;
 import com.ubi.academicapplication.dto.response.Response;
 import com.ubi.academicapplication.entity.EducationalInstitution;
 import com.ubi.academicapplication.entity.Region;
+import com.ubi.academicapplication.entity.School;
 import com.ubi.academicapplication.error.CustomException;
 import com.ubi.academicapplication.error.HttpStatusCode;
 import com.ubi.academicapplication.error.Result;
 import com.ubi.academicapplication.mapper.RegionMapper;
+import com.ubi.academicapplication.mapper.SchoolMapper;
 import com.ubi.academicapplication.repository.EducationalInstitutionRepository;
 import com.ubi.academicapplication.repository.RegionRepository;
+import com.ubi.academicapplication.repository.SchoolRepository;
 
 @Service
 public class RegionServiceImpl implements RegionService {
@@ -33,6 +40,11 @@ public class RegionServiceImpl implements RegionService {
 	@Autowired
 	private RegionMapper regionMapper;
 	
+	@Autowired
+	private SchoolMapper schoolMapper;
+	
+	@Autowired
+	private SchoolRepository schoolRepository;
 	
 	@Autowired
 	private EducationalInstitutionRepository educationalInstitutionRepository;
@@ -175,5 +187,83 @@ public class RegionServiceImpl implements RegionService {
 		return getRegion;
 	}
 	
+// Mapping
+	@Override
+	public Response<RegionSchoolDto> addSchool(RegionSchoolMappingDto regionSchoolMappingDto) {
+		int regionId =regionSchoolMappingDto.getRegionId();
+		int schoolId = regionSchoolMappingDto.getSchoolId();
+		Response<RegionSchoolDto> response = new Response<>();
+		Result<RegionSchoolDto> res = new Result<>();
+		Region region = regionRepository.getReferenceById(regionId);
+		School school = schoolRepository.getReferenceById(schoolId);
+		Set<School> setOfSchool = region.getSchool();
+		for (School currSchool : setOfSchool) {
+			if (currSchool.getSchoolId() == region.getId()) {
+				throw new CustomException(HttpStatusCode.MAPPING_ALREADY_EXIST.getCode(),
+						HttpStatusCode.MAPPING_ALREADY_EXIST, HttpStatusCode.MAPPING_ALREADY_EXIST.getMessage(), res);
+			}
+		}
+		region.getSchool().add(school);
+		school.setRegion(region);
+	
+			schoolRepository.save(school);
+		regionRepository.save(region);
+		RegionSchoolDto regionSchoolDto = regionMapper.toRegionSchoolDto(region);
+		response.setStatusCode(HttpStatusCode.SUCCESSFUL.getCode());
+		response.setMessage(HttpStatusCode.SUCCESSFUL.getMessage());
+		response.setResult(new Result<>(regionSchoolDto));
+		return response;
+	}
+
+@Override
+public Response<RegionSchoolDto> getRegionwithSchool(int id) {
+	
+	Response<RegionSchoolDto> response = new Response<>();
+	Result<RegionSchoolDto> res = new Result<>();
+
+	Optional<Region> region = this.regionRepository.findById(id);
+
+	if (!region.isPresent()) {
+		throw new CustomException(HttpStatusCode.NO_REGION_MATCH_WITH_ID.getCode(),
+				HttpStatusCode.NO_REGION_MATCH_WITH_ID,
+				HttpStatusCode.NO_REGION_MATCH_WITH_ID.getMessage(), res);
+	}
+	
+	RegionSchoolDto regionSchoolDto = new RegionSchoolDto();
+	
+	regionSchoolDto.setRegionDto(regionMapper.entityToDto(region.get()));
+	regionSchoolDto.setSchoolDto(schoolMapper.entitiesToDtos(region.get().getSchool()));
+
+	res.setData(regionSchoolDto);
+
+	response.setStatusCode(HttpStatusCode.REGION_RETRIEVED_SUCCESSFULLY.getCode());
+	response.setMessage(HttpStatusCode.REGION_RETRIEVED_SUCCESSFULLY.getMessage());
+	response.setResult(new Result<>(regionSchoolDto));
+	return response;
+
+}
+	
+@Override
+public Response<List<RegionDto>> getRegionwithSort(String field) {
+
+	Result<List<RegionDto>> allRegionResult = new Result<>();
+
+	Response<List<RegionDto>> getListofRegion = new Response<>();
+
+	List<Region> list = this.regionRepository.findAll(Sort.by(Sort.Direction.ASC,field));
+	List<RegionDto> regionDtos = regionMapper
+			.entitiesToDtos(list);
+
+	if (list.size() == 0) {
+		throw new CustomException(HttpStatusCode.NO_REGION_FOUND.getCode(), HttpStatusCode.NO_REGION_FOUND,
+				HttpStatusCode.NO_REGION_FOUND.getMessage(), allRegionResult);
+	}
+	allRegionResult.setData(regionDtos);
+	getListofRegion.setStatusCode(HttpStatusCode.REGION_RETRIEVED_SUCCESSFULLY.getCode());
+	getListofRegion.setMessage(HttpStatusCode.REGION_RETRIEVED_SUCCESSFULLY.getMessage());
+	getListofRegion.setResult(allRegionResult);
+	return getListofRegion;
+}
+
 
 }

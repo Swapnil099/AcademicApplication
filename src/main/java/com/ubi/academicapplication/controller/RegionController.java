@@ -2,7 +2,6 @@ package com.ubi.academicapplication.controller;
 
 import java.util.List;
 
-import com.ubi.academicapplication.dto.response.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ubi.academicapplication.dto.regionDto.EducationalRegionDto;
 import com.ubi.academicapplication.dto.regionDto.RegionDto;
+import com.ubi.academicapplication.dto.regionDto.RegionSchoolDto;
+import com.ubi.academicapplication.dto.regionDto.RegionSchoolMappingDto;
+import com.ubi.academicapplication.dto.response.Response;
 import com.ubi.academicapplication.service.RegionService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -115,5 +118,30 @@ public class RegionController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 		}
 	}
+	
+	@Operation(summary = "Map Region and School", security = @SecurityRequirement(name = "bearerAuth"))
+	@PostMapping("/addSchool")
+	public ResponseEntity<Response<RegionSchoolDto>> addSchool(@RequestBody RegionSchoolMappingDto regionSchoolDto) {
+		Response<RegionSchoolDto> response = regionService.addSchool(regionSchoolDto);
+		return ResponseEntity.ok().body(response);
+	}
+
+	@Operation(summary = "Get School in Region", security = @SecurityRequirement(name = "bearerAuth"))
+	@GetMapping("/getRegion/{id}")
+	public ResponseEntity<Response<RegionSchoolDto>> getSchoolInRegion(@PathVariable int id) {
+		Response<RegionSchoolDto> response = regionService.getRegionwithSchool(id);
+		return ResponseEntity.ok().body(response);
+	}
+	
+	
+	//-----Sorting
+
+		@Operation(summary = "Get Region in Sorting", security = @SecurityRequirement(name = "bearerAuth"))
+		@GetMapping("/sort/{field}")
+		public ResponseEntity<Response<List<RegionDto>>> getRegionBySorting(@PathVariable String field) {
+			Response<List<RegionDto>> response = regionService.getRegionwithSort(field);
+			return ResponseEntity.ok().body(response);
+		}
+
 
 }

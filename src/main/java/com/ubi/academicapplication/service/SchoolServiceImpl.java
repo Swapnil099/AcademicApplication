@@ -1,8 +1,11 @@
 package com.ubi.academicapplication.service;
 
 import java.text.ParseException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+
 import com.ubi.academicapplication.dto.classdto.SchholClassMappingDto;
 import com.ubi.academicapplication.dto.classdto.SchoolClassDto;
 import com.ubi.academicapplication.dto.response.Response;
@@ -18,6 +21,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+
+import com.ubi.academicapplication.entity.EducationalInstitution;
+import com.ubi.academicapplication.entity.Region;
 import com.ubi.academicapplication.entity.ClassDetail;
 import com.ubi.academicapplication.entity.School;
 import com.ubi.academicapplication.entity.User;
@@ -26,6 +32,7 @@ import com.ubi.academicapplication.error.HttpStatusCode;
 import com.ubi.academicapplication.error.Result;
 import com.ubi.academicapplication.mapper.ClassMapper;
 import com.ubi.academicapplication.mapper.SchoolMapper;
+import com.ubi.academicapplication.repository.RegionRepository;
 import com.ubi.academicapplication.repository.ClassRepository;
 import com.ubi.academicapplication.repository.SchoolRepository;
 
@@ -36,6 +43,8 @@ public class SchoolServiceImpl implements SchoolService{
 	@Autowired
 	private SchoolMapper schoolMapper;
 	
+	@Autowired
+	private RegionRepository regionRepository;
 	@Autowired
 	private SchoolRepository schoolRepository;
 	
@@ -160,6 +169,13 @@ public class SchoolServiceImpl implements SchoolService{
 		if (!school.isPresent()) {
 			throw new CustomException(HttpStatusCode.RESOURCE_NOT_FOUND.getCode(), HttpStatusCode.RESOURCE_NOT_FOUND,
 					HttpStatusCode.RESOURCE_NOT_FOUND.getMessage(), res);
+		}
+		
+	
+		Region region=school.get().getRegion();
+		if(region!=null)
+		{
+			region.getSchool().remove(school.get());
 		}
 		schoolRepository.deleteById(schoolId);
 		Response<SchoolDto> response = new Response<>();
