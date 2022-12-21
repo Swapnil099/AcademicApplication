@@ -1,5 +1,6 @@
 package com.ubi.academicapplication.service;
 
+import java.io.ByteArrayInputStream;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,10 +10,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.ubi.academicapplication.csv.StudentCSVHelper;
 import com.ubi.academicapplication.dto.response.Response;
 import com.ubi.academicapplication.dto.student.StudentDto;
 import com.ubi.academicapplication.entity.ClassDetail;
-import com.ubi.academicapplication.entity.Region;
 import com.ubi.academicapplication.entity.Student;
 import com.ubi.academicapplication.error.CustomException;
 import com.ubi.academicapplication.error.HttpStatusCode;
@@ -36,6 +37,14 @@ public class StudentServiceImpl implements StudentService {
 	@Autowired
 	private StudentRepository repository;
 
+	  
+	  public ByteArrayInputStream load() {
+	    List<Student> student = repository.findAll();
+
+	    ByteArrayInputStream in = StudentCSVHelper.StudentToCSV(student);
+	    return in;
+	  }
+	
 	public Response<StudentDto> saveStudent(StudentDto studentDto) {
 
 		res.setData(null);
