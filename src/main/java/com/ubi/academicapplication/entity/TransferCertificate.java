@@ -31,10 +31,10 @@ public class TransferCertificate {
 @GeneratedValue(strategy=GenerationType.AUTO)
 @Column(name="id")
 private int id;
-
-@NotNull
 @JsonFormat(pattern="yyyy-MM-dd")
 private LocalDate dateOfIssue;
+@Column(name="student_id")
+private int studentId;
 
 }
 
