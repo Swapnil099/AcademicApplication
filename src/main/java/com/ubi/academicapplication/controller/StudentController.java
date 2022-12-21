@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ubi.academicapplication.csv.StudentCSVService;
 import com.ubi.academicapplication.dto.response.Response;
 import com.ubi.academicapplication.dto.student.StudentDto;
 import com.ubi.academicapplication.service.StudentServiceImpl;
@@ -35,9 +34,6 @@ public class StudentController {
 	@Autowired
 	private StudentServiceImpl service;
 	
-	  @Autowired
-	  StudentCSVService fileService;
-
 	@PostMapping
 	@Operation(summary = "Create New Student", security = @SecurityRequirement(name = "bearerAuth"))
 	public ResponseEntity<Response<StudentDto>> addStudent(@RequestBody StudentDto studentId) {
@@ -65,8 +61,8 @@ public class StudentController {
 
 	@GetMapping("{id}")
 	@Operation(summary = "Get Student By Id", security = @SecurityRequirement(name = "bearerAuth"))
-	public ResponseEntity<Response> getStudentById(@PathVariable("id") Long id) {
-		Response response = service.getStudentById(id);
+	public ResponseEntity<Response<StudentDto>> getStudentById(@PathVariable("id") Long id) {
+		Response<StudentDto> response = service.getStudentById(id);
 		if (response.getStatusCode() == 200) {
 			return ResponseEntity.status(HttpStatus.OK).body(response);
 		} else {
@@ -77,20 +73,20 @@ public class StudentController {
 //
 	@PutMapping
 	@Operation(summary = "Update Student", security = @SecurityRequirement(name = "bearerAuth"))
-	public ResponseEntity<Response> updateStudent(@RequestBody StudentDto student) {
+	public ResponseEntity<Response<StudentDto>> updateStudent(@RequestBody StudentDto student) {
 		Response<StudentDto> response = service.updateStudent(student);
 		return ResponseEntity.ok().body(response);
 	}
 
 	
-	@Operation(summary = "Change Active Status To True Of Student By Id", security = @SecurityRequirement(name = "bearerAuth"))
+	@Operation(summary = "Change deactivate Status To Activate", security = @SecurityRequirement(name = "bearerAuth"))
 	@PatchMapping("/activate/{id}")
 	public ResponseEntity<Response<StudentDto>> activateStudentById(@PathVariable Long id) {
 		Response<StudentDto> response = service.changeActiveStatusToTrue(id);
 		return ResponseEntity.ok().body(response);
 	}
 
-	@Operation(summary = "Change Active Status To True Of Student By Id", security = @SecurityRequirement(name = "bearerAuth"))
+	@Operation(summary = "Change Active Status To deactivate", security = @SecurityRequirement(name = "bearerAuth"))
 	@PatchMapping("/deactivate/{id}")
 	public ResponseEntity<Response<StudentDto>> deactivateStudentById(@PathVariable Long id) {
 		Response<StudentDto> response = service.changeActiveStatusToFalse(id);
@@ -105,7 +101,7 @@ public class StudentController {
 		return ResponseEntity.ok().body(response);
 	}
 
-	@Operation(summary = "Change Current Status To Domoted Of Student By Id", security = @SecurityRequirement(name = "bearerAuth"))
+	@Operation(summary = "Change Current Status To Demoted Of Student By Id", security = @SecurityRequirement(name = "bearerAuth"))
 	@PatchMapping("/demoted/{id}")
 	public ResponseEntity<Response<StudentDto>> changeCurrentStatusToDomoted(@PathVariable Long id) {
 		Response<StudentDto> response = service.changeCurrentStatusToDemoted(id);
@@ -116,7 +112,7 @@ public class StudentController {
 	@GetMapping("/download")
 	  public ResponseEntity<Resource> getFile() {
 	    String filename = "Student.csv";
-	    InputStreamResource file = new InputStreamResource(fileService.load());
+	    InputStreamResource file = new InputStreamResource(service.load());
 
 	    return ResponseEntity.ok()
 	        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
