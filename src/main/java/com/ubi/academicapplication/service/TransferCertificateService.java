@@ -9,9 +9,10 @@ import com.ubi.academicapplication.dto.transfercertificate.TransferCertificateDt
 
 
 public interface TransferCertificateService {
-
 	public Response<List<TransferCertificateDto>> getAllTransferCertificate(Integer PageNumber, Integer PageSize);
 
+	public Response<List<TransferCertificateDto>> getTransferCertificateById(int studentId);
+	
 	public Response<TransferCertificateDto> addTransferCertificate(TransferCertificateDto transferCertificateDto);
 
 	public Response<TransferCertificateDto> deleteTransferCertificate(int transferCertificateId);
@@ -21,6 +22,7 @@ public interface TransferCertificateService {
 	public Response<TransferCertificateDto> updateTransferCertificate(TransferCertificateDto transferCertificateDto) throws ParseException;
 
 	
+
 
 	
 

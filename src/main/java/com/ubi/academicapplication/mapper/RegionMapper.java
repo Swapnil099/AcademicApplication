@@ -6,15 +6,26 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.ubi.academicapplication.dto.educationaldto.EducationalInstitutionDto;
+import com.ubi.academicapplication.dto.regionDto.EducationalRegionDto;
 import com.ubi.academicapplication.dto.regionDto.RegionDto;
+import com.ubi.academicapplication.dto.regionDto.RegionSchoolDto;
+import com.ubi.academicapplication.dto.school.SchoolDto;
+import com.ubi.academicapplication.entity.EducationalInstitution;
 import com.ubi.academicapplication.entity.Region;
+import com.ubi.academicapplication.entity.School;
 
 @Component
 public class RegionMapper {
 
 	ModelMapper modelMapper = new ModelMapper();
+	
+	@Autowired
+       SchoolMapper schoolMapper;
+	
 
 	public RegionDto entityToDto(Region region) {
 		return modelMapper.map(region, RegionDto.class);
@@ -40,4 +51,24 @@ public class RegionMapper {
 	public List<Region> dtosToEntities(List<RegionDto> regionDto) {
 		return regionDto.stream().filter(Objects::nonNull).map(this::dtoToEntity).collect(Collectors.toList());
 	}
+	
+	
+	
+	public SchoolDto entityToDto(School school) {
+		return modelMapper.map(school, SchoolDto.class);
+	}
+	
+	public List<SchoolDto> entitiesToDto(List<School> school) {
+		return school.stream().filter(Objects::nonNull).map(this::entityToDto).collect(Collectors.toList());
+	}
+	
+	
+	
+	public RegionSchoolDto toRegionSchoolDto(Region region)
+	{
+		RegionDto regionDto = this.entityToDto(region);
+		Set<SchoolDto> schoolDto=schoolMapper.entitiesToDtos(region.getSchool());
+		return new RegionSchoolDto(regionDto,schoolDto);
+	}
+	
 }

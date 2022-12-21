@@ -3,7 +3,6 @@ package com.ubi.academicapplication.service;
 import java.util.List;
 import java.util.Optional;
 
-import com.ubi.academicapplication.dto.response.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,12 +12,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.ubi.academicapplication.dto.classdto.ClassDto;
-
+import com.ubi.academicapplication.dto.response.Response;
+import com.ubi.academicapplication.dto.student.StudentDto;
 import com.ubi.academicapplication.entity.ClassDetail;
+import com.ubi.academicapplication.entity.Student;
 import com.ubi.academicapplication.error.CustomException;
 import com.ubi.academicapplication.error.HttpStatusCode;
 import com.ubi.academicapplication.error.Result;
 import com.ubi.academicapplication.mapper.ClassMapper;
+import com.ubi.academicapplication.mapper.StudentMapper;
 import com.ubi.academicapplication.repository.ClassRepository;
 import com.ubi.academicapplication.repository.SchoolRepository;
 
@@ -36,6 +38,10 @@ public class ClassServiceImpl implements ClassService {
 	@Autowired
 	private ClassMapper classMapper;
 
+	
+	@Autowired
+	private StudentMapper studentMapper;
+	
 	public Response<ClassDto> addClassDetails(ClassDto classDto) {
 
 		Result<ClassDto> res = new Result<>();
@@ -166,4 +172,30 @@ public class ClassServiceImpl implements ClassService {
 		return getClass;
 }
 
-}
+	@Override
+	public Response<List<StudentDto>> getClasswithStudent(Long id) {
+		Response<List<StudentDto>> response = new Response<>();
+		Result<List<StudentDto>> res = new Result<>();
+		Optional<ClassDetail> classDetail = this.classRepository.findById(id);
+
+		if (!classDetail.isPresent()) {
+			throw new CustomException(HttpStatusCode.NO_EDUCATIONAL_INSTITUTION_MATCH_WITH_ID.getCode(),
+					HttpStatusCode.NO_EDUCATIONAL_INSTITUTION_MATCH_WITH_ID,
+					HttpStatusCode.NO_EDUCATIONAL_INSTITUTION_MATCH_WITH_ID.getMessage(), res);
+		}
+
+		ClassDetail classDetailss = classDetail.get();
+
+		List<Student> student = classDetailss.getStudents();
+
+		response.setResult(res);
+
+		res.setData(studentMapper.entitiesToDtos(student));
+
+		response.setStatusCode(HttpStatusCode.EDUCATIONAL_INSTITUTION_RETRIVED_SUCCESSFULLY.getCode());
+		response.setMessage(HttpStatusCode.EDUCATIONAL_INSTITUTION_RETRIVED_SUCCESSFULLY.getMessage());
+		return response;
+	}
+	}
+
+

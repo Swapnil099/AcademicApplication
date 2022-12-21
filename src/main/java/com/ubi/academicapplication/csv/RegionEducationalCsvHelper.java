@@ -14,7 +14,7 @@ import org.apache.commons.csv.QuoteMode;
 import com.ubi.academicapplication.entity.EducationalInstitution;
 import com.ubi.academicapplication.entity.Region;
 
-public class CsvHelper {
+public class RegionEducationalCsvHelper {
 
 	public static ByteArrayInputStream regionCSV(List<Region> region) {
 		final CSVFormat format = CSVFormat.DEFAULT.withQuoteMode(QuoteMode.MINIMAL);

@@ -1,5 +1,6 @@
 package com.ubi.academicapplication.service;
 
+import java.io.ByteArrayInputStream;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -9,6 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.ubi.academicapplication.csv.UserContactInfoCsvHelper;
 import com.ubi.academicapplication.dto.response.Response;
 import com.ubi.academicapplication.dto.user.UserContactInfoDto;
 import com.ubi.academicapplication.dto.user.UserContactInfoMappingDto;
@@ -284,4 +286,11 @@ public class UserServiceImpl implements UserService {
 	  		return response;
 
 	  	}
+	 
+	 @Override
+		public ByteArrayInputStream load() {
+			List<User> user=userRepository.findAll();
+	        ByteArrayInputStream out = UserContactInfoCsvHelper.userCSV(user);
+		    return out;
+		  }
 }

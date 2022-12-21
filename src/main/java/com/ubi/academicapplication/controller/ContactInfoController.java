@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ubi.academicapplication.dto.contactinfodto.ContactInfoDto;
+import com.ubi.academicapplication.dto.regionDto.RegionDto;
 import com.ubi.academicapplication.dto.response.Response;
 import com.ubi.academicapplication.service.ContactInfoServiceImpl;
 
@@ -78,7 +79,13 @@ public class ContactInfoController {
 		Response<ContactInfoDto> response = contactInfoServiceImpl.updateContactDetails(contactInfoDto);
 		return ResponseEntity.ok().body(response);
 	}
-	 
+    
+    @Operation(summary = "Get Contact Info in Sorting", security = @SecurityRequirement(name = "bearerAuth"))
+	@GetMapping("/sort/{field}")
+	public ResponseEntity<Response<List<ContactInfoDto>>> getRegionBySorting(@PathVariable String field) {
+		Response<List<ContactInfoDto>> response = contactInfoServiceImpl.getContactInfowithSort(field);
+		return ResponseEntity.ok().body(response);
+	}
 
 
 }

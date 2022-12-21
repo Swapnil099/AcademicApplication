@@ -6,9 +6,13 @@ public enum HttpStatusCode {
 	
 	NO_STUDENT_NAME_FOUND(202,"No student name found"),
 	
+	NO_CLASSID_FOUND(206,"please enter class Id"),
+	
 	NO_SCHOOL_NAME_FOUND(202, "No School Name Found"),
 	
 	NO_STUDENT_FOUND(108,"No Student Found"),
+	
+	NO_REGION_FOUND(108,"No Region Found"),
 	
 	USER_RETRIVED_SUCCESSFULLY(200,"User Retrived"),
 	
@@ -23,6 +27,8 @@ public enum HttpStatusCode {
     NO_PAYMENT_MATCH_WITH_ID(109,"No Payment found with given Id "),
 	
 	PAYMENT_RETRIVED_SUCCESSFULLY(200,"Payment Retrived"),
+	
+	CONTACTINFO_RETRIEVED_SUCCESSFULLY(200,"Contact Info retrived successfully"),
 
     NO_CLASSCODE_FOUND(202,"No class code found"),
     
@@ -48,6 +54,8 @@ public enum HttpStatusCode {
 	
 	NO_CONTACTINFO_MATCH_WITH_ID(109,"No such contact info found with such id"),
 
+	NO_REGION_MATCH_WITH_ID(109, "No Region Match with ID"),
+	
 	NO_TRANSFER_CERTIFICATE_MATCH_WITH_ID(109,"No such Transfer Certificate found with such id"),
 	
 	NO_SCHOOL_MATCH_WITH_ID(109, "No School Found with Given ID"),
@@ -137,7 +145,13 @@ public enum HttpStatusCode {
 
 	TRANSFER_CERTIFICATE_UPDATED(200, "Transfer Certificate Updated Successfully"),
 
+
+	
+	
+	REGION_RETRIEVED_SUCCESSFULLY(200,"Region Retrieved Succesfully"),
+
 	CLASS_RETREIVED_SUCCESSFULLY(200, "Class Retrieved Successfully"),
+
 
 	SCHOOL_RETRIVED_SUCCESSFULLY(200,"School Retrieved Successfully"),
 

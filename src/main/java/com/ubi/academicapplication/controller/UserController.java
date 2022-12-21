@@ -7,6 +7,10 @@ import com.ubi.academicapplication.dto.user.UserContactInfoDto;
 import com.ubi.academicapplication.dto.user.UserContactInfoMappingDto;
 import com.ubi.academicapplication.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -97,4 +101,17 @@ public class UserController {
 		Response<UserContactInfoDto> response = userService.getContactInfowithUser(id);
 		return ResponseEntity.ok().body(response);
 	}
+    
+    @Operation(summary="Download file ",security=@SecurityRequirement(name= "bearerAuth"))
+   	@GetMapping("/download")
+   	public ResponseEntity<Resource> getCSVFileData()
+   	{
+   	    String filename = "user.csv";
+   	    InputStreamResource file = new InputStreamResource(userService.load());
+
+   	    return ResponseEntity.ok()
+   	        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
+   	        .contentType(MediaType.parseMediaType("application/csv"))
+   	        .body(file);
+   	}
 }

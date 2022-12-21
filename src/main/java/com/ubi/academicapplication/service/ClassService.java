@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.ubi.academicapplication.dto.classdto.ClassDto;
 import com.ubi.academicapplication.dto.response.Response;
+import com.ubi.academicapplication.dto.student.StudentDto;
+
 
 
 public interface ClassService {
@@ -19,6 +21,8 @@ public interface ClassService {
 	Response<ClassDto> updateClassDetails(ClassDto classDto);
 	
 	Response<ClassDto> getClassByName(String className);
+	
+	Response<List<StudentDto>> getClasswithStudent(Long id);
 	
 }
 
