@@ -6,6 +6,8 @@ public enum HttpStatusCode {
 	
 	NO_STUDENT_NAME_FOUND(202,"No student name found"),
 	
+	NO_CLASSID_FOUND(206,"please enter class Id"),
+	
 	NO_SCHOOL_NAME_FOUND(202, "No School Name Found"),
 	
 	NO_STUDENT_FOUND(108,"No Student Found"),
