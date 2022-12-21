@@ -16,13 +16,13 @@ import com.ubi.academicapplication.entity.Region;
 import com.ubi.academicapplication.entity.School;
 import com.ubi.academicapplication.mapper.RegionMapper;
 
-public class RegionCsvHelper {
+public class RegionSchoolCsvHelper {
 
 	
 	@Autowired
 	static RegionMapper regionMapper;
 
-	public static ByteArrayInputStream regionCSV(List<Region> region) {
+	public static ByteArrayInputStream regionSchoolCSV(List<Region> region) {
 		final CSVFormat format = CSVFormat.DEFAULT.withQuoteMode(QuoteMode.MINIMAL);
 		int count = 0;
 		try (ByteArrayOutputStream out = new ByteArrayOutputStream();
