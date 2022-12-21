@@ -7,13 +7,15 @@ import javax.validation.Valid;
 
 import com.ubi.academicapplication.dto.classdto.SchholClassMappingDto;
 import com.ubi.academicapplication.dto.classdto.SchoolClassDto;
-import com.ubi.academicapplication.dto.regionDto.EIRegionMappingDto;
-import com.ubi.academicapplication.dto.regionDto.EducationalRegionDto;
 import com.ubi.academicapplication.dto.response.Response;
 import com.ubi.academicapplication.dto.school.SchoolDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -106,10 +108,21 @@ public class SchoolController {
 	public ResponseEntity<Response<List<SchoolDto>>> getSchoolBySorting(@PathVariable String field) {
 		Response<List<SchoolDto>> response = schoolService.getSchoolwithSort(field);
 		return ResponseEntity.ok().body(response);
-	}
+	}	
 	
-	
-	
+	@Operation(summary="Download file ",security=@SecurityRequirement(name= "bearerAuth"))
+	@GetMapping("/download")
+	public ResponseEntity<Resource> getCSVFileData()
+	{
+	    String filename = "class.csv";
+	    InputStreamResource file = new InputStreamResource(schoolService.loadSchoolAndClass());
+
+	    return ResponseEntity.ok()
+	        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
+	        .contentType(MediaType.parseMediaType("application/csv"))
+	        .body(file);
+		
+	}	
 	
 	
 	

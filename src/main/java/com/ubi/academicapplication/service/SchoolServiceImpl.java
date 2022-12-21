@@ -1,14 +1,15 @@
 package com.ubi.academicapplication.service;
 
+import java.io.ByteArrayInputStream;
 import java.text.ParseException;
 import java.util.List;
 import java.util.Optional;
+
+import com.ubi.academicapplication.csv.SchoolClassCsvHelper;
 import com.ubi.academicapplication.dto.classdto.SchholClassMappingDto;
 import com.ubi.academicapplication.dto.classdto.SchoolClassDto;
 import com.ubi.academicapplication.dto.response.Response;
 import com.ubi.academicapplication.dto.school.SchoolDto;
-import com.ubi.academicapplication.dto.user.UserContactInfoDto;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,6 @@ import org.springframework.stereotype.Service;
 
 import com.ubi.academicapplication.entity.ClassDetail;
 import com.ubi.academicapplication.entity.School;
-import com.ubi.academicapplication.entity.User;
 import com.ubi.academicapplication.error.CustomException;
 import com.ubi.academicapplication.error.HttpStatusCode;
 import com.ubi.academicapplication.error.Result;
@@ -284,6 +284,14 @@ public class SchoolServiceImpl implements SchoolService{
 			getListofSchools.setResult(allSchoolResult);
 			return getListofSchools;
 		}
+
+
+	@Override
+	public ByteArrayInputStream loadSchoolAndClass() {
+			List<School> school=schoolRepository.findAll();
+	        ByteArrayInputStream out = SchoolClassCsvHelper.regionCSV(school);
+		    return out;
+		  }
 	}
 	
 
