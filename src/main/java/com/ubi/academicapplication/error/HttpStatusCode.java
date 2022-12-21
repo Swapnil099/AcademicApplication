@@ -16,6 +16,8 @@ public enum HttpStatusCode {
 	
 	USER_RETRIVED_SUCCESSFULLY(200,"User Retrived"),
 	
+	CLASS_RETRIVED_SUCCESSFULLY(200,"class Retrived"),
+	
 	NO_USER_MATCH_WITH_ID(109,"No User found with given Id "),
 	
 	NO_STUDENT_MATCH_WITH_ID(109,"No such student found with such id"),
@@ -28,7 +30,9 @@ public enum HttpStatusCode {
 	
 	PAYMENT_RETRIVED_SUCCESSFULLY(200,"Payment Retrived"),
 	
-	CONTACTINFO_RETRIEVED_SUCCESSFULLY(200,"Contact Info retrived successfully"),
+	STUDENT_RETRIVED_SUCCESSFULLY(200,"Student retrived"),
+	
+	CONTACTINFO_RETRIVED_SUCCESSFULLY(200,"Contact Info retrived successfully"),
 
     NO_CLASSCODE_FOUND(202,"No class code found"),
     
