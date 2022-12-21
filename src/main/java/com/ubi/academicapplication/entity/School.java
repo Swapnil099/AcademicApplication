@@ -68,4 +68,5 @@ public class School {
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "school")
 	private List<ClassDetail> classDetail;
+
 }

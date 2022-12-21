@@ -1,8 +1,15 @@
 package com.ubi.academicapplication.service;
 
+import java.io.ByteArrayInputStream;
 import java.text.ParseException;
 import java.util.List;
 import java.util.Optional;
+
+import com.ubi.academicapplication.csv.SchoolClassCsvHelper;
+import com.ubi.academicapplication.dto.classdto.SchholClassMappingDto;
+import com.ubi.academicapplication.dto.classdto.SchoolClassDto;
+import com.ubi.academicapplication.dto.response.Response;
+import com.ubi.academicapplication.dto.school.SchoolDto;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -293,6 +300,14 @@ public class SchoolServiceImpl implements SchoolService{
 			getListofSchools.setResult(allSchoolResult);
 			return getListofSchools;
 		}
+
+
+	@Override
+	public ByteArrayInputStream loadSchoolAndClass() {
+			List<School> school=schoolRepository.findAll();
+	        ByteArrayInputStream out = SchoolClassCsvHelper.regionCSV(school);
+		    return out;
+		  }
 	}
 	
 
