@@ -13,8 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.ubi.academicapplication.csv.CsvHelper;
-import com.ubi.academicapplication.csv.RegionCsvHelper;
+import com.ubi.academicapplication.csv.RegionEducationalCsvHelper;
+import com.ubi.academicapplication.csv.RegionSchoolCsvHelper;
 import com.ubi.academicapplication.dto.paymentdto.PaymentDto;
 import com.ubi.academicapplication.dto.regionDto.RegionDto;
 import com.ubi.academicapplication.dto.regionDto.RegionSchoolDto;
@@ -88,7 +88,7 @@ public class RegionServiceImpl implements RegionService {
 		
 		Page<Region> list = this.regionRepository.findAll(paging);
 		List<RegionDto> paymentDtos = regionMapper.entitiesToDtos(list.toList());
-		if (list.getSize() == 0) {
+		if (list.isEmpty()) {
 			throw new CustomException(HttpStatusCode.RESOURCE_NOT_FOUND.getCode(), HttpStatusCode.RESOURCE_NOT_FOUND,
 					HttpStatusCode.RESOURCE_NOT_FOUND.getMessage(), allRegion);
 		}
@@ -142,7 +142,7 @@ public class RegionServiceImpl implements RegionService {
 
 	@Override
 	public Response<RegionDto> updateRegionDetails(RegionDto regionDto) {
-		Result<PaymentDto> res = new Result<>();
+		Result<RegionDto> res = new Result<>();
 
 		res.setData(null);
 		Optional<Region> existingRegionContainer = regionRepository.findById(regionDto.getId());
@@ -166,9 +166,17 @@ public class RegionServiceImpl implements RegionService {
 	@Override
 	public ByteArrayInputStream load() {
 		List<Region> region=regionRepository.findAll();
-        ByteArrayInputStream out = RegionCsvHelper.regionCSV(region);
+        ByteArrayInputStream out = RegionEducationalCsvHelper.regionCSV(region);
 	    return out;
 	  }
+	
+	@Override
+	public ByteArrayInputStream Regionload() {
+		List<Region> region=regionRepository.findAll();
+        ByteArrayInputStream out = RegionSchoolCsvHelper.regionSchoolCSV(region);
+	    return out;
+	  }
+
 
 	@Override
 	public Response<RegionDto> getRegionByName(String name) {
