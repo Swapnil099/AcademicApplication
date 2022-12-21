@@ -70,10 +70,19 @@ public class TransferCertificateController {
 	}
 
 	@Operation(summary = "Update Transfer Certificate By Id", security = @SecurityRequirement(name = "bearerAuth"))
-	@PutMapping("/{transferCertificateId}")
+	@PutMapping("/{tcId}")
 	public ResponseEntity<Response<TransferCertificateDto>> updateTransferCertificate(@Valid @RequestBody TransferCertificateDto transferCertificateDto) throws ParseException { // NOSONAR
 	  Response<TransferCertificateDto> response=transferCertificateService.updateTransferCertificate(transferCertificateDto);
 	  return ResponseEntity.ok().body(response);
 	}
 
+	
+	@Operation(summary = "Get Single Transfer Certificate", security = @SecurityRequirement(name = "bearerAuth"))
+	@GetMapping("/studentId/{studentId}")
+	public ResponseEntity<Response<List<TransferCertificateDto>>> getTransferCertificateById(@PathVariable int studentId) {
+	  Response<List<TransferCertificateDto>> response=transferCertificateService.getTransferCertificateById(studentId);
+	  
+	  return ResponseEntity.ok().body(response);
+	}
+	
 }
