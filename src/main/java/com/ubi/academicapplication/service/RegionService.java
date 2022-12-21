@@ -22,6 +22,8 @@ public interface RegionService {
 	
 	ByteArrayInputStream load();
 	
+	ByteArrayInputStream Regionload();
+	
 	Response<RegionDto> getRegionByName(String name);
 	
 	Response<RegionSchoolDto> addSchool(RegionSchoolMappingDto regionSchoolMappingDto);
