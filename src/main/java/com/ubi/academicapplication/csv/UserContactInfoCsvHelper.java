@@ -17,7 +17,7 @@ import com.ubi.academicapplication.entity.User;
 public class UserContactInfoCsvHelper {
 
 
-	public static ByteArrayInputStream userCSV(List<User> eduInst) {
+	public static ByteArrayInputStream userCSV(List<User> users) {
 		final CSVFormat format = CSVFormat.DEFAULT.withQuoteMode(QuoteMode.MINIMAL);
 		int count=0;
 		List<String> data;
@@ -50,7 +50,7 @@ public class UserContactInfoCsvHelper {
 			header.add("Nationality");
 
 			csvPrinter.printRecord(header);
-			for (User user : eduInst) {
+			for (User user : users) {
 				int m=1;
 
 				data = new ArrayList<>();

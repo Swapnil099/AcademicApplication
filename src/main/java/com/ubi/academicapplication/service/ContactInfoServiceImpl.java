@@ -134,6 +134,7 @@ public class ContactInfoServiceImpl implements ContactInfoService {
 			response.setResult(new Result<>(contactInfoMapper.entityToDto(updateContact)));
 			return response;
 		}
+	   
 	   @Override
 	   public Response<List<ContactInfoDto>> getContactInfowithSort(String field) {
 
@@ -150,8 +151,8 @@ public class ContactInfoServiceImpl implements ContactInfoService {
 	   				HttpStatusCode.NO_CONTACTINFO_FOUND.getMessage(), allContactInfoResult);
 	   	}
 	   	allContactInfoResult.setData(contactInfoDtos);
-	   	getListofContactInfo.setStatusCode(HttpStatusCode.CONTACTINFO_RETRIEVED_SUCCESSFULLY.getCode());
-	   	getListofContactInfo.setMessage(HttpStatusCode.CONTACTINFO_RETRIEVED_SUCCESSFULLY.getMessage());
+	   	getListofContactInfo.setStatusCode(HttpStatusCode.CONTACTINFO_RETRIVED_SUCCESSFULLY.getCode());
+	   	getListofContactInfo.setMessage(HttpStatusCode.CONTACTINFO_RETRIVED_SUCCESSFULLY.getMessage());
 	   	getListofContactInfo.setResult(allContactInfoResult);
 	   	return getListofContactInfo;
 	   }
