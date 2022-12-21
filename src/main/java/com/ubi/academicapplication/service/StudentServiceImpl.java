@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.ubi.academicapplication.dto.response.Response;
 import com.ubi.academicapplication.dto.student.StudentDto;
 import com.ubi.academicapplication.entity.ClassDetail;
+import com.ubi.academicapplication.entity.Region;
 import com.ubi.academicapplication.entity.Student;
 import com.ubi.academicapplication.error.CustomException;
 import com.ubi.academicapplication.error.HttpStatusCode;
@@ -40,13 +41,20 @@ public class StudentServiceImpl implements StudentService {
 		res.setData(null);
 		Response<StudentDto> response = new Response<>();
 
+
 		if (studentDto.getStudentName().isEmpty() || studentDto.getStudentName().length() == 0) {
 			throw new CustomException(HttpStatusCode.NO_STUDENT_NAME_FOUND.getCode(),
 					HttpStatusCode.NO_STUDENT_NAME_FOUND, HttpStatusCode.NO_STUDENT_NAME_FOUND.getMessage(), res);
 		}
-
+		
 //		studentDto.getClassId();
-		ClassDetail classDetail = classRepository.getReferenceById(studentDto.getClassId());
+	
+		
+		 if (studentDto.getClassId()==null ) {
+			throw new CustomException(HttpStatusCode.NO_CLASSID_FOUND.getCode(),
+					HttpStatusCode.NO_CLASSID_FOUND, HttpStatusCode.NO_CLASSID_FOUND.getMessage(), res);
+		}
+			ClassDetail classDetail = classRepository.getReferenceById(studentDto.getClassId());
 		Student student = studentMapper.dtoToEntity(studentDto);
 		student.setClassDetail(classDetail);
 
@@ -84,13 +92,7 @@ public class StudentServiceImpl implements StudentService {
 			throw new CustomException(HttpStatusCode.NO_STUDENT_MATCH_WITH_ID.getCode(),
 					HttpStatusCode.NO_STUDENT_MATCH_WITH_ID, HttpStatusCode.NO_STUDENT_MATCH_WITH_ID.getMessage(), res);
 		}
-
-//		ClassDetail classDetail = classRepository.getReferenceById(studentDto.getClassId());
 		StudentDto student = studentMapper.entityToDto(std.get());
-		student.setClassId(id);
-//		existingStudent.setClassId(studentDto.getClassId());
-//		student.setClassDetail(classDetail);
-
 		studentResult.setData(student);
 		getStudent.setStatusCode(200);
 		getStudent.setResult(studentResult);
@@ -107,8 +109,14 @@ public class StudentServiceImpl implements StudentService {
 					HttpStatusCode.RESOURCE_NOT_FOUND.getMessage(), res);
 		}
 
+		ClassDetail classDetail=student.get().getClassDetail();
+		if(classDetail!=null)
+		{
+			classDetail.getStudents().remove(student.get());
+		}
 		repository.deleteById(id);
 		Response<StudentDto> response = new Response<>();
+		
 		response.setMessage(HttpStatusCode.STUDENT_DELETED.getMessage());
 		response.setStatusCode(HttpStatusCode.STUDENT_DELETED.getCode());
 		response.setResult(new Result<StudentDto>(studentMapper.entityToDto(student.get())));
@@ -136,9 +144,11 @@ public class StudentServiceImpl implements StudentService {
 		existingStudent.setVerifiedByTeacher(studentDto.getVerifiedByTeacher());
 		existingStudent.setVerifiedByPrincipal(studentDto.getVerifiedByPrincipal());
 		existingStudent.setVerifiedByRegion(studentDto.getVerifiedByRegion());
+		existingStudent.setClassId(studentDto.getClassId());
 		ClassDetail classDetail = classRepository.getReferenceById(studentDto.getClassId());
 		Student student = studentMapper.dtoToEntity(existingStudent);
-		existingStudent.setClassId(studentDto.getClassId());
+
+		
 		student.setClassDetail(classDetail);
 		Student updateStudent = repository.save(student);
 		Response<StudentDto> response = new Response<>();

@@ -47,7 +47,7 @@ public class Student {
 	private Boolean isActivate;
 	private String currentStatus;
 	
-	@ManyToOne(cascade = CascadeType.ALL )
+	@ManyToOne(cascade = CascadeType.PERSIST )
 	private ClassDetail classDetail;
 
 }
