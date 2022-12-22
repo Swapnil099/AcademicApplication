@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import com.ubi.academicapplication.csv.RegionEducationalCsvHelper;
 import com.ubi.academicapplication.csv.RegionSchoolCsvHelper;
-import com.ubi.academicapplication.dto.paymentdto.PaymentDto;
 import com.ubi.academicapplication.dto.regionDto.RegionDto;
 import com.ubi.academicapplication.dto.regionDto.RegionSchoolDto;
 import com.ubi.academicapplication.dto.regionDto.RegionSchoolMappingDto;
@@ -40,38 +39,34 @@ public class RegionServiceImpl implements RegionService {
 
 	@Autowired
 	private RegionMapper regionMapper;
-	
+
 	@Autowired
 	private SchoolMapper schoolMapper;
-	
+
 	@Autowired
 	private SchoolRepository schoolRepository;
-	
+
 	@Autowired
 	private EducationalInstitutionRepository educationalInstitutionRepository;
-	
+
 	@Override
 	public Response<RegionDto> addRegion(RegionDto regionDto) {
 		Result<RegionDto> res = new Result<>();
 		Response<RegionDto> response = new Response<>();
 		Optional<Region> tempRegion = regionRepository.findById(regionDto.getId());
-		Region regionName=regionRepository.getRegionByName(regionDto.getName());
-		Region regionCode=regionRepository.getRegionByCode(regionDto.getCode());
-		if (tempRegion.isPresent()){
+		Region regionName = regionRepository.getRegionByName(regionDto.getName());
+		Region regionCode = regionRepository.getRegionByCode(regionDto.getCode());
+		if (tempRegion.isPresent()) {
 			throw new CustomException(HttpStatusCode.RESOURCE_NOT_FOUND.getCode(), HttpStatusCode.RESOURCE_NOT_FOUND,
 					HttpStatusCode.RESOURCE_NOT_FOUND.getMessage(), res);
 		}
-		if(regionName!=null)
-		{
+		if (regionName != null) {
 			throw new CustomException(HttpStatusCode.RESOURCE_ALREADY_EXISTS.getCode(),
-					HttpStatusCode.RESOURCE_ALREADY_EXISTS,HttpStatusCode.RESOURCE_ALREADY_EXISTS.getMessage(),
-					res);
+					HttpStatusCode.RESOURCE_ALREADY_EXISTS, HttpStatusCode.RESOURCE_ALREADY_EXISTS.getMessage(), res);
 		}
-		if(regionCode!=null)
-		{
+		if (regionCode != null) {
 			throw new CustomException(HttpStatusCode.RESOURCE_ALREADY_EXISTS.getCode(),
-					HttpStatusCode.RESOURCE_ALREADY_EXISTS,HttpStatusCode.RESOURCE_ALREADY_EXISTS.getMessage(),
-					res);
+					HttpStatusCode.RESOURCE_ALREADY_EXISTS, HttpStatusCode.RESOURCE_ALREADY_EXISTS.getMessage(), res);
 		}
 		Region saveRegion = regionRepository.save(regionMapper.dtoToEntity(regionDto));
 		response.setStatusCode(HttpStatusCode.RESOURCE_CREATED_SUCCESSFULLY.getCode());
@@ -85,7 +80,7 @@ public class RegionServiceImpl implements RegionService {
 		Result<List<RegionDto>> allRegion = new Result<>();
 		Pageable paging = PageRequest.of(PageNumber, PageSize);
 		Response<List<RegionDto>> getListofRegion = new Response<List<RegionDto>>();
-		
+
 		Page<Region> list = this.regionRepository.findAll(paging);
 		List<RegionDto> paymentDtos = regionMapper.entitiesToDtos(list.toList());
 		if (list.isEmpty()) {
@@ -105,9 +100,8 @@ public class RegionServiceImpl implements RegionService {
 		Optional<Region> region = this.regionRepository.findById(id);
 		Result<RegionDto> regionResult = new Result<>();
 		if (!region.isPresent()) {
-			throw new CustomException(HttpStatusCode.REGION_NOT_FOUND.getCode(),
-					HttpStatusCode.REGION_NOT_FOUND, HttpStatusCode.REGION_NOT_FOUND.getMessage(),
-					regionResult);
+			throw new CustomException(HttpStatusCode.REGION_NOT_FOUND.getCode(), HttpStatusCode.REGION_NOT_FOUND,
+					HttpStatusCode.REGION_NOT_FOUND.getMessage(), regionResult);
 		}
 		regionResult.setData(regionMapper.entityToDto(region.get()));
 		getRegion.setStatusCode(HttpStatusCode.REGION_RETREIVED_SUCCESSFULLY.getCode());
@@ -125,14 +119,14 @@ public class RegionServiceImpl implements RegionService {
 			throw new CustomException(HttpStatusCode.RESOURCE_NOT_FOUND.getCode(), HttpStatusCode.RESOURCE_NOT_FOUND,
 					HttpStatusCode.RESOURCE_NOT_FOUND.getMessage(), res);
 		}
-		
-		for(EducationalInstitution eduInsti:region.get().getEducationalInstitiute()) {
+
+		for (EducationalInstitution eduInsti : region.get().getEducationalInstitiute()) {
 			eduInsti.getRegion().remove(region.get());
 			educationalInstitutionRepository.save(eduInsti);
 		}
 		region.get().setEducationalInstitiute(new HashSet<>());
 		regionRepository.save(region.get());
-		regionRepository.deleteById(id);	
+		regionRepository.deleteById(id);
 		Response<RegionDto> response = new Response<>();
 		response.setMessage(HttpStatusCode.REGION_DELETED_SUCCESSFULLY.getMessage());
 		response.setStatusCode(HttpStatusCode.REGION_DELETED_SUCCESSFULLY.getCode());
@@ -162,44 +156,41 @@ public class RegionServiceImpl implements RegionService {
 		return response;
 	}
 
-
 	@Override
 	public ByteArrayInputStream load() {
-		List<Region> region=regionRepository.findAll();
-        ByteArrayInputStream out = RegionEducationalCsvHelper.regionCSV(region);
-	    return out;
-	  }
-	
+		List<Region> region = regionRepository.findAll();
+		ByteArrayInputStream out = RegionEducationalCsvHelper.regionCSV(region);
+		return out;
+	}
+
 	@Override
 	public ByteArrayInputStream Regionload() {
-		List<Region> region=regionRepository.findAll();
-        ByteArrayInputStream out = RegionSchoolCsvHelper.regionSchoolCSV(region);
-	    return out;
-	  }
-
+		List<Region> region = regionRepository.findAll();
+		ByteArrayInputStream out = RegionSchoolCsvHelper.regionSchoolCSV(region);
+		return out;
+	}
 
 	@Override
 	public Response<RegionDto> getRegionByName(String name) {
 		Response<RegionDto> getRegion = new Response<RegionDto>();
 		Region region = regionRepository.getRegionByName(name);
 		Result<RegionDto> regionResult = new Result<>();
-		if (region==null) {
-			throw new CustomException(HttpStatusCode.REGION_NOT_FOUND.getCode(),
-					HttpStatusCode.REGION_NOT_FOUND, HttpStatusCode.REGION_NOT_FOUND.getMessage(),
-					regionResult);
+		if (region == null) {
+			throw new CustomException(HttpStatusCode.REGION_NOT_FOUND.getCode(), HttpStatusCode.REGION_NOT_FOUND,
+					HttpStatusCode.REGION_NOT_FOUND.getMessage(), regionResult);
 		}
-		
+
 		regionResult.setData(regionMapper.toDto(region));
 		getRegion.setStatusCode(HttpStatusCode.REGION_RETREIVED_SUCCESSFULLY.getCode());
 		getRegion.setMessage(HttpStatusCode.REGION_RETREIVED_SUCCESSFULLY.getMessage());
 		getRegion.setResult(regionResult);
 		return getRegion;
 	}
-	
+
 // Mapping
 	@Override
 	public Response<RegionSchoolDto> addSchool(RegionSchoolMappingDto regionSchoolMappingDto) {
-		int regionId =regionSchoolMappingDto.getRegionId();
+		int regionId = regionSchoolMappingDto.getRegionId();
 		int schoolId = regionSchoolMappingDto.getSchoolId();
 		Response<RegionSchoolDto> response = new Response<>();
 		Result<RegionSchoolDto> res = new Result<>();
@@ -214,8 +205,8 @@ public class RegionServiceImpl implements RegionService {
 		}
 		region.getSchool().add(school);
 		school.setRegion(region);
-	
-			schoolRepository.save(school);
+
+		schoolRepository.save(school);
 		regionRepository.save(region);
 		RegionSchoolDto regionSchoolDto = regionMapper.toRegionSchoolDto(region);
 		response.setStatusCode(HttpStatusCode.SUCCESSFUL.getCode());
@@ -224,55 +215,52 @@ public class RegionServiceImpl implements RegionService {
 		return response;
 	}
 
-@Override
-public Response<RegionSchoolDto> getRegionwithSchool(int id) {
-	
-	Response<RegionSchoolDto> response = new Response<>();
-	Result<RegionSchoolDto> res = new Result<>();
+	@Override
+	public Response<RegionSchoolDto> getRegionwithSchool(int id) {
 
-	Optional<Region> region = this.regionRepository.findById(id);
+		Response<RegionSchoolDto> response = new Response<>();
+		Result<RegionSchoolDto> res = new Result<>();
 
-	if (!region.isPresent()) {
-		throw new CustomException(HttpStatusCode.NO_REGION_MATCH_WITH_ID.getCode(),
-				HttpStatusCode.NO_REGION_MATCH_WITH_ID,
-				HttpStatusCode.NO_REGION_MATCH_WITH_ID.getMessage(), res);
+		Optional<Region> region = this.regionRepository.findById(id);
+
+		if (!region.isPresent()) {
+			throw new CustomException(HttpStatusCode.NO_REGION_MATCH_WITH_ID.getCode(),
+					HttpStatusCode.NO_REGION_MATCH_WITH_ID, HttpStatusCode.NO_REGION_MATCH_WITH_ID.getMessage(), res);
+		}
+
+		RegionSchoolDto regionSchoolDto = new RegionSchoolDto();
+
+		regionSchoolDto.setRegionDto(regionMapper.entityToDto(region.get()));
+		regionSchoolDto.setSchoolDto(schoolMapper.entitiesToDtos(region.get().getSchool()));
+
+		res.setData(regionSchoolDto);
+
+		response.setStatusCode(HttpStatusCode.REGION_RETRIEVED_SUCCESSFULLY.getCode());
+		response.setMessage(HttpStatusCode.REGION_RETRIEVED_SUCCESSFULLY.getMessage());
+		response.setResult(new Result<>(regionSchoolDto));
+		return response;
+
 	}
-	
-	RegionSchoolDto regionSchoolDto = new RegionSchoolDto();
-	
-	regionSchoolDto.setRegionDto(regionMapper.entityToDto(region.get()));
-	regionSchoolDto.setSchoolDto(schoolMapper.entitiesToDtos(region.get().getSchool()));
 
-	res.setData(regionSchoolDto);
+	@Override
+	public Response<List<RegionDto>> getRegionwithSort(String field) {
 
-	response.setStatusCode(HttpStatusCode.REGION_RETRIEVED_SUCCESSFULLY.getCode());
-	response.setMessage(HttpStatusCode.REGION_RETRIEVED_SUCCESSFULLY.getMessage());
-	response.setResult(new Result<>(regionSchoolDto));
-	return response;
+		Result<List<RegionDto>> allRegionResult = new Result<>();
 
-}
-	
-@Override
-public Response<List<RegionDto>> getRegionwithSort(String field) {
+		Response<List<RegionDto>> getListofRegion = new Response<>();
 
-	Result<List<RegionDto>> allRegionResult = new Result<>();
+		List<Region> list = this.regionRepository.findAll(Sort.by(Sort.Direction.ASC, field));
+		List<RegionDto> regionDtos = regionMapper.entitiesToDtos(list);
 
-	Response<List<RegionDto>> getListofRegion = new Response<>();
-
-	List<Region> list = this.regionRepository.findAll(Sort.by(Sort.Direction.ASC,field));
-	List<RegionDto> regionDtos = regionMapper
-			.entitiesToDtos(list);
-
-	if (list.size() == 0) {
-		throw new CustomException(HttpStatusCode.NO_REGION_FOUND.getCode(), HttpStatusCode.NO_REGION_FOUND,
-				HttpStatusCode.NO_REGION_FOUND.getMessage(), allRegionResult);
+		if (list.size() == 0) {
+			throw new CustomException(HttpStatusCode.NO_REGION_FOUND.getCode(), HttpStatusCode.NO_REGION_FOUND,
+					HttpStatusCode.NO_REGION_FOUND.getMessage(), allRegionResult);
+		}
+		allRegionResult.setData(regionDtos);
+		getListofRegion.setStatusCode(HttpStatusCode.REGION_RETRIEVED_SUCCESSFULLY.getCode());
+		getListofRegion.setMessage(HttpStatusCode.REGION_RETRIEVED_SUCCESSFULLY.getMessage());
+		getListofRegion.setResult(allRegionResult);
+		return getListofRegion;
 	}
-	allRegionResult.setData(regionDtos);
-	getListofRegion.setStatusCode(HttpStatusCode.REGION_RETRIEVED_SUCCESSFULLY.getCode());
-	getListofRegion.setMessage(HttpStatusCode.REGION_RETRIEVED_SUCCESSFULLY.getMessage());
-	getListofRegion.setResult(allRegionResult);
-	return getListofRegion;
-}
-
 
 }

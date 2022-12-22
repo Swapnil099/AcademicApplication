@@ -111,7 +111,7 @@ public class SchoolServiceImpl implements SchoolService{
 		Page<School> list = this.schoolRepository.findAll(paging);
 		List<SchoolDto> schoolDtos = schoolMapper.entitiesToDtos(list.toList());
 
-		if (list.getSize() == 0) {
+		if (list.isEmpty()) {
 			throw new CustomException(HttpStatusCode.NO_SCHOOL_FOUND.getCode(), HttpStatusCode.NO_SCHOOL_FOUND,
 					HttpStatusCode.NO_SCHOOL_FOUND.getMessage(), allSchoolResult);
 		}

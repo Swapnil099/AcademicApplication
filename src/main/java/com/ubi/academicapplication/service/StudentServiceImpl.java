@@ -77,7 +77,7 @@ public class StudentServiceImpl implements StudentService {
 		List<StudentDto> studentDtos = studentMapper.entitiesToDtos(list.toList());
 
 		res.setData(studentDtos);
-		if (list.getSize() == 0) {
+		if (list.isEmpty()) {
 			throw new CustomException(HttpStatusCode.NO_ENTRY_FOUND.getCode(), HttpStatusCode.NO_ENTRY_FOUND,
 					HttpStatusCode.NO_ENTRY_FOUND.getMessage(), res);
 		}

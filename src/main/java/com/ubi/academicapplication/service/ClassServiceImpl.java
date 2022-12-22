@@ -45,7 +45,6 @@ public class ClassServiceImpl implements ClassService {
 	@Autowired
 	private ClassMapper classMapper;
 
-
 	@Autowired
 	private StudentMapper studentMapper;
 
@@ -53,27 +52,25 @@ public class ClassServiceImpl implements ClassService {
 
 		Result<ClassDto> res = new Result<>();
 		Response<ClassDto> response = new Response<>();
-		//		Optional<ClassDetail> tempClass = classRepository.findById(classDto.getClassId());
-		
-		ClassDetail className=classRepository.getClassByclassName(classDto.getClassName());
-		ClassDetail classCode=classRepository.getClassByclassCode(classDto.getClassCode());
-		
-		//		if (tempClass.isPresent()){
-		//			throw new CustomException(HttpStatusCode.RESOURCE_NOT_FOUND.getCode(), HttpStatusCode.RESOURCE_NOT_FOUND,
-		//					HttpStatusCode.RESOURCE_NOT_FOUND.getMessage(), res);
-		//		}
-		
-		if(className!=null)
-		{
+		// Optional<ClassDetail> tempClass =
+		// classRepository.findById(classDto.getClassId());
+
+		ClassDetail className = classRepository.getClassByclassName(classDto.getClassName());
+		ClassDetail classCode = classRepository.getClassByclassCode(classDto.getClassCode());
+
+		// if (tempClass.isPresent()){
+		// throw new CustomException(HttpStatusCode.RESOURCE_NOT_FOUND.getCode(),
+		// HttpStatusCode.RESOURCE_NOT_FOUND,
+		// HttpStatusCode.RESOURCE_NOT_FOUND.getMessage(), res);
+		// }
+
+		if (className != null) {
 			throw new CustomException(HttpStatusCode.RESOURCE_ALREADY_EXISTS.getCode(),
-					HttpStatusCode.RESOURCE_ALREADY_EXISTS,HttpStatusCode.RESOURCE_ALREADY_EXISTS.getMessage(),
-					res);
+					HttpStatusCode.RESOURCE_ALREADY_EXISTS, HttpStatusCode.RESOURCE_ALREADY_EXISTS.getMessage(), res);
 		}
-		if(classCode!=null)
-		{
+		if (classCode != null) {
 			throw new CustomException(HttpStatusCode.RESOURCE_ALREADY_EXISTS.getCode(),
-					HttpStatusCode.RESOURCE_ALREADY_EXISTS,HttpStatusCode.RESOURCE_ALREADY_EXISTS.getMessage(),
-					res);
+					HttpStatusCode.RESOURCE_ALREADY_EXISTS, HttpStatusCode.RESOURCE_ALREADY_EXISTS.getMessage(), res);
 		}
 		ClassDetail saveClass = classRepository.save(classMapper.dtoToEntity(classDto));
 		response.setStatusCode(HttpStatusCode.RESOURCE_CREATED_SUCCESSFULLY.getCode());
@@ -90,7 +87,7 @@ public class ClassServiceImpl implements ClassService {
 
 		Page<ClassDetail> classList = this.classRepository.findAll(pageing);
 		List<ClassDto> classDto = classMapper.entitiesToDtos(classList.toList());
-		if (classList.getSize() == 0) {
+		if (classList.isEmpty()) {
 			throw new CustomException(HttpStatusCode.RESOURCE_NOT_FOUND.getCode(), HttpStatusCode.RESOURCE_NOT_FOUND,
 					HttpStatusCode.RESOURCE_NOT_FOUND.getMessage(), allClasses);
 		}
@@ -104,12 +101,12 @@ public class ClassServiceImpl implements ClassService {
 	public Response<ClassDto> getClassById(Long classidL) {
 
 		Response<ClassDto> getClass = new Response<>();
-		Optional<ClassDetail> classDetail =this.classRepository.findById(classidL);
+		Optional<ClassDetail> classDetail = this.classRepository.findById(classidL);
 		Result<ClassDto> classResult = new Result<>();
 		if (!classDetail.isPresent()) {
 			throw new CustomException(HttpStatusCode.NO_CLASS_MATCH_WITH_ID.getCode(),
-					HttpStatusCode.NO_CLASS_MATCH_WITH_ID,
-					HttpStatusCode.NO_CLASS_MATCH_WITH_ID.getMessage(), classResult);
+					HttpStatusCode.NO_CLASS_MATCH_WITH_ID, HttpStatusCode.NO_CLASS_MATCH_WITH_ID.getMessage(),
+					classResult);
 		}
 		classResult.setData(classMapper.entityToDto(classDetail.get()));
 		getClass.setStatusCode(HttpStatusCode.CLASS_RETREIVED_SUCCESSFULLY.getCode());
@@ -127,10 +124,12 @@ public class ClassServiceImpl implements ClassService {
 					HttpStatusCode.RESOURCE_NOT_FOUND.getMessage(), res);
 		}
 
-		/*for(School newSchools:classes.get().getSchool()) {
-			newSchools.getClassDetail().remove(classes.get());
-			schoolRepository.save(newSchools);
-		}*/
+		/*
+		 * for(School newSchools:classes.get().getSchool()) {
+		 * newSchools.getClassDetail().remove(classes.get());
+		 * schoolRepository.save(newSchools); }
+		 */
+
 
 		
 		//classes.get().setSchool(new HashSet<>());
@@ -147,6 +146,10 @@ public class ClassServiceImpl implements ClassService {
 		});		
 //		studentRepository.saveAll(stds);	
 		
+		// classes.get().setSchool(new HashSet<>());
+		classRepository.save(classes.get());
+		classRepository.deleteById(id);
+
 		Response<ClassDto> response = new Response<>();
 		response.setMessage(HttpStatusCode.CLASS_DELETED_SUCCESSFULLY.getMessage());
 		response.setStatusCode(HttpStatusCode.CLASS_DELETED_SUCCESSFULLY.getCode());
@@ -181,10 +184,9 @@ public class ClassServiceImpl implements ClassService {
 		Response<ClassDto> getClass = new Response<ClassDto>();
 		ClassDetail classDetail = classRepository.getClassByclassName(className);
 		Result<ClassDto> classResult = new Result<>();
-		if (classDetail==null) {
-			throw new CustomException(HttpStatusCode.CLASS_NOT_FOUND.getCode(),
-					HttpStatusCode.CLASS_NOT_FOUND, HttpStatusCode.CLASS_NOT_FOUND.getMessage(),
-					classResult);
+		if (classDetail == null) {
+			throw new CustomException(HttpStatusCode.CLASS_NOT_FOUND.getCode(), HttpStatusCode.CLASS_NOT_FOUND,
+					HttpStatusCode.CLASS_NOT_FOUND.getMessage(), classResult);
 		}
 
 		classResult.setData(classMapper.entityToDto(classDetail));
@@ -202,8 +204,7 @@ public class ClassServiceImpl implements ClassService {
 
 		if (!classDetail.isPresent()) {
 			throw new CustomException(HttpStatusCode.NO_STUDENT_MATCH_WITH_ID.getCode(),
-					HttpStatusCode.NO_STUDENT_MATCH_WITH_ID,
-					HttpStatusCode.NO_STUDENT_MATCH_WITH_ID.getMessage(), res);
+					HttpStatusCode.NO_STUDENT_MATCH_WITH_ID, HttpStatusCode.NO_STUDENT_MATCH_WITH_ID.getMessage(), res);
 		}
 
 		ClassDetail classDetailss = classDetail.get();
@@ -226,7 +227,7 @@ public class ClassServiceImpl implements ClassService {
 
 		Response<List<ClassDto>> getListofClasses = new Response<>();
 
-		List<ClassDetail> list = this.classRepository.findAll(Sort.by(Sort.Direction.ASC,field));
+		List<ClassDetail> list = this.classRepository.findAll(Sort.by(Sort.Direction.ASC, field));
 		List<ClassDto> classDtos = classMapper.entitiesToDtos(list);
 
 		if (list.size() == 0) {
@@ -239,13 +240,11 @@ public class ClassServiceImpl implements ClassService {
 		getListofClasses.setResult(allClassResult);
 		return getListofClasses;
 	}
-	
-	 @Override
-		public ByteArrayInputStream load() {
-			List<ClassDetail> classd=classRepository.findAll();
-	        ByteArrayInputStream out = ClassCsvHelper.classCSV(classd);
-		    return out;
-		  }
+
+	@Override
+	public ByteArrayInputStream load() {
+		List<ClassDetail> classd = classRepository.findAll();
+		ByteArrayInputStream out = ClassCsvHelper.classCSV(classd);
+		return out;
+	}
 }
-
-
