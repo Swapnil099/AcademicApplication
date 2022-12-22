@@ -3,6 +3,7 @@ package com.ubi.academicapplication.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -46,7 +47,7 @@ public class ClassDetail
 	@JoinColumn(name = "schoolId" )
 	private School school;
 	
-	@OneToMany(mappedBy = "classDetail")	
+	@OneToMany(mappedBy = "classDetail",cascade = CascadeType.ALL)	
 	List<Student> students = new ArrayList<>();
 }
 
