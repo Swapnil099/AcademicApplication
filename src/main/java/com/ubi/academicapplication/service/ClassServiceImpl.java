@@ -14,15 +14,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.ubi.academicapplication.csv.ClassCsvHelper;
-import com.ubi.academicapplication.csv.UserContactInfoCsvHelper;
 import com.ubi.academicapplication.dto.classdto.ClassDto;
-import com.ubi.academicapplication.dto.contactinfodto.ContactInfoDto;
 import com.ubi.academicapplication.dto.response.Response;
 import com.ubi.academicapplication.dto.student.StudentDto;
 import com.ubi.academicapplication.entity.ClassDetail;
-import com.ubi.academicapplication.entity.ContactInfo;
 import com.ubi.academicapplication.entity.Student;
-import com.ubi.academicapplication.entity.User;
 import com.ubi.academicapplication.error.CustomException;
 import com.ubi.academicapplication.error.HttpStatusCode;
 import com.ubi.academicapplication.error.Result;
@@ -30,6 +26,7 @@ import com.ubi.academicapplication.mapper.ClassMapper;
 import com.ubi.academicapplication.mapper.StudentMapper;
 import com.ubi.academicapplication.repository.ClassRepository;
 import com.ubi.academicapplication.repository.SchoolRepository;
+import com.ubi.academicapplication.repository.StudentRepository;
 
 @Service
 public class ClassServiceImpl implements ClassService {
@@ -41,6 +38,9 @@ public class ClassServiceImpl implements ClassService {
 
 	@Autowired
 	private SchoolRepository schoolRepository;
+	
+	@Autowired
+	private StudentRepository studentRepository;
 
 	@Autowired
 	private ClassMapper classMapper;
@@ -132,9 +132,21 @@ public class ClassServiceImpl implements ClassService {
 			schoolRepository.save(newSchools);
 		}*/
 
+		
 		//classes.get().setSchool(new HashSet<>());
-		classRepository.save(classes.get());
-		classRepository.deleteById(id);	
+//		classRepository.save(classes.get());
+		
+		List<Student> stds = classes.get().getStudents();
+		classRepository.deleteById(id);
+		
+		// retain students to DB
+		stds.stream()
+		.forEach(std -> {
+			std.setClassDetail(null);
+			studentRepository.save(std);
+		});		
+//		studentRepository.saveAll(stds);	
+		
 		Response<ClassDto> response = new Response<>();
 		response.setMessage(HttpStatusCode.CLASS_DELETED_SUCCESSFULLY.getMessage());
 		response.setStatusCode(HttpStatusCode.CLASS_DELETED_SUCCESSFULLY.getCode());
