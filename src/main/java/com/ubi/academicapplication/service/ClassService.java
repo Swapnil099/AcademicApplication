@@ -1,8 +1,10 @@
 package com.ubi.academicapplication.service;
 
+import java.io.ByteArrayInputStream;
 import java.util.List;
 
 import com.ubi.academicapplication.dto.classdto.ClassDto;
+import com.ubi.academicapplication.dto.contactinfodto.ContactInfoDto;
 import com.ubi.academicapplication.dto.response.Response;
 import com.ubi.academicapplication.dto.student.StudentDto;
 
@@ -23,6 +25,10 @@ public interface ClassService {
 	Response<ClassDto> getClassByName(String className);
 	
 	Response<List<StudentDto>> getClasswithStudent(Long id);
+	
+	Response<List<ClassDto>> getClasswithSort(String field);
+	
+	ByteArrayInputStream load();
 	
 }
 

@@ -1,5 +1,6 @@
 package com.ubi.academicapplication.service;
 
+import java.io.ByteArrayInputStream;
 import java.text.ParseException;
 import java.util.List;
 
@@ -27,6 +28,8 @@ public interface SchoolService {
 	Response<SchoolClassDto> getSchoolwithClass(int id);
 
 	Response<List<SchoolDto>> getSchoolwithSort(String field);
+	
+	ByteArrayInputStream loadSchoolAndClass();
 	
 	
 }

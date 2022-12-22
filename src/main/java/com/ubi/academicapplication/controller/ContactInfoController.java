@@ -82,7 +82,7 @@ public class ContactInfoController {
     
     @Operation(summary = "Get Contact Info in Sorting", security = @SecurityRequirement(name = "bearerAuth"))
 	@GetMapping("/sort/{field}")
-	public ResponseEntity<Response<List<ContactInfoDto>>> getRegionBySorting(@PathVariable String field) {
+	public ResponseEntity<Response<List<ContactInfoDto>>> getContactInfowithSort(@PathVariable String field) {
 		Response<List<ContactInfoDto>> response = contactInfoServiceImpl.getContactInfowithSort(field);
 		return ResponseEntity.ok().body(response);
 	}

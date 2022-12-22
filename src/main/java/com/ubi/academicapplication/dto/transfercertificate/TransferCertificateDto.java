@@ -15,4 +15,5 @@ public class TransferCertificateDto {
 	private int id;
 	@JsonFormat(pattern="yyyy-MM-dd")
 	private LocalDate dateOfIssue;
+	private int studentId;
 }
