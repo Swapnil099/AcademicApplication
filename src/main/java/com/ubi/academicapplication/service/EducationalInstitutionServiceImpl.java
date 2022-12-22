@@ -145,7 +145,7 @@ public class EducationalInstitutionServiceImpl implements EducationalInstitution
 		List<EducationalInstitutionDto> educationalInstitutionDtos = educationalInstitutionMapper
 				.entitiesToDtos(list.toList());
 
-		if (list.getSize() == 0) {
+		if (list.isEmpty()) {
 			throw new CustomException(HttpStatusCode.NO_EDUCATIONAL_INSTITUTION_FOUND.getCode(), HttpStatusCode.NO_EDUCATIONAL_INSTITUTION_FOUND,
 					HttpStatusCode.NO_EDUCATIONAL_INSTITUTION_FOUND.getMessage(), allEducationalResult);
 		}

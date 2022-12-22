@@ -35,15 +35,19 @@ public class RegionEducationalCsvHelper {
 			header.add("Educational Institution VvnAccount");
 			csvPrinter.printRecord(header);
 			for (Region regions : region) {
+				
 				int m = 1;
 				List<String> data = new ArrayList<String>();
 				String regionId = String.valueOf(regions.getId());
 				data.add(regionId);
 				data.add(regions.getCode());
 				data.add(regions.getName());
+				
+				boolean flag=true;
+				if(regions.getEducationalInstitiute().size()==0) csvPrinter.printRecord(data);
 
 				for (EducationalInstitution eduInsti : regions.getEducationalInstitiute()) {
-
+					if(flag) {
 					data.add(String.valueOf(eduInsti.getId()));
 					data.add(eduInsti.getEducationalInstitutionCode());
 					data.add(eduInsti.getEducationalInstitutionName());
@@ -52,9 +56,28 @@ public class RegionEducationalCsvHelper {
 					data.add(eduInsti.getState());
 					data.add(eduInsti.getExemptionFlag());
 					data.add(String.valueOf(eduInsti.getVvnAccount()));
+					flag=false;
+					}
+					else
+					{
+						data.clear();
+						data.add("");
+						data.add("");
+						data.add("");
+						
+						data.add(String.valueOf(eduInsti.getId()));
+						data.add(eduInsti.getEducationalInstitutionCode());
+						data.add(eduInsti.getEducationalInstitutionName());
+						data.add(eduInsti.getEducationalInstitutionType());
+						data.add(String.valueOf(eduInsti.getStrength()));
+						data.add(eduInsti.getState());
+						data.add(eduInsti.getExemptionFlag());
+						data.add(String.valueOf(eduInsti.getVvnAccount()));
+					}
+					csvPrinter.printRecord(data);
 				}
 				count += m;
-				csvPrinter.printRecord(data);
+				
 			}
 			csvPrinter.printRecord("Count: " + count);
 			csvPrinter.flush();

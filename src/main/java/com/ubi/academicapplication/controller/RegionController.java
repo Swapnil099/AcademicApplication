@@ -1,6 +1,5 @@
 package com.ubi.academicapplication.controller;
 
-import java.io.ByteArrayInputStream;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -22,13 +21,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ubi.academicapplication.csv.RegionSchoolCsvHelper;
-import com.ubi.academicapplication.dto.regionDto.EducationalRegionDto;
 import com.ubi.academicapplication.dto.regionDto.RegionDto;
 import com.ubi.academicapplication.dto.regionDto.RegionSchoolDto;
 import com.ubi.academicapplication.dto.regionDto.RegionSchoolMappingDto;
 import com.ubi.academicapplication.dto.response.Response;
-import com.ubi.academicapplication.entity.Region;
 import com.ubi.academicapplication.service.RegionService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -97,33 +93,27 @@ public class RegionController {
 		return ResponseEntity.ok().body(response);
 
 	}
-	
-	@Operation(summary="Download file ",security=@SecurityRequirement(name= "bearerAuth"))
+
+	@Operation(summary = "Download Region and Education Detail file ", security = @SecurityRequirement(name = "bearerAuth"))
 	@GetMapping("/download")
-	public ResponseEntity<Resource> getCSVFileData()
-	{
-	    String filename = "region.csv";
-	    InputStreamResource file = new InputStreamResource(regionService.load());
+	public ResponseEntity<Resource> getCSVFileData() {
+		String filename = "region.csv";
+		InputStreamResource file = new InputStreamResource(regionService.load());
 
-	    return ResponseEntity.ok()
-	        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
-	        .contentType(MediaType.parseMediaType("application/csv"))
-	        .body(file);
+		return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
+				.contentType(MediaType.parseMediaType("application/csv")).body(file);
 	}
-	
-	@Operation(summary="Download file ",security=@SecurityRequirement(name= "bearerAuth"))
+
+	@Operation(summary = "Download file ", security = @SecurityRequirement(name = "bearerAuth"))
 	@GetMapping("/getcsvdata")
-	public ResponseEntity<Resource> getRegionCsvFileData()
-	{
-	    String filename = "regionschool.csv";
-	    InputStreamResource file = new InputStreamResource(regionService.Regionload());
+	public ResponseEntity<Resource> getRegionCsvFileData() {
+		String filename = "regionschool.csv";
+		InputStreamResource file = new InputStreamResource(regionService.Regionload());
 
-	    return ResponseEntity.ok()
-	        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
-	        .contentType(MediaType.parseMediaType("application/csv"))
-	        .body(file);
+		return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
+				.contentType(MediaType.parseMediaType("application/csv")).body(file);
 	}
-	
+
 	@Operation(summary = "Get Region By Region Name", security = @SecurityRequirement(name = "bearerAuth"))
 	@GetMapping("/region/{name}")
 	public ResponseEntity<Response<RegionDto>> getSingleRegion(@RequestParam String name) {
@@ -134,7 +124,7 @@ public class RegionController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 		}
 	}
-	
+
 	@Operation(summary = "Map Region and School", security = @SecurityRequirement(name = "bearerAuth"))
 	@PostMapping("/addSchool")
 	public ResponseEntity<Response<RegionSchoolDto>> addSchool(@RequestBody RegionSchoolMappingDto regionSchoolDto) {
@@ -148,16 +138,14 @@ public class RegionController {
 		Response<RegionSchoolDto> response = regionService.getRegionwithSchool(id);
 		return ResponseEntity.ok().body(response);
 	}
-	
-	
-	//-----Sorting
 
-		@Operation(summary = "Get Region in Sorting", security = @SecurityRequirement(name = "bearerAuth"))
-		@GetMapping("/sort/{field}")
-		public ResponseEntity<Response<List<RegionDto>>> getRegionBySorting(@PathVariable String field) {
-			Response<List<RegionDto>> response = regionService.getRegionwithSort(field);
-			return ResponseEntity.ok().body(response);
-		}
+	// -----Sorting
 
-		
+	@Operation(summary = "Get Region in Sorting", security = @SecurityRequirement(name = "bearerAuth"))
+	@GetMapping("/sort/{field}")
+	public ResponseEntity<Response<List<RegionDto>>> getRegionBySorting(@PathVariable String field) {
+		Response<List<RegionDto>> response = regionService.getRegionwithSort(field);
+		return ResponseEntity.ok().body(response);
+	}
+
 }

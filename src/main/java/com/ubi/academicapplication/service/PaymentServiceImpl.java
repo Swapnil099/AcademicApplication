@@ -76,7 +76,7 @@ public class PaymentServiceImpl implements PaymentService {
 		Page<Payment> list = this.paymentRepository.findAll(paging);
 		List<PaymentDto> paymentDtos = paymentMapper.entitiesToDtos(list.toList());
 
-		if (list.getSize() == 0) {
+		if (list.isEmpty()) {
 			throw new CustomException(HttpStatusCode.NO_PAYMENT_FOUND.getCode(), HttpStatusCode.NO_PAYMENT_FOUND,
 					HttpStatusCode.NO_PAYMENT_FOUND.getMessage(), allPaymentResult);
 		}
