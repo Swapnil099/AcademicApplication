@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ubi.academicapplication.dto.regionDto.RegionCreationDto;
+import com.ubi.academicapplication.dto.regionDto.RegionDetailsDto;
 import com.ubi.academicapplication.dto.regionDto.RegionDto;
 import com.ubi.academicapplication.dto.regionDto.RegionSchoolDto;
 import com.ubi.academicapplication.dto.regionDto.RegionSchoolMappingDto;
@@ -41,9 +43,9 @@ public class RegionController {
 
 	@Operation(summary = "Create New Region", security = @SecurityRequirement(name = "bearerAuth"))
 	@PostMapping
-	public ResponseEntity<Response<RegionDto>> insertRegion(@RequestBody RegionDto regionDto) {
+	public ResponseEntity<Response<RegionDetailsDto>> insertRegion(@RequestBody RegionCreationDto regionCreationDto) {
 
-		Response<RegionDto> response = this.regionService.addRegion(regionDto);
+		Response<RegionDetailsDto> response = this.regionService.addRegion(regionCreationDto);
 
 		return ResponseEntity.ok().body(response);
 

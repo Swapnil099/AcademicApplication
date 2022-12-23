@@ -41,10 +41,10 @@ public class EducationalInstitutionController {
 
 	@Operation(summary = "Create New Educational Institution", security = @SecurityRequirement(name = "bearerAuth"))
 	@PostMapping
-	public ResponseEntity<Response<EducationalInstitutionDto>> insertEducationalInstitution(
+	public ResponseEntity<Response<EducationalRegionDto>> insertEducationalInstitution(
 			@RequestBody EducationalInstitutionDto educationalInstitutionDto) { // NOSONAR
 
-		Response<EducationalInstitutionDto> response = this.educationalInstitutionService
+		Response<EducationalRegionDto> response = this.educationalInstitutionService
 				.addEducationalInstitution(educationalInstitutionDto);
 
 		return ResponseEntity.ok().body(response);
@@ -79,10 +79,10 @@ public class EducationalInstitutionController {
 
 	@Operation(summary = "Get All Educational Institution", security = @SecurityRequirement(name = "bearerAuth"))
 	@GetMapping()
-	public ResponseEntity<Response<List<EducationalInstitutionDto>>> getEducationalInstitutions(
+	public ResponseEntity<Response<List<EducationalRegionDto>>> getEducationalInstitutions(
 			@RequestParam(value = "PageNumber", defaultValue = "0", required = false) Integer pageNumber,
 			@RequestParam(value = "PageSize", defaultValue = "5", required = false) Integer pageSize) {
-		Response<List<EducationalInstitutionDto>> response = educationalInstitutionService
+		Response<List<EducationalRegionDto>> response = educationalInstitutionService
 				.getAllEducationalInstitutions(pageNumber, pageSize);
 		if (response.getStatusCode() == 200) {
 			return ResponseEntity.status(HttpStatus.OK).body(response);

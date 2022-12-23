@@ -10,13 +10,13 @@ import com.ubi.academicapplication.dto.response.Response;
 
 public interface EducationalInstitutionService {
 
-	Response<EducationalInstitutionDto> addEducationalInstitution(EducationalInstitutionDto educationalInstitutionDto);
+	Response<EducationalRegionDto> addEducationalInstitution(EducationalInstitutionDto educationalInstitutionDto);
 
 	Response<EducationalInstitutionDto> getSingleEducationalInstitution(int id);
 
 	Response<EducationalInstitutionDto> getEducationalInstituteByName(String educationalInstitutionName);
 
-	Response<List<EducationalInstitutionDto>> getAllEducationalInstitutions(Integer pageNumber, Integer pageSize);
+	Response<List<EducationalRegionDto>> getAllEducationalInstitutions(Integer pageNumber, Integer pageSize);
 
 	Response<EducationalInstitutionDto> deleteEducationalInstitution(int id);
 

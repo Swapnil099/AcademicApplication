@@ -1,8 +1,9 @@
 package com.ubi.academicapplication.mapper;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
+import java.util.Set;import java.util.stream.Collectors;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -17,15 +18,14 @@ import com.ubi.academicapplication.entity.Region;
 
 @Component
 public class EducationalInstitutionMapper {
-
-	@Autowired
-	RegionMapper mapper;
 	
 	ModelMapper modelMapper = new ModelMapper();
 
 	public EducationalInstitutionDto entityToDto(EducationalInstitution educationalInstitution) {
-		System.out.println("here --- ");
-		return modelMapper.map(educationalInstitution, EducationalInstitutionDto.class);
+		EducationalInstitutionDto educationalInstitutionDto = modelMapper.map(educationalInstitution, EducationalInstitutionDto.class);
+		Set<Integer> regionId = educationalInstitution.getRegion().stream().map(region -> region.getId()).collect(Collectors.toSet());
+		educationalInstitutionDto.setRegionId(regionId);
+		return educationalInstitutionDto;
 	}
 
 	public List<EducationalInstitutionDto> entitiesToDtos(List<EducationalInstitution> educationalInstitution) {
@@ -54,8 +54,19 @@ public class EducationalInstitutionMapper {
 	public EducationalRegionDto toEducationalRegionDto(EducationalInstitution educationalInstitute)
 	{
 		EducationalInstitutionDto educationalInstitutionDto = this.entityToDto(educationalInstitute);
-		Set<RegionDto> regionDto=mapper.entitiesToDto(educationalInstitute.getRegion());
-		return new EducationalRegionDto(educationalInstitutionDto,regionDto);
+		
+		Set<RegionDto> regionDtoSet = new HashSet<>();
+		for(Region region:educationalInstitute.getRegion()) {
+			RegionDto regionDto =  new RegionDto();
+			regionDto.setCode(region.getCode());
+			regionDto.setName(region.getName());
+			regionDto.setId(region.getId());
+			regionDto.setSchoollId(region.getSchool().stream().map(school->school.getSchoolId()).collect(Collectors.toSet()));
+			regionDto.setEduInstId(region.getEducationalInstitiute().stream().map(eduInsti->eduInsti.getId()).collect(Collectors.toSet()));
+			regionDtoSet.add(regionDto);
+		}
+		
+		return new EducationalRegionDto(educationalInstitutionDto,regionDtoSet);
 	}
 	
 	

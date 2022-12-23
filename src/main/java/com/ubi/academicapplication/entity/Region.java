@@ -40,13 +40,13 @@ public class Region {
 //	@Column(name="regionName")
 	private String name;
 	
+	@JsonIgnore
 	@ManyToMany(mappedBy="region",cascade = CascadeType.MERGE)
 	private Set<EducationalInstitution> educationalInstitiute;
 
 	
 	
 	@OneToMany(mappedBy="region" , cascade=CascadeType.ALL)
-	
 	private Set<School> school;
 	
 }

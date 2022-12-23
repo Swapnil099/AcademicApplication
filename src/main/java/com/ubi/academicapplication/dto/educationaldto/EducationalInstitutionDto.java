@@ -1,5 +1,10 @@
 package com.ubi.academicapplication.dto.educationaldto;
 
+import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ubi.academicapplication.entity.Region;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,5 +31,7 @@ public class EducationalInstitutionDto {
 	private String exemptionFlag;
 
 	private Long vvnAccount;
+	
+	private Set<Integer> regionId;
 
 }
