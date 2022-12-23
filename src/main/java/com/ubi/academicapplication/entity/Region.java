@@ -10,7 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
@@ -40,13 +39,13 @@ public class Region {
 //	@Column(name="regionName")
 	private String name;
 	
+	
 	@ManyToMany(mappedBy="region",cascade = CascadeType.MERGE)
 	private Set<EducationalInstitution> educationalInstitiute;
 
 	
 	
 	@OneToMany(mappedBy="region" , cascade=CascadeType.ALL)
-	
 	private Set<School> school;
 	
 }

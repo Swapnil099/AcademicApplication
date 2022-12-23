@@ -14,7 +14,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.ubi.academicapplication.csv.RegionEducationalCsvHelper;
 import com.ubi.academicapplication.csv.EducationalInstitutionCsvHelper;
 import com.ubi.academicapplication.dto.educationaldto.EducationalInstitutionDto;
 import com.ubi.academicapplication.dto.regionDto.EIRegionMappingDto;
@@ -60,8 +59,6 @@ public class EducationalInstitutionServiceImpl implements EducationalInstitution
         EducationalInstitution educationalInstitutionName=educationalInstitutionRepository.getEducationalInstitutionByeducationalInstitutionName(educationalInstitutionDto.getEducationalInstitutionName());
 		
 		EducationalInstitution educationalInstitutionCode=educationalInstitutionRepository.getEducationalInstitutionByeducationalInstitutionCode(educationalInstitutionDto.getEducationalInstitutionCode());
-		
-
 		if (tempeducationalInstitution.isPresent()) {
 			throw new CustomException(HttpStatusCode.NO_EDUCATIONAL_INSTITUTION_FOUND.getCode(),
 					HttpStatusCode.NO_EDUCATIONAL_INSTITUTION_FOUND,
@@ -214,23 +211,24 @@ public class EducationalInstitutionServiceImpl implements EducationalInstitution
 	@Override
 	public Response<EducationalRegionDto> addRegion(EIRegionMappingDto eIRegionMappingDto) {
 		int eduId = eIRegionMappingDto.getEducationalInstitutionId();
-		int regionId = eIRegionMappingDto.getRegionid();
+		List<Integer> regionIdList = eIRegionMappingDto.getRegionid();
 		Response<EducationalRegionDto> response = new Response<>();
 		Result<EducationalRegionDto> res = new Result<>();
 		EducationalInstitution eduInstitute = educationalInstitutionRepository.getReferenceById(eduId);
-		Region region = regionRepository.getReferenceById(regionId);
+		List<Region> regions = regionRepository.findAll();
 		Set<Region> setOfRegion = eduInstitute.getRegion();
-		for (Region currRegion : setOfRegion) {
-			if (currRegion.getId() == region.getId()) {
-				throw new CustomException(HttpStatusCode.MAPPING_ALREADY_EXIST.getCode(),
-						HttpStatusCode.MAPPING_ALREADY_EXIST, HttpStatusCode.MAPPING_ALREADY_EXIST.getMessage(), res);
-			}
+//		for (Region currRegion : setOfRegion) {
+//			if (currRegion.getId() == regions.getId()) {
+//				throw new CustomException(HttpStatusCode.MAPPING_ALREADY_EXIST.getCode(),
+//						HttpStatusCode.MAPPING_ALREADY_EXIST, HttpStatusCode.MAPPING_ALREADY_EXIST.getMessage(), res);
+//			}
+//		}
+		for(int i=0;i<regions.size();i++)
+		{
+			eduInstitute.getRegion().add(regions.get(i));
+			regions.get(i).getEducationalInstitiute().add(eduInstitute);
+			regionRepository.save(regions.get(i));
 		}
-		eduInstitute.getRegion().add(region);
-		region.getEducationalInstitiute().add(eduInstitute);
-		//region.getEducationalInstitiute().add(eduInstitute);
-		//region.getEducationalInstitiute().add(eduInstitute);
-		regionRepository.save(region);
 		educationalInstitutionRepository.save(eduInstitute);
 		EducationalRegionDto educationalRegionDto = educationalInstitutionMapper.toEducationalRegionDto(eduInstitute);
 		response.setStatusCode(HttpStatusCode.SUCCESSFUL.getCode());

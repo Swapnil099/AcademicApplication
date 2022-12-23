@@ -56,7 +56,8 @@ public class RegionServiceImpl implements RegionService {
 		Optional<Region> tempRegion = regionRepository.findById(regionDto.getId());
 		Region regionName = regionRepository.getRegionByName(regionDto.getName());
 		Region regionCode = regionRepository.getRegionByCode(regionDto.getCode());
-		if (tempRegion.isPresent()) {
+		
+ 		if (tempRegion.isPresent()) {
 			throw new CustomException(HttpStatusCode.RESOURCE_NOT_FOUND.getCode(), HttpStatusCode.RESOURCE_NOT_FOUND,
 					HttpStatusCode.RESOURCE_NOT_FOUND.getMessage(), res);
 		}
@@ -82,12 +83,12 @@ public class RegionServiceImpl implements RegionService {
 		Response<List<RegionDto>> getListofRegion = new Response<List<RegionDto>>();
 
 		Page<Region> list = this.regionRepository.findAll(paging);
-		List<RegionDto> paymentDtos = regionMapper.entitiesToDtos(list.toList());
+		List<RegionDto> regionDtos = regionMapper.entitiesToDtos(list.toList());
 		if (list.isEmpty()) {
 			throw new CustomException(HttpStatusCode.RESOURCE_NOT_FOUND.getCode(), HttpStatusCode.RESOURCE_NOT_FOUND,
 					HttpStatusCode.RESOURCE_NOT_FOUND.getMessage(), allRegion);
 		}
-		allRegion.setData(paymentDtos);
+		allRegion.setData(regionDtos);
 		getListofRegion.setStatusCode(HttpStatusCode.REGION_RETREIVED_SUCCESSFULLY.getCode());
 		getListofRegion.setMessage(HttpStatusCode.REGION_RETREIVED_SUCCESSFULLY.getMessage());
 		getListofRegion.setResult(allRegion);

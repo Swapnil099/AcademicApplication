@@ -13,8 +13,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 
 public class RegionSchoolDto {
-	
-	
 		private RegionDto regionDto; 
 		private Set<SchoolDto> schoolDto;
 	}

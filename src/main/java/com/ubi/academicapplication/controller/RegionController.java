@@ -62,7 +62,7 @@ public class RegionController {
 
 	@Operation(summary = "Get All Region", security = @SecurityRequirement(name = "bearerAuth"))
 	@GetMapping()
-	public ResponseEntity<Response<List<RegionDto>>> getPayments(
+	public ResponseEntity<Response<List<RegionDto>>> getRegions(
 			@RequestParam(value = "PageNumber", defaultValue = "0", required = false) Integer pageNumber,
 			@RequestParam(value = "PageSize", defaultValue = "5", required = false) Integer pageSize) {
 		Response<List<RegionDto>> response = regionService.getRegionDetails(pageNumber, pageSize);
@@ -76,7 +76,7 @@ public class RegionController {
 
 	@Operation(summary = "Delete Region By Id", security = @SecurityRequirement(name = "bearerAuth"))
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Response<RegionDto>> deletePaymentById(@PathVariable("id") int id) {
+	public ResponseEntity<Response<RegionDto>> deleteRegionById(@PathVariable("id") int id) {
 
 		Response<RegionDto> response = this.regionService.deleteRegionById(id);
 
@@ -86,7 +86,7 @@ public class RegionController {
 
 	@Operation(summary = "Update Region with Id", security = @SecurityRequirement(name = "bearerAuth"))
 	@PutMapping
-	public ResponseEntity<Response<RegionDto>> updatePayment(@RequestBody RegionDto region) { // NOSONAR
+	public ResponseEntity<Response<RegionDto>> updateRegion(@RequestBody RegionDto region) { // NOSONAR
 
 		Response<RegionDto> response = this.regionService.updateRegionDetails(region);
 

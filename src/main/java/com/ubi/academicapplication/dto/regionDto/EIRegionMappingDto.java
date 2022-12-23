@@ -1,5 +1,7 @@
 package com.ubi.academicapplication.dto.regionDto;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,6 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EIRegionMappingDto {
-	int regionid;
+	List<Integer> regionid;
 	int educationalInstitutionId;
 }
