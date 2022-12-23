@@ -105,12 +105,12 @@ public class RegionServiceImpl implements RegionService {
 		Response<List<RegionDto>> getListofRegion = new Response<List<RegionDto>>();
 
 		Page<Region> list = this.regionRepository.findAll(paging);
-		List<RegionDto> paymentDtos = regionMapper.entitiesToDtos(list.toList());
+		List<RegionDto> regionDtos = regionMapper.entitiesToDtos(list.toList());
 		if (list.isEmpty()) {
 			throw new CustomException(HttpStatusCode.RESOURCE_NOT_FOUND.getCode(), HttpStatusCode.RESOURCE_NOT_FOUND,
 					HttpStatusCode.RESOURCE_NOT_FOUND.getMessage(), allRegion);
 		}
-		allRegion.setData(paymentDtos);
+		allRegion.setData(regionDtos);
 		getListofRegion.setStatusCode(HttpStatusCode.REGION_RETREIVED_SUCCESSFULLY.getCode());
 		getListofRegion.setMessage(HttpStatusCode.REGION_RETREIVED_SUCCESSFULLY.getMessage());
 		getListofRegion.setResult(allRegion);
