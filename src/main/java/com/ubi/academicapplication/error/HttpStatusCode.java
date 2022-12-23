@@ -14,6 +14,8 @@ public enum HttpStatusCode {
 	
 	NO_REGION_FOUND(108,"No Region Found"),
 	
+	NO_REGION_ID_FOUND(206,"please enter Region Id"),
+	
 	USER_RETRIVED_SUCCESSFULLY(200,"User Retrived"),
 	
 	CLASS_RETRIVED_SUCCESSFULLY(200,"class Retrived"),

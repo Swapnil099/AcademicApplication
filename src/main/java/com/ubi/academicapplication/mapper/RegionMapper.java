@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import com.ubi.academicapplication.dto.educationaldto.EducationalInstitutionDto;
 import com.ubi.academicapplication.dto.regionDto.EducationalRegionDto;
+import com.ubi.academicapplication.dto.regionDto.RegionDetailsDto;
 import com.ubi.academicapplication.dto.regionDto.RegionDto;
 import com.ubi.academicapplication.dto.regionDto.RegionSchoolDto;
 import com.ubi.academicapplication.dto.school.SchoolDto;
@@ -26,14 +27,33 @@ public class RegionMapper {
 	@Autowired
        SchoolMapper schoolMapper;
 	
+	@Autowired
+	EducationalInstitutionMapper educationalInstitutionMapper;
+	
 
 	public RegionDto entityToDto(Region region) {
 		return modelMapper.map(region, RegionDto.class);
 	}
 	
-	public RegionDto toDto( Region region)
+	public RegionDto toDto(Region region)
 	{
-		return new RegionDto(region.getId(),region.getCode(),region.getName());
+		RegionDto regionDto =  new RegionDto();
+		regionDto.setCode(region.getCode());
+		region.setName(region.getName());
+		region.setId(region.getId());
+		regionDto.setSchoollId(region.getSchool().stream().map(school->school.getSchoolId()).collect(Collectors.toSet()));
+		regionDto.setEduInstId(region.getEducationalInstitiute().stream().map(eduInsti->eduInsti.getId()).collect(Collectors.toSet()));
+		return regionDto;
+	}
+	
+	public RegionDetailsDto toRegionDetails(Region region) {
+		RegionDetailsDto regionDetailsDto = new RegionDetailsDto();
+		regionDetailsDto.setCode(region.getCode());
+		regionDetailsDto.setName(region.getName());
+		regionDetailsDto.setId(region.getId());
+		regionDetailsDto.setEduInstiDto(region.getEducationalInstitiute().stream().map(eduInsti->educationalInstitutionMapper.entityToDto(eduInsti)).collect(Collectors.toSet()));
+		regionDetailsDto.setSchoolDto(region.getSchool().stream().map(school->schoolMapper.entityToDto(school)).collect(Collectors.toSet()));
+		return regionDetailsDto;
 	}
 
 	public List<RegionDto> entitiesToDtos(List<Region> region) {

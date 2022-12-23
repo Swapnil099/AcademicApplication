@@ -48,7 +48,7 @@ public class EducationalInstitution {
 	private Long vvnAccount;
 	
 	
-	@ManyToMany(cascade=CascadeType.MERGE)
+	@ManyToMany(cascade=CascadeType.ALL)
 	@JoinTable(name="EI_REGION_TABLE",
 	joinColumns= {
 			@JoinColumn(name="educationalInstitution_id",referencedColumnName="id")
@@ -56,7 +56,7 @@ public class EducationalInstitution {
 	inverseJoinColumns= {
 			@JoinColumn(name="region_id",referencedColumnName="id")
 	})
-	@JsonIgnore
+	
 	private Set<Region> region;
 	
 	

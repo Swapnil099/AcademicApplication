@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 
 import com.ubi.academicapplication.csv.RegionEducationalCsvHelper;
 import com.ubi.academicapplication.csv.RegionSchoolCsvHelper;
+import com.ubi.academicapplication.dto.regionDto.RegionCreationDto;
+import com.ubi.academicapplication.dto.regionDto.RegionDetailsDto;
 import com.ubi.academicapplication.dto.regionDto.RegionDto;
 import com.ubi.academicapplication.dto.regionDto.RegionSchoolDto;
 import com.ubi.academicapplication.dto.regionDto.RegionSchoolMappingDto;
@@ -50,16 +52,14 @@ public class RegionServiceImpl implements RegionService {
 	private EducationalInstitutionRepository educationalInstitutionRepository;
 
 	@Override
-	public Response<RegionDto> addRegion(RegionDto regionDto) {
-		Result<RegionDto> res = new Result<>();
-		Response<RegionDto> response = new Response<>();
-		Optional<Region> tempRegion = regionRepository.findById(regionDto.getId());
-		Region regionName = regionRepository.getRegionByName(regionDto.getName());
-		Region regionCode = regionRepository.getRegionByCode(regionDto.getCode());
-		if (tempRegion.isPresent()) {
-			throw new CustomException(HttpStatusCode.RESOURCE_NOT_FOUND.getCode(), HttpStatusCode.RESOURCE_NOT_FOUND,
-					HttpStatusCode.RESOURCE_NOT_FOUND.getMessage(), res);
-		}
+	public Response<RegionDetailsDto> addRegion(RegionCreationDto regionCreationDto) {
+		Result<RegionDetailsDto> res = new Result<>();
+		Response<RegionDetailsDto> response = new Response<>();
+		
+		Region regionName = regionRepository.getRegionByName(regionCreationDto.getName());
+		Region regionCode = regionRepository.getRegionByCode(regionCreationDto.getCode());
+		
+		
 		if (regionName != null) {
 			throw new CustomException(HttpStatusCode.RESOURCE_ALREADY_EXISTS.getCode(),
 					HttpStatusCode.RESOURCE_ALREADY_EXISTS, HttpStatusCode.RESOURCE_ALREADY_EXISTS.getMessage(), res);
@@ -68,10 +68,33 @@ public class RegionServiceImpl implements RegionService {
 			throw new CustomException(HttpStatusCode.RESOURCE_ALREADY_EXISTS.getCode(),
 					HttpStatusCode.RESOURCE_ALREADY_EXISTS, HttpStatusCode.RESOURCE_ALREADY_EXISTS.getMessage(), res);
 		}
-		Region saveRegion = regionRepository.save(regionMapper.dtoToEntity(regionDto));
+		
+		Region savedRegion = new Region();
+		savedRegion.setCode(regionCreationDto.getCode());
+		savedRegion.setName(regionCreationDto.getName());
+		savedRegion.setEducationalInstitiute(new HashSet<>());
+		savedRegion.setSchool(new HashSet<>());
+		savedRegion = regionRepository.save(savedRegion);
+		
+		for(Integer schoolId : regionCreationDto.getSchoollId()) {
+			School school = schoolRepository.getReferenceById(schoolId);
+			school.setRegion(savedRegion);
+			schoolRepository.save(school);
+			savedRegion.getSchool().add(school);
+		}
+		
+		for(Integer eduInstiId : regionCreationDto.getEduInstId()) {
+			EducationalInstitution eduInsti = educationalInstitutionRepository.getReferenceById(eduInstiId);
+			eduInsti.getRegion().add(savedRegion);
+			educationalInstitutionRepository.save(eduInsti);
+			savedRegion.getEducationalInstitiute().add(eduInsti);
+		}
+		savedRegion = regionRepository.save(savedRegion);
+		
+//		Region saveRegion = regionRepository.save(regionMapper.dtoToEntity(regionDto));
 		response.setStatusCode(HttpStatusCode.RESOURCE_CREATED_SUCCESSFULLY.getCode());
 		response.setMessage(HttpStatusCode.RESOURCE_CREATED_SUCCESSFULLY.getMessage());
-		response.setResult(new Result<RegionDto>(regionMapper.entityToDto(saveRegion)));
+		response.setResult(new Result<RegionDetailsDto>(regionMapper.toRegionDetails(savedRegion)));
 		return response;
 	}
 
