@@ -16,4 +16,6 @@ public class EducationRegionGetDto {
 	private EducationalInstitutionDto educationalInstituteDto;
 	
 	private Set<RegionGet> regionDto;
+	
+	//private Integer totalEducationInstituteCount;
 }
