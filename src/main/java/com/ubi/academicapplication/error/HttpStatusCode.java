@@ -107,6 +107,7 @@ public enum HttpStatusCode {
 	OPERATION_NOT_ALLOWED(405, "Operation is Not Allowed"),
 
 	UNAUTHORIZED_EXCEPTION(401, "Unauthorized To Perform Request"),
+	USER_DEACTIVATED(401, "User is deactivated"),
 
 	FORBIDDEN_EXCEPTION(403, "Forbidden access attempted"),
 

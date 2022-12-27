@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ubi.academicapplication.dto.response.Response;
 import com.ubi.academicapplication.dto.student.StudentDto;
+import com.ubi.academicapplication.security.roleaccessinterface.IsTeacher;
 import com.ubi.academicapplication.service.StudentServiceImpl;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -36,6 +37,7 @@ public class StudentController {
 	
 	@PostMapping
 	@Operation(summary = "Create New Student", security = @SecurityRequirement(name = "bearerAuth"))
+	@IsTeacher
 	public ResponseEntity<Response<StudentDto>> addStudent(@RequestBody StudentDto studentId) {
 		Response<StudentDto> response = service.saveStudent(studentId);
 		return ResponseEntity.ok().body(response);
@@ -43,6 +45,7 @@ public class StudentController {
 
 	@Operation(summary = "Get All Student", security = @SecurityRequirement(name = "bearerAuth"))
 	@GetMapping
+	@IsTeacher
 	public ResponseEntity<Response<List<StudentDto>>> getStudents(
 			@RequestParam(value = "PageNumber", defaultValue = "0", required = false) Integer pageNumber,
 			@RequestParam(value = "PageSize", defaultValue = "5", required = false) Integer pageSize) {
@@ -53,6 +56,7 @@ public class StudentController {
 
 	@DeleteMapping("/{id}")
 	@Operation(summary = "Delete Student By Id", security = @SecurityRequirement(name = "bearerAuth"))
+	@IsTeacher
 	public ResponseEntity<Response<StudentDto>> deleteStudent(@PathVariable Long id) {
 		Response<StudentDto> response = service.deleteById(id);
 		return ResponseEntity.ok().body(response);
@@ -61,6 +65,7 @@ public class StudentController {
 
 	@GetMapping("{id}")
 	@Operation(summary = "Get Student By Id", security = @SecurityRequirement(name = "bearerAuth"))
+	@IsTeacher
 	public ResponseEntity<Response<StudentDto>> getStudentById(@PathVariable("id") Long id) {
 		Response<StudentDto> response = service.getStudentById(id);
 		if (response.getStatusCode() == 200) {
@@ -73,6 +78,7 @@ public class StudentController {
 //
 	@PutMapping
 	@Operation(summary = "Update Student", security = @SecurityRequirement(name = "bearerAuth"))
+	@IsTeacher
 	public ResponseEntity<Response<StudentDto>> updateStudent(@RequestBody StudentDto student) {
 		Response<StudentDto> response = service.updateStudent(student);
 		return ResponseEntity.ok().body(response);
@@ -81,6 +87,7 @@ public class StudentController {
 	
 	@Operation(summary = "Change deactivate Status To Activate", security = @SecurityRequirement(name = "bearerAuth"))
 	@PatchMapping("/activate/{id}")
+	@IsTeacher
 	public ResponseEntity<Response<StudentDto>> activateStudentById(@PathVariable Long id) {
 		Response<StudentDto> response = service.changeActiveStatusToTrue(id);
 		return ResponseEntity.ok().body(response);
@@ -88,6 +95,7 @@ public class StudentController {
 
 	@Operation(summary = "Change Active Status To deactivate", security = @SecurityRequirement(name = "bearerAuth"))
 	@PatchMapping("/deactivate/{id}")
+	@IsTeacher
 	public ResponseEntity<Response<StudentDto>> deactivateStudentById(@PathVariable Long id) {
 		Response<StudentDto> response = service.changeActiveStatusToFalse(id);
 		return ResponseEntity.ok().body(response);

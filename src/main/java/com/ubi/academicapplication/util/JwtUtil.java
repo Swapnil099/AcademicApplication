@@ -1,9 +1,18 @@
 package com.ubi.academicapplication.util;
 
+import com.ubi.academicapplication.dto.user.UserDto;
+import com.ubi.academicapplication.entity.User;
 import com.ubi.academicapplication.error.CustomException;
+import com.ubi.academicapplication.error.HttpStatusCode;
+import com.ubi.academicapplication.error.Result;
+import com.ubi.academicapplication.repository.UserRepository;
+import com.ubi.academicapplication.service.UserService;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -17,7 +26,12 @@ import java.util.function.Function;
 public class JwtUtil {
     @Value("${SECRET_KEY}")
     private String secretKey;
-
+    
+    @Autowired
+    UserRepository userRepository;
+    
+    @Autowired
+    UserService userService;
 
     public String extractUsername(String token) throws Exception {
         return extractClaim(token, Claims::getSubject);

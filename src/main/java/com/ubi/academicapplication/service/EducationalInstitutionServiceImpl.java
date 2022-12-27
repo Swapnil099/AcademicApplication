@@ -171,19 +171,18 @@ public class EducationalInstitutionServiceImpl implements EducationalInstitution
 		Result<List<EducationRegionGetDto>> allEducationalResult = new Result<>();
 		Pageable paging = PageRequest.of(pageNumber, pageSize);
 		Response<List<EducationRegionGetDto>> getListofEducationalInstitution = new Response<>();
+		
+		//Integer count = educationalInstitutionRepository.findAll().size();
 
 		Page<EducationalInstitution> list = this.educationalInstitutionRepository.findAll(paging);
 
 		List<EducationRegionGetDto> EducationalRegionDtoList = new ArrayList<>();
 		for (EducationalInstitution eduInsti : list) {
 			EducationRegionGetDto educationalRegionDto = new EducationRegionGetDto();
-
+		//	educationalRegionDto.setTotalEducationInstituteCount(count);
 			educationalRegionDto.setEducationalInstituteDto(educationalInstitutionMapper.entityToDtos(eduInsti));
 			Set<RegionGet> regionDtos = eduInsti.getRegion().stream().map(region -> regionMapper.toDtos(region))
 					.collect(Collectors.toSet());
-			for (RegionGet region : regionDtos) {
-
-			}
 			educationalRegionDto.setRegionDto(regionDtos);
 			EducationalRegionDtoList.add(educationalRegionDto);
 

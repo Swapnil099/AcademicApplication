@@ -9,6 +9,9 @@ import com.ubi.academicapplication.dto.classdto.SchholClassMappingDto;
 import com.ubi.academicapplication.dto.classdto.SchoolClassDto;
 import com.ubi.academicapplication.dto.response.Response;
 import com.ubi.academicapplication.dto.school.SchoolDto;
+import com.ubi.academicapplication.security.roleaccessinterface.IsPrincipal;
+import com.ubi.academicapplication.security.roleaccessinterface.IsRegionalOfficeAdmin;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +48,7 @@ public class SchoolController {
 	
 	@Operation(summary = "Create New School", security = @SecurityRequirement(name = "bearerAuth"))
 	@PostMapping
+	@IsRegionalOfficeAdmin
 	public ResponseEntity<Response<SchoolDto>> addSchool(@Valid @RequestBody SchoolDto schoolDto) {
 		Response<SchoolDto> schoolResponse = schoolService.addSchool(schoolDto);
 		return ResponseEntity.ok().body(schoolResponse);
@@ -53,6 +57,7 @@ public class SchoolController {
 
 	@Operation(summary = "Get All Schools ", security = @SecurityRequirement(name = "bearerAuth"))
 	@GetMapping
+	@IsRegionalOfficeAdmin
 	public ResponseEntity<Response<List<SchoolDto>>> getAllSchools(
 			@RequestParam(value = "PageNumber", defaultValue = "0", required = false) Integer pageNumber,
 			@RequestParam(value = "PageSize", defaultValue = "5", required = false) Integer pageSize) {
@@ -62,6 +67,7 @@ public class SchoolController {
 	}
 	@Operation(summary = "Delete School By Id", security = @SecurityRequirement(name = "bearerAuth"))
 	@DeleteMapping("/{schoolId}")
+	@IsRegionalOfficeAdmin
 	public ResponseEntity<Response<SchoolDto>> deleteSchoolById(@PathVariable("schoolId") int schoolId) 
 	{
 		Response<SchoolDto> response = schoolService.deleteSchoolById(schoolId);
@@ -70,6 +76,7 @@ public class SchoolController {
 	
 	@Operation(summary = "Get Single School By Id", security = @SecurityRequirement(name = "bearerAuth"))
 	@GetMapping("/school/{id}")
+	@IsRegionalOfficeAdmin
 	public ResponseEntity<Response<SchoolDto>> getSchoolById(@PathVariable int id) {
 	  Response<SchoolDto> response=schoolService.getSchoolById(id);
 	  return ResponseEntity.ok().body(response);
@@ -77,6 +84,7 @@ public class SchoolController {
 
 	@Operation(summary = "Update School By Id", security = @SecurityRequirement(name = "bearerAuth"))
 	@PutMapping("/{schoolId}")
+	@IsRegionalOfficeAdmin
 	public ResponseEntity<Response<SchoolDto>> updateSchool(@Valid @RequestBody SchoolDto schoolDto) throws ParseException { // NOSONAR
 	  Response<SchoolDto> response=schoolService.updateSchool(schoolDto);
 	  return ResponseEntity.ok().body(response);
@@ -84,6 +92,7 @@ public class SchoolController {
 
 	@Operation(summary = "Get School By Name", security = @SecurityRequirement(name = "bearerAuth"))
 	@GetMapping("/{name}")
+	@IsRegionalOfficeAdmin
 	public ResponseEntity<Response<SchoolDto>> getSchoolByName(@PathVariable("name") String schoolName) {
 	  Response<SchoolDto> response=schoolService.getSchoolByName(schoolName);
 	  return ResponseEntity.ok().body(response);
@@ -98,6 +107,7 @@ public class SchoolController {
 
 	@Operation(summary = "Get Classes In Schools", security = @SecurityRequirement(name = "bearerAuth"))
 	@GetMapping("/getsch/{id}")
+	@IsPrincipal
 	public ResponseEntity<Response<SchoolClassDto>> getClassInSchool(@PathVariable int id) {
 		Response<SchoolClassDto> response = schoolService.getSchoolwithClass(id);
 		return ResponseEntity.ok().body(response);
@@ -105,6 +115,7 @@ public class SchoolController {
 
 	@Operation(summary = "Get School With Sorting", security = @SecurityRequirement(name = "bearerAuth"))
 	@GetMapping("/sort/{field}")
+	@IsRegionalOfficeAdmin
 	public ResponseEntity<Response<List<SchoolDto>>> getSchoolBySorting(@PathVariable String field) {
 		Response<List<SchoolDto>> response = schoolService.getSchoolwithSort(field);
 		return ResponseEntity.ok().body(response);
@@ -112,6 +123,7 @@ public class SchoolController {
 	
 	@Operation(summary="Download file ",security=@SecurityRequirement(name= "bearerAuth"))
 	@GetMapping("/download")
+	@IsRegionalOfficeAdmin
 	public ResponseEntity<Resource> getCSVFileData()
 	{
 	    String filename = "class.csv";

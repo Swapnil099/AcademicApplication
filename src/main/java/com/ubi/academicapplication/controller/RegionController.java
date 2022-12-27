@@ -27,6 +27,7 @@ import com.ubi.academicapplication.dto.regionDto.RegionDto;
 import com.ubi.academicapplication.dto.regionDto.RegionSchoolDto;
 import com.ubi.academicapplication.dto.regionDto.RegionSchoolMappingDto;
 import com.ubi.academicapplication.dto.response.Response;
+import com.ubi.academicapplication.security.roleaccessinterface.IsEducationInstituteHQAdmin;
 import com.ubi.academicapplication.service.RegionService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -43,6 +44,7 @@ public class RegionController {
 
 	@Operation(summary = "Create New Region", security = @SecurityRequirement(name = "bearerAuth"))
 	@PostMapping
+	@IsEducationInstituteHQAdmin
 	public ResponseEntity<Response<RegionDetailsDto>> insertRegion(@RequestBody RegionCreationDto regionCreationDto) {
 
 		Response<RegionDetailsDto> response = this.regionService.addRegion(regionCreationDto);
@@ -53,6 +55,7 @@ public class RegionController {
 
 	@Operation(summary = "Get Region By Id", security = @SecurityRequirement(name = "bearerAuth"))
 	@GetMapping("/{id}")
+	@IsEducationInstituteHQAdmin
 	public ResponseEntity<Response<RegionDto>> getSingleRegion(@PathVariable int id) {
 		Response<RegionDto> response = regionService.getRegionById(id);
 		if (response.getStatusCode() == 200) {
@@ -64,6 +67,7 @@ public class RegionController {
 
 	@Operation(summary = "Get All Region", security = @SecurityRequirement(name = "bearerAuth"))
 	@GetMapping()
+	@IsEducationInstituteHQAdmin
 	public ResponseEntity<Response<List<RegionDto>>> getPayments(
 			@RequestParam(value = "PageNumber", defaultValue = "0", required = false) Integer pageNumber,
 			@RequestParam(value = "PageSize", defaultValue = "5", required = false) Integer pageSize) {
@@ -78,6 +82,7 @@ public class RegionController {
 
 	@Operation(summary = "Delete Region By Id", security = @SecurityRequirement(name = "bearerAuth"))
 	@DeleteMapping("/{id}")
+	@IsEducationInstituteHQAdmin
 	public ResponseEntity<Response<RegionDto>> deleteRegionById(@PathVariable("id") int id) {
 
 		Response<RegionDto> response = this.regionService.deleteRegionById(id);
@@ -98,6 +103,7 @@ public class RegionController {
 
 	@Operation(summary = "Download Region and Education Detail file ", security = @SecurityRequirement(name = "bearerAuth"))
 	@GetMapping("/download")
+	@IsEducationInstituteHQAdmin
 	public ResponseEntity<Resource> getCSVFileData() {
 		String filename = "region.csv";
 		InputStreamResource file = new InputStreamResource(regionService.load());
@@ -108,6 +114,7 @@ public class RegionController {
 
 	@Operation(summary = "Download file ", security = @SecurityRequirement(name = "bearerAuth"))
 	@GetMapping("/getcsvdata")
+	@IsEducationInstituteHQAdmin
 	public ResponseEntity<Resource> getRegionCsvFileData() {
 		String filename = "regionschool.csv";
 		InputStreamResource file = new InputStreamResource(regionService.Regionload());
@@ -118,6 +125,7 @@ public class RegionController {
 
 	@Operation(summary = "Get Region By Region Name", security = @SecurityRequirement(name = "bearerAuth"))
 	@GetMapping("/region/{name}")
+	@IsEducationInstituteHQAdmin
 	public ResponseEntity<Response<RegionDto>> getSingleRegion(@RequestParam String name) {
 		Response<RegionDto> response = regionService.getRegionByName(name);
 		if (response.getStatusCode() == 200) {
@@ -129,6 +137,7 @@ public class RegionController {
 
 	@Operation(summary = "Map Region and School", security = @SecurityRequirement(name = "bearerAuth"))
 	@PostMapping("/addSchool")
+	@IsEducationInstituteHQAdmin
 	public ResponseEntity<Response<RegionSchoolDto>> addSchool(@RequestBody RegionSchoolMappingDto regionSchoolDto) {
 		Response<RegionSchoolDto> response = regionService.addSchool(regionSchoolDto);
 		return ResponseEntity.ok().body(response);
@@ -136,6 +145,7 @@ public class RegionController {
 
 	@Operation(summary = "Get School in Region", security = @SecurityRequirement(name = "bearerAuth"))
 	@GetMapping("/getRegion/{id}")
+	@IsEducationInstituteHQAdmin
 	public ResponseEntity<Response<RegionSchoolDto>> getSchoolInRegion(@PathVariable int id) {
 		Response<RegionSchoolDto> response = regionService.getRegionwithSchool(id);
 		return ResponseEntity.ok().body(response);
@@ -145,6 +155,7 @@ public class RegionController {
 
 	@Operation(summary = "Get Region in Sorting", security = @SecurityRequirement(name = "bearerAuth"))
 	@GetMapping("/sort/{field}")
+	@IsEducationInstituteHQAdmin
 	public ResponseEntity<Response<List<RegionDto>>> getRegionBySorting(@PathVariable String field) {
 		Response<List<RegionDto>> response = regionService.getRegionwithSort(field);
 		return ResponseEntity.ok().body(response);
