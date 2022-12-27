@@ -1,8 +1,10 @@
 package com.ubi.academicapplication.controller.config;
 
+import com.ubi.academicapplication.dto.user.UserDto;
 import com.ubi.academicapplication.error.CustomException;
 import com.ubi.academicapplication.error.HttpStatusCode;
 import com.ubi.academicapplication.error.Result;
+import com.ubi.academicapplication.service.UserService;
 import com.ubi.academicapplication.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,6 +28,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Autowired
     JwtUtil jwtUtil;
+    
+    @Autowired
+    UserService userService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -54,6 +59,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
                 }
+                
             } catch (Exception e) {
                 throw new CustomException(
                         HttpStatusCode.UNAUTHORIZED_EXCEPTION.getCode(),
@@ -62,14 +68,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         new Result<>());
             }
         }
+       
 
-//        if(username == null && !request.getRequestURI().matches("/swagger-ui/*") && !request.getRequestURI().equals("/authenticate")) {
-//            throw new CustomException(
-//                    HttpStatusCode.UNAUTHORIZED_EXCEPTION.getCode(),
-//                    HttpStatusCode.UNAUTHORIZED_EXCEPTION,
-//                    HttpStatusCode.UNAUTHORIZED_EXCEPTION.getMessage(),
-//                    new Result<>());
-//        }
+        if(username == null && (request.getRequestURI().matches("/user/*") || request.getRequestURI().matches("/role/*"))) {
+            throw new CustomException(
+                    HttpStatusCode.UNAUTHORIZED_EXCEPTION.getCode(),
+                    HttpStatusCode.UNAUTHORIZED_EXCEPTION,
+                    HttpStatusCode.UNAUTHORIZED_EXCEPTION.getMessage(),
+                    new Result<>());
+        }
         filterChain.doFilter(request, response);
     }
 

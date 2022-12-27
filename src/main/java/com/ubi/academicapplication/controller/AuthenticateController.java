@@ -56,8 +56,19 @@ public class AuthenticateController {
             return response;
         }
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
+        
         String roleName = userService.getRoleByUsername(username);
         UserDto userDto = userService.getUserByUsername(username);
+        
+        if(userDto!=null && !userDto.getIsActivate()) {
+        	throw new CustomException(
+                    HttpStatusCode.USER_DEACTIVATED.getCode(),
+                    HttpStatusCode.USER_DEACTIVATED,
+                    HttpStatusCode.USER_DEACTIVATED.getMessage(),
+                    new Result<>());
+        }
+        
         String token = jwtUtil.generateToken(userDetails);
 
         response.setStatusCode(HttpStatusCode.SUCCESSFUL.getCode());
