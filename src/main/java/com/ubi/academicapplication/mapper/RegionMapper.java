@@ -13,6 +13,7 @@ import com.ubi.academicapplication.dto.educationaldto.EducationalInstitutionDto;
 import com.ubi.academicapplication.dto.regionDto.EducationalRegionDto;
 import com.ubi.academicapplication.dto.regionDto.RegionDetailsDto;
 import com.ubi.academicapplication.dto.regionDto.RegionDto;
+import com.ubi.academicapplication.dto.regionDto.RegionGet;
 import com.ubi.academicapplication.dto.regionDto.RegionSchoolDto;
 import com.ubi.academicapplication.dto.school.SchoolDto;
 import com.ubi.academicapplication.entity.EducationalInstitution;
@@ -89,6 +90,20 @@ public class RegionMapper {
 		RegionDto regionDto = this.entityToDto(region);
 		Set<SchoolDto> schoolDto=schoolMapper.entitiesToDtos(region.getSchool());
 		return new RegionSchoolDto(regionDto,schoolDto);
+	}
+	
+	
+	
+	public RegionGet toDtos(Region region)
+	{
+		
+		RegionGet regionDto =  new RegionGet();
+		regionDto.setCode(region.getCode());
+		regionDto.setName(region.getName());
+		regionDto.setId(region.getId());
+		//regionDto.setSchoollId(region.getSchool().stream().map(school->school.getSchoolId()).collect(Collectors.toSet()));
+		//regionDto.setEduInstId(region.getEducationalInstitiute().stream().map(eduInsti->eduInsti.getId()).collect(Collectors.toSet()));
+		return regionDto;
 	}
 	
 }

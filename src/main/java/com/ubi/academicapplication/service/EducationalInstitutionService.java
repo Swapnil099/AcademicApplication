@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.ubi.academicapplication.dto.educationaldto.EducationalInstitutionDto;
 import com.ubi.academicapplication.dto.regionDto.EIRegionMappingDto;
+import com.ubi.academicapplication.dto.regionDto.EducationRegionGetDto;
 import com.ubi.academicapplication.dto.regionDto.EducationalRegionDto;
 import com.ubi.academicapplication.dto.response.Response;
 
@@ -16,11 +17,11 @@ public interface EducationalInstitutionService {
 
 	Response<EducationalInstitutionDto> getEducationalInstituteByName(String educationalInstitutionName);
 
-	Response<List<EducationalRegionDto>> getAllEducationalInstitutions(Integer pageNumber, Integer pageSize);
+	Response<List<EducationRegionGetDto>> getAllEducationalInstitutions(Integer pageNumber, Integer pageSize);
 
 	Response<EducationalInstitutionDto> deleteEducationalInstitution(int id);
 
-	Response<EducationalInstitutionDto> updateEducationalInstitution(
+	Response<EducationalRegionDto> updateEducationalInstitution(
 			EducationalInstitutionDto educationalInstitutionDto);
 
 	Response<EducationalRegionDto> addRegion(EIRegionMappingDto eIRegionMappingDto);
