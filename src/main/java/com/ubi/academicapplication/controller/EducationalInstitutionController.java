@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ubi.academicapplication.dto.educationaldto.EducationalInstitutionDto;
 import com.ubi.academicapplication.dto.regionDto.EIRegionMappingDto;
+import com.ubi.academicapplication.dto.regionDto.EducationRegionGetDto;
 import com.ubi.academicapplication.dto.regionDto.EducationalRegionDto;
 import com.ubi.academicapplication.dto.response.Response;
 import com.ubi.academicapplication.service.EducationalInstitutionService;
@@ -79,10 +80,10 @@ public class EducationalInstitutionController {
 
 	@Operation(summary = "Get All Educational Institution", security = @SecurityRequirement(name = "bearerAuth"))
 	@GetMapping()
-	public ResponseEntity<Response<List<EducationalRegionDto>>> getEducationalInstitutions(
+	public ResponseEntity<Response<List<EducationRegionGetDto>>> getEducationalInstitutions(
 			@RequestParam(value = "PageNumber", defaultValue = "0", required = false) Integer pageNumber,
 			@RequestParam(value = "PageSize", defaultValue = "5", required = false) Integer pageSize) {
-		Response<List<EducationalRegionDto>> response = educationalInstitutionService
+		Response<List<EducationRegionGetDto>> response = educationalInstitutionService
 				.getAllEducationalInstitutions(pageNumber, pageSize);
 		if (response.getStatusCode() == 200) {
 			return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -105,10 +106,10 @@ public class EducationalInstitutionController {
 
 	@Operation(summary = "Update Educational Institution with Id", security = @SecurityRequirement(name = "bearerAuth"))
 	@PutMapping
-	public ResponseEntity<Response<EducationalInstitutionDto>> updateEducationalInstutions(
+	public ResponseEntity<Response<EducationalRegionDto>> updateEducationalInstutions(
 			@RequestBody EducationalInstitutionDto educationalInstitutionDto) { // NOSONAR
 
-		Response<EducationalInstitutionDto> updateEducationalInst = this.educationalInstitutionService
+		Response<EducationalRegionDto> updateEducationalInst = this.educationalInstitutionService
 				.updateEducationalInstitution(educationalInstitutionDto);
 
 		return ResponseEntity.ok().body(updateEducationalInst);
