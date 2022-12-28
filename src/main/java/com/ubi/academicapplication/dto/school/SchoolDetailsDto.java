@@ -1,6 +1,10 @@
 package com.ubi.academicapplication.dto.school;
 
+import java.util.HashSet;
 import java.util.Set;
+
+import com.ubi.academicapplication.dto.classdto.ClassDto;
+import com.ubi.academicapplication.entity.ClassDetail;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,8 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SchoolDto {
-
+public class SchoolDetailsDto {
 	private int schoolId;
 
 	private int code;
@@ -37,6 +40,5 @@ public class SchoolDto {
 	
 	private int regionId;
 	
-	private Set<Long> classId;
-
+   Set<ClassDto> classDto=new HashSet<>();
 }

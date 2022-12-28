@@ -19,15 +19,19 @@ public class ClassMapper {
 	 
 	//entity to DTO Mapping
  public ClassDto entityToDto(ClassDetail classDetail) {
-		return modelMapper.map(classDetail, ClassDto.class);
+	 	ClassDto classDto=new ClassDto();
+	 	classDto.setClassId(classDetail.getClassId());
+	 	classDto.setClassName(classDetail.getClassName());
+	 	classDto.setClassCode(classDetail.getClassCode());
+		return classDto;
 	}
  
  public List<ClassDto> entitiesToDtos(List<ClassDetail> classDetail) {
         return classDetail.stream().filter(Objects::nonNull).map(this::entityToDto).collect(Collectors.toList());
     }
  
- public List<ClassDto> entitiesToDto(List<ClassDetail> classDetail) {
-		return classDetail.stream().filter(Objects::nonNull).map(this::entityToDto).collect(Collectors.toList());
+ public Set<ClassDto> entitiesToDto(Set<ClassDetail> classDetail) {
+		return classDetail.stream().filter(Objects::nonNull).map(this::entityToDto).collect(Collectors.toSet());
 	}
 
 	// DTO to entity Mapping

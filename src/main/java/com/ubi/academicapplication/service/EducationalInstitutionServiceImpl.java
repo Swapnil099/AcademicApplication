@@ -262,10 +262,8 @@ public class EducationalInstitutionServiceImpl implements EducationalInstitution
 			Region region = regionRepository.getReferenceById(regionId);
 			System.out.println("region --- " + region.toString());
 			if(region != null) existingEducationalInstitution.getRegionId().add(regionId);
-
 		}
-		
-		
+				
 		if (educationalInstitutionDto.getRegionId().isEmpty()) {
 			throw new CustomException(HttpStatusCode.NO_REGION_ADDED.getCode(), HttpStatusCode.NO_REGION_ADDED,
 					HttpStatusCode.NO_REGION_ADDED.getMessage(), res);
