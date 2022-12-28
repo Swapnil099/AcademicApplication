@@ -1,4 +1,4 @@
-package com.ubi.academicapplication.controller.config;
+package com.ubi.academicapplication.config;
 
 import com.ubi.academicapplication.dto.user.UserDto;
 import com.ubi.academicapplication.error.CustomException;

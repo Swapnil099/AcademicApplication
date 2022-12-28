@@ -9,14 +9,11 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.ubi.academicapplication.dto.educationaldto.EducationalInstitutionDto;
-import com.ubi.academicapplication.dto.regionDto.EducationalRegionDto;
-import com.ubi.academicapplication.dto.regionDto.RegionDetailsDto;
-import com.ubi.academicapplication.dto.regionDto.RegionDto;
-import com.ubi.academicapplication.dto.regionDto.RegionGet;
-import com.ubi.academicapplication.dto.regionDto.RegionSchoolDto;
+import com.ubi.academicapplication.dto.educationaldto.regionDto.RegionDetailsDto;
+import com.ubi.academicapplication.dto.educationaldto.regionDto.RegionDto;
+import com.ubi.academicapplication.dto.educationaldto.regionDto.RegionGet;
+import com.ubi.academicapplication.dto.educationaldto.regionDto.RegionSchoolDto;
 import com.ubi.academicapplication.dto.school.SchoolDto;
-import com.ubi.academicapplication.entity.EducationalInstitution;
 import com.ubi.academicapplication.entity.Region;
 import com.ubi.academicapplication.entity.School;
 
@@ -40,8 +37,8 @@ public class RegionMapper {
 	{
 		RegionDto regionDto =  new RegionDto();
 		regionDto.setCode(region.getCode());
-		region.setName(region.getName());
-		region.setId(region.getId());
+		regionDto.setName(region.getName());
+		regionDto.setId(region.getId());
 		regionDto.setSchoollId(region.getSchool().stream().map(school->school.getSchoolId()).collect(Collectors.toSet()));
 		regionDto.setEduInstId(region.getEducationalInstitiute().stream().map(eduInsti->eduInsti.getId()).collect(Collectors.toSet()));
 		return regionDto;

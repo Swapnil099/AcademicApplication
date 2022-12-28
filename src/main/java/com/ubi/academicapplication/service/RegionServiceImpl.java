@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,11 +16,11 @@ import org.springframework.stereotype.Service;
 
 import com.ubi.academicapplication.csv.RegionEducationalCsvHelper;
 import com.ubi.academicapplication.csv.RegionSchoolCsvHelper;
-import com.ubi.academicapplication.dto.regionDto.RegionCreationDto;
-import com.ubi.academicapplication.dto.regionDto.RegionDetailsDto;
-import com.ubi.academicapplication.dto.regionDto.RegionDto;
-import com.ubi.academicapplication.dto.regionDto.RegionSchoolDto;
-import com.ubi.academicapplication.dto.regionDto.RegionSchoolMappingDto;
+import com.ubi.academicapplication.dto.educationaldto.regionDto.RegionCreationDto;
+import com.ubi.academicapplication.dto.educationaldto.regionDto.RegionDetailsDto;
+import com.ubi.academicapplication.dto.educationaldto.regionDto.RegionDto;
+import com.ubi.academicapplication.dto.educationaldto.regionDto.RegionSchoolDto;
+import com.ubi.academicapplication.dto.educationaldto.regionDto.RegionSchoolMappingDto;
 import com.ubi.academicapplication.dto.response.Response;
 import com.ubi.academicapplication.entity.EducationalInstitution;
 import com.ubi.academicapplication.entity.Region;
@@ -32,6 +33,8 @@ import com.ubi.academicapplication.mapper.SchoolMapper;
 import com.ubi.academicapplication.repository.EducationalInstitutionRepository;
 import com.ubi.academicapplication.repository.RegionRepository;
 import com.ubi.academicapplication.repository.SchoolRepository;
+
+import javax.validation.constraints.NotNull;
 
 @Service
 public class RegionServiceImpl implements RegionService {
@@ -99,13 +102,13 @@ public class RegionServiceImpl implements RegionService {
 	}
 
 	@Override
-	public Response<List<RegionDto>> getRegionDetails(Integer PageNumber, Integer PageSize) {
-		Result<List<RegionDto>> allRegion = new Result<>();
+	public Response<List<RegionDetailsDto>> getRegionDetails(Integer PageNumber, Integer PageSize) {
+		Result<List<RegionDetailsDto>> allRegion = new Result<>();
 		Pageable paging = PageRequest.of(PageNumber, PageSize);
-		Response<List<RegionDto>> getListofRegion = new Response<List<RegionDto>>();
+		Response<List<RegionDetailsDto>> getListofRegion = new Response<List<RegionDetailsDto>>();
 
 		Page<Region> list = this.regionRepository.findAll(paging);
-		List<RegionDto> regionDtos = regionMapper.entitiesToDtos(list.toList());
+		List<RegionDetailsDto> regionDtos = list.toList().stream().map(region -> regionMapper.toRegionDetails(region)).collect(Collectors.toList());
 		if (list.isEmpty()) {
 			throw new CustomException(HttpStatusCode.RESOURCE_NOT_FOUND.getCode(), HttpStatusCode.RESOURCE_NOT_FOUND,
 					HttpStatusCode.RESOURCE_NOT_FOUND.getMessage(), allRegion);
@@ -118,15 +121,15 @@ public class RegionServiceImpl implements RegionService {
 	}
 
 	@Override
-	public Response<RegionDto> getRegionById(int id) {
-		Response<RegionDto> getRegion = new Response<RegionDto>();
+	public Response<RegionDetailsDto> getRegionById(int id) {
+		Response<RegionDetailsDto> getRegion = new Response<RegionDetailsDto>();
 		Optional<Region> region = this.regionRepository.findById(id);
-		Result<RegionDto> regionResult = new Result<>();
+		Result<RegionDetailsDto> regionResult = new Result<>();
 		if (!region.isPresent()) {
 			throw new CustomException(HttpStatusCode.REGION_NOT_FOUND.getCode(), HttpStatusCode.REGION_NOT_FOUND,
 					HttpStatusCode.REGION_NOT_FOUND.getMessage(), regionResult);
 		}
-		regionResult.setData(regionMapper.entityToDto(region.get()));
+		regionResult.setData(regionMapper.toRegionDetails(region.get()));
 		getRegion.setStatusCode(HttpStatusCode.REGION_RETREIVED_SUCCESSFULLY.getCode());
 		getRegion.setMessage(HttpStatusCode.REGION_RETREIVED_SUCCESSFULLY.getMessage());
 		getRegion.setResult(regionResult);
@@ -266,14 +269,14 @@ public class RegionServiceImpl implements RegionService {
 	}
 
 	@Override
-	public Response<List<RegionDto>> getRegionwithSort(String field) {
+	public Response<List<RegionDetailsDto>> getRegionwithSort(String field) {
 
-		Result<List<RegionDto>> allRegionResult = new Result<>();
+		Result<List<RegionDetailsDto>> allRegionResult = new Result<>();
 
-		Response<List<RegionDto>> getListofRegion = new Response<>();
+		Response<List<RegionDetailsDto>> getListofRegion = new Response<>();
 
 		List<Region> list = this.regionRepository.findAll(Sort.by(Sort.Direction.ASC, field));
-		List<RegionDto> regionDtos = regionMapper.entitiesToDtos(list);
+		List<RegionDetailsDto> regionDtos = list.stream().map(region -> regionMapper.toRegionDetails(region)).collect(Collectors.toList());
 
 		if (list.size() == 0) {
 			throw new CustomException(HttpStatusCode.NO_REGION_FOUND.getCode(), HttpStatusCode.NO_REGION_FOUND,
