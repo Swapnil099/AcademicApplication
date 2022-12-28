@@ -9,6 +9,7 @@ import com.ubi.academicapplication.dto.classdto.SchholClassMappingDto;
 import com.ubi.academicapplication.dto.classdto.SchoolClassDto;
 import com.ubi.academicapplication.dto.response.Response;
 import com.ubi.academicapplication.dto.school.SchoolDto;
+import com.ubi.academicapplication.dto.school.SchoolRegionDto;
 import com.ubi.academicapplication.security.roleaccessinterface.IsPrincipal;
 import com.ubi.academicapplication.security.roleaccessinterface.IsRegionalOfficeAdmin;
 
@@ -49,8 +50,8 @@ public class SchoolController {
 	@Operation(summary = "Create New School", security = @SecurityRequirement(name = "bearerAuth"))
 	@PostMapping
 	@IsRegionalOfficeAdmin
-	public ResponseEntity<Response<SchoolDto>> addSchool(@Valid @RequestBody SchoolDto schoolDto) {
-		Response<SchoolDto> schoolResponse = schoolService.addSchool(schoolDto);
+	public ResponseEntity<Response<SchoolRegionDto>> addSchool(@Valid @RequestBody SchoolDto schoolDto) {
+		Response<SchoolRegionDto> schoolResponse = schoolService.addSchool(schoolDto);
 		return ResponseEntity.ok().body(schoolResponse);
 
 	}
@@ -58,12 +59,11 @@ public class SchoolController {
 	@Operation(summary = "Get All Schools ", security = @SecurityRequirement(name = "bearerAuth"))
 	@GetMapping
 	@IsRegionalOfficeAdmin
-	public ResponseEntity<Response<List<SchoolDto>>> getAllSchools(
+	public ResponseEntity<Response<List<SchoolRegionDto>>> getAllSchools(
 			@RequestParam(value = "PageNumber", defaultValue = "0", required = false) Integer pageNumber,
 			@RequestParam(value = "PageSize", defaultValue = "5", required = false) Integer pageSize) {
-		Response<List<SchoolDto>> response = schoolService.getAllSchools(pageNumber, pageSize);
+		Response<List<SchoolRegionDto>> response = schoolService.getAllSchools(pageNumber, pageSize);
 		return ResponseEntity.ok().body(response);
-
 	}
 	@Operation(summary = "Delete School By Id", security = @SecurityRequirement(name = "bearerAuth"))
 	@DeleteMapping("/{schoolId}")
@@ -73,46 +73,46 @@ public class SchoolController {
 		Response<SchoolDto> response = schoolService.deleteSchoolById(schoolId);
 		return ResponseEntity.ok().body(response);
 	}
-	
+
 	@Operation(summary = "Get Single School By Id", security = @SecurityRequirement(name = "bearerAuth"))
 	@GetMapping("/school/{id}")
 	@IsRegionalOfficeAdmin
-	public ResponseEntity<Response<SchoolDto>> getSchoolById(@PathVariable int id) {
-	  Response<SchoolDto> response=schoolService.getSchoolById(id);
+	public ResponseEntity<Response<SchoolRegionDto>> getSchoolById(@PathVariable int id) {
+	  Response<SchoolRegionDto> response=schoolService.getSchoolById(id);
 	  return ResponseEntity.ok().body(response);
 	}
 
 	@Operation(summary = "Update School By Id", security = @SecurityRequirement(name = "bearerAuth"))
 	@PutMapping("/{schoolId}")
 	@IsRegionalOfficeAdmin
-	public ResponseEntity<Response<SchoolDto>> updateSchool(@Valid @RequestBody SchoolDto schoolDto) throws ParseException { // NOSONAR
-	  Response<SchoolDto> response=schoolService.updateSchool(schoolDto);
+	public ResponseEntity<Response<SchoolRegionDto>> updateSchool(@Valid @RequestBody SchoolDto schoolDto) { // NOSONAR
+	  Response<SchoolRegionDto> response=schoolService.updateSchool(schoolDto);
 	  return ResponseEntity.ok().body(response);
 	}
 
 	@Operation(summary = "Get School By Name", security = @SecurityRequirement(name = "bearerAuth"))
 	@GetMapping("/{name}")
 	@IsRegionalOfficeAdmin
-	public ResponseEntity<Response<SchoolDto>> getSchoolByName(@PathVariable("name") String schoolName) {
-	  Response<SchoolDto> response=schoolService.getSchoolByName(schoolName);
+	public ResponseEntity<Response<SchoolRegionDto>> getSchoolByName(@PathVariable("name") String schoolName) {
+	  Response<SchoolRegionDto> response=schoolService.getSchoolByName(schoolName);
 	  return ResponseEntity.ok().body(response);
 	}
-	
-	@Operation(summary = "Map School and  Class", security = @SecurityRequirement(name = "bearerAuth"))
-	@PostMapping("/addClass")
-	public ResponseEntity<Response<SchoolClassDto>> addClass(@RequestBody SchholClassMappingDto schoolClassDto) {
-		Response<SchoolClassDto> response = schoolService.addClass(schoolClassDto);
-		return ResponseEntity.ok().body(response);
-	}
-
-	@Operation(summary = "Get Classes In Schools", security = @SecurityRequirement(name = "bearerAuth"))
-	@GetMapping("/getsch/{id}")
-	@IsPrincipal
-	public ResponseEntity<Response<SchoolClassDto>> getClassInSchool(@PathVariable int id) {
-		Response<SchoolClassDto> response = schoolService.getSchoolwithClass(id);
-		return ResponseEntity.ok().body(response);
-	}
-
+//	
+//	@Operation(summary = "Map School and  Class", security = @SecurityRequirement(name = "bearerAuth"))
+//	@PostMapping("/addClass")
+//	public ResponseEntity<Response<SchoolClassDto>> addClass(@RequestBody SchholClassMappingDto schoolClassDto) {
+//		Response<SchoolClassDto> response = schoolService.addClass(schoolClassDto);
+//		return ResponseEntity.ok().body(response);
+//	}
+//
+//	@Operation(summary = "Get Classes In Schools", security = @SecurityRequirement(name = "bearerAuth"))
+//	@GetMapping("/getsch/{id}")
+//	@IsPrincipal
+//	public ResponseEntity<Response<SchoolClassDto>> getClassInSchool(@PathVariable int id) {
+//		Response<SchoolClassDto> response = schoolService.getSchoolwithClass(id);
+//		return ResponseEntity.ok().body(response);
+//	}
+//
 	@Operation(summary = "Get School With Sorting", security = @SecurityRequirement(name = "bearerAuth"))
 	@GetMapping("/sort/{field}")
 	@IsRegionalOfficeAdmin
@@ -135,7 +135,7 @@ public class SchoolController {
 	        .body(file);
 		
 	}	
-	
+//	
 	
 	
 }

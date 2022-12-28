@@ -146,7 +146,7 @@ public enum HttpStatusCode {
 	SCHOOL_DELETED(200,"School Deleted Successfully"),
 	SCHOOL_UPDATED(200,"School Updated Successfully"),
 	
-	
+	NO_CLASS_ADDED(200, "No Class Added"),
 
 
 	RESOURCE_CREATED_SUCCESSFULLY(201, "Resource Created Successfully"),

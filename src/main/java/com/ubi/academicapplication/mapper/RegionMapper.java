@@ -30,17 +30,26 @@ public class RegionMapper {
 	
 
 	public RegionDto entityToDto(Region region) {
-		return modelMapper.map(region, RegionDto.class);
-	}
-	
-	public RegionDto toDto(Region region)
-	{
 		RegionDto regionDto =  new RegionDto();
 		regionDto.setCode(region.getCode());
 		regionDto.setName(region.getName());
 		regionDto.setId(region.getId());
 		regionDto.setSchoollId(region.getSchool().stream().map(school->school.getSchoolId()).collect(Collectors.toSet()));
 		regionDto.setEduInstId(region.getEducationalInstitiute().stream().map(eduInsti->eduInsti.getId()).collect(Collectors.toSet()));
+		return regionDto;
+	}
+	
+	public RegionDto toDto(Region region)
+	{
+		RegionDto regionDto =  new RegionDto();
+		if(region!=null) {
+		
+		regionDto.setCode(region.getCode());
+		regionDto.setName(region.getName());
+		regionDto.setId(region.getId());
+		regionDto.setSchoollId(region.getSchool().stream().map(school->school.getSchoolId()).collect(Collectors.toSet()));
+		regionDto.setEduInstId(region.getEducationalInstitiute().stream().map(eduInsti->eduInsti.getId()).collect(Collectors.toSet()));
+		}
 		return regionDto;
 	}
 	

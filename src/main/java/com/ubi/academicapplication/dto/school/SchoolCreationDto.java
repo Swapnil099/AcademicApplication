@@ -9,9 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SchoolDto {
-
-	private int schoolId;
+public class SchoolCreationDto {
 
 	private int code;
 
@@ -38,5 +36,4 @@ public class SchoolDto {
 	private int regionId;
 	
 	private Set<Long> classId;
-
 }
