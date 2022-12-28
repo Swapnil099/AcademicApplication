@@ -109,6 +109,14 @@ public class EducationalInstitutionController {
 		return ResponseEntity.ok().body(updateEducationalInst);
 
 	}
+	
+	@Operation(summary = "Get Region In EducationalInstitute", security = @SecurityRequirement(name = "bearerAuth"))
+	@GetMapping("/getEduInst/{id}")
+	@IsSuperAdmin
+	public ResponseEntity<Response<EducationRegionGetDto>> getRegionInEduIst(@PathVariable int id) {
+		Response<EducationRegionGetDto> response = educationalInstitutionService.getEduInstwithRegion(id);
+		return ResponseEntity.ok().body(response);
+	}
 
 	// -----Sorting
 
