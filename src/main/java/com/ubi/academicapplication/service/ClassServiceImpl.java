@@ -1,5 +1,6 @@
 package com.ubi.academicapplication.service;
 
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.ubi.academicapplication.csv.ClassCsvHelper;
 import com.ubi.academicapplication.dto.classdto.ClassDto;
 import com.ubi.academicapplication.dto.classdto.ClassStudentDto;
 import com.ubi.academicapplication.dto.response.Response;
@@ -197,11 +199,10 @@ public class ClassServiceImpl implements ClassService {
 //		return response;
 //	}
 //
-//	public Response<ClassDto> updateClassDetails(ClassDto classDetail) {
-//		Result<ClassDto> res = new Result<>();
+//	public Response<ClassStudentDto> updateClassDetails(ClassDto classDetail) {
+//		Result<ClassStudentDto> res = new Result<>();
 //
-//		res.setData(null);
-//		Optional<ClassDetail> existingClassContainer = classRepository.findById(classDetail.getClassId());
+//		Optional<ClassStudentDto> existingClassContainer = classRepository.findById(classDetail.getClassId());
 //		if (!existingClassContainer.isPresent()) {
 //			throw new CustomException(HttpStatusCode.NO_CLASS_FOUND.getCode(), HttpStatusCode.NO_CLASS_FOUND,
 //					HttpStatusCode.NO_CLASS_FOUND.getMessage(), res);
@@ -240,30 +241,7 @@ public class ClassServiceImpl implements ClassService {
 		getClass.setResult(classResult);
 		return getClass;
 	}
-//
-//	@Override
-//	public Response<List<StudentDto>> getClasswithStudent(Long id) {
-//		Response<List<StudentDto>> response = new Response<>();
-//		Result<List<StudentDto>> res = new Result<>();
-//		Optional<ClassDetail> classDetail = this.classRepository.findById(id);
-//
-//		if (!classDetail.isPresent()) {
-//			throw new CustomException(HttpStatusCode.NO_STUDENT_MATCH_WITH_ID.getCode(),
-//					HttpStatusCode.NO_STUDENT_MATCH_WITH_ID, HttpStatusCode.NO_STUDENT_MATCH_WITH_ID.getMessage(), res);
-//		}
-//
-//		ClassDetail classDetailss = classDetail.get();
-//
-//		List<Student> student = classDetailss.getStudents();
-//
-//		response.setResult(res);
-//
-//		res.setData(studentMapper.entitiesToDtos(student));
-//
-//		response.setStatusCode(HttpStatusCode.STUDENT_RETRIVED_SUCCESSFULLY.getCode());
-//		response.setMessage(HttpStatusCode.STUDENT_RETRIVED_SUCCESSFULLY.getMessage());
-//		return response;
-//	}
+
 //
 //	@Override
 //	public Response<List<ClassDto>> getClasswithSort(String field) {
@@ -286,10 +264,10 @@ public class ClassServiceImpl implements ClassService {
 //		return getListofClasses;
 //	}
 //
-//	@Override
-//	public ByteArrayInputStream load() {
-//		List<ClassDetail> classd = classRepository.findAll();
-//		ByteArrayInputStream out = ClassCsvHelper.classCSV(classd);
-//		return out;
-//	}
+	@Override
+	public ByteArrayInputStream load() {
+		List<ClassDetail> classd = classRepository.findAll();
+		ByteArrayInputStream out = ClassCsvHelper.classCSV(classd);
+		return out;
+	}
 }
