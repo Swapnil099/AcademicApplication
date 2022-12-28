@@ -24,6 +24,7 @@ public class EducationalInstitutionMapper {
 	
 	ModelMapper modelMapper = new ModelMapper();
 	
+
 	@Autowired
 	RegionRepository regionRepository;
 
@@ -33,7 +34,7 @@ public class EducationalInstitutionMapper {
 		educationalInstitutionDto.setRegionId(regionId);
 		return educationalInstitutionDto;
 	}
-
+	
 	public List<EducationalInstitutionDto> entitiesToDtos(List<EducationalInstitution> educationalInstitution) {
 		return educationalInstitution.stream().filter(Objects::nonNull).map(this::entityToDto)
 				.collect(Collectors.toList());
@@ -85,9 +86,6 @@ public class EducationalInstitutionMapper {
 	
 	
 	
-	//-------------
-	
-	
 	public EducationalInstitutionDto entityToDtos(EducationalInstitution educationalInstitution) {
 		EducationalInstitutionDto educationalInstitutionDto = modelMapper.map(educationalInstitution, EducationalInstitutionDto.class);
 		Set<Integer> regionId = educationalInstitution.getRegion().stream().map(region -> region.getId()).collect(Collectors.toSet());
@@ -110,6 +108,9 @@ public class EducationalInstitutionMapper {
 		
 		return new EducationRegionGetDto(educationalInstitutionDto,regionDtoSet);
 	}
+	
+	
+	
 		
 
 }
