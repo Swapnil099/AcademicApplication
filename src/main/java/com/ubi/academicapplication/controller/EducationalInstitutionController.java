@@ -22,9 +22,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ubi.academicapplication.dto.educationaldto.EducationalInstitutionDto;
-import com.ubi.academicapplication.dto.regionDto.EIRegionMappingDto;
-import com.ubi.academicapplication.dto.regionDto.EducationRegionGetDto;
-import com.ubi.academicapplication.dto.regionDto.EducationalRegionDto;
+import com.ubi.academicapplication.dto.educationaldto.regionDto.EIRegionMappingDto;
+import com.ubi.academicapplication.dto.educationaldto.regionDto.EducationRegionGetDto;
+import com.ubi.academicapplication.dto.educationaldto.regionDto.EducationalRegionDto;
 import com.ubi.academicapplication.dto.response.Response;
 import com.ubi.academicapplication.security.roleaccessinterface.IsSuperAdmin;
 import com.ubi.academicapplication.service.EducationalInstitutionService;
@@ -54,25 +54,12 @@ public class EducationalInstitutionController {
 
 	}
 
-	@Operation(summary = "Get Educational Institution By Id", security = @SecurityRequirement(name = "bearerAuth"))
-	@GetMapping("/{id}")
-	@IsSuperAdmin
-	public ResponseEntity<Response<EducationalInstitutionDto>> getSingleEducationalInstitution(@PathVariable int id) {
-		Response<EducationalInstitutionDto> response = educationalInstitutionService
-				.getSingleEducationalInstitution(id);
-		if (response.getStatusCode() == 200) {
-			return ResponseEntity.status(HttpStatus.OK).body(response);
-		} else {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-		}
-	}
-
 	@Operation(summary = "Get Educational Institution By Name", security = @SecurityRequirement(name = "bearerAuth"))
 	@GetMapping("name/{educationalInstitutionName}")
 	@IsSuperAdmin
-	public ResponseEntity<Response<EducationalInstitutionDto>> getEducationalInstByName(
+	public ResponseEntity<Response<EducationRegionGetDto>> getEducationalInstByName(
 			@PathVariable String educationalInstitutionName) {
-		Response<EducationalInstitutionDto> response = educationalInstitutionService
+		Response<EducationRegionGetDto> response = educationalInstitutionService
 				.getEducationalInstituteByName(educationalInstitutionName);
 		if (response.getStatusCode() == 200) {
 			return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -122,26 +109,17 @@ public class EducationalInstitutionController {
 		return ResponseEntity.ok().body(updateEducationalInst);
 
 	}
-
-	@Operation(summary = "Map EducationalInstitute and  Region", security = @SecurityRequirement(name = "bearerAuth"))
-	@PostMapping("/addRegion")
-	@IsSuperAdmin
-	public ResponseEntity<Response<EducationalRegionDto>> addRegion(@RequestBody EIRegionMappingDto eduRegionDto) {
-		Response<EducationalRegionDto> response = educationalInstitutionService.addRegion(eduRegionDto);
-		return ResponseEntity.ok().body(response);
-	}
-
+	
 	@Operation(summary = "Get Region In EducationalInstitute", security = @SecurityRequirement(name = "bearerAuth"))
 	@GetMapping("/getEduInst/{id}")
 	@IsSuperAdmin
-	public ResponseEntity<Response<EducationalRegionDto>> getRegionInEduIst(@PathVariable int id) {
-		Response<EducationalRegionDto> response = educationalInstitutionService.getEduInstwithRegion(id);
+	public ResponseEntity<Response<EducationRegionGetDto>> getRegionInEduIst(@PathVariable int id) {
+		Response<EducationRegionGetDto> response = educationalInstitutionService.getEduInstwithRegion(id);
 		return ResponseEntity.ok().body(response);
 	}
-	
-	
-	//-----Sorting
-	
+
+	// -----Sorting
+
 	@Operation(summary = "Get EducationalInstitution in Sorting", security = @SecurityRequirement(name = "bearerAuth"))
 	@GetMapping("/sort/{field}")
 	@IsSuperAdmin
@@ -149,20 +127,16 @@ public class EducationalInstitutionController {
 		Response<List<EducationalInstitutionDto>> response = educationalInstitutionService.getEduInstwithSort(field);
 		return ResponseEntity.ok().body(response);
 	}
-	
-	
-	@Operation(summary="Download file ",security=@SecurityRequirement(name= "bearerAuth"))
+
+	@Operation(summary = "Download file ", security = @SecurityRequirement(name = "bearerAuth"))
 	@GetMapping("/download")
 	@IsSuperAdmin
-	public ResponseEntity<Resource> getCSVFileData()
-	{
-	    String filename = "education.csv";
-	    InputStreamResource file = new InputStreamResource(educationalInstitutionService.load());
+	public ResponseEntity<Resource> getCSVFileData() {
+		String filename = "education.csv";
+		InputStreamResource file = new InputStreamResource(educationalInstitutionService.load());
 
-	    return ResponseEntity.ok()
-	        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
-	        .contentType(MediaType.parseMediaType("application/csv"))
-	        .body(file);
+		return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
+				.contentType(MediaType.parseMediaType("application/csv")).body(file);
 	}
 
 }

@@ -1,8 +1,7 @@
-package com.ubi.academicapplication.dto.regionDto;
+package com.ubi.academicapplication.dto.educationaldto.regionDto;
 
 import java.util.Set;
 
-import com.ubi.academicapplication.dto.educationaldto.EducationalInstitutionDto;
 import com.ubi.academicapplication.dto.school.SchoolDto;
 
 import lombok.AllArgsConstructor;

@@ -1,7 +1,9 @@
 package com.ubi.academicapplication.dto.educationaldto;
 
+import java.time.LocalDate;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ubi.academicapplication.entity.Region;
 
@@ -31,7 +33,7 @@ public class EducationalInstitutionDto {
 	private String exemptionFlag;
 
 	private Long vvnAccount;
-	
+
 	private Set<Integer> regionId;
 
 }

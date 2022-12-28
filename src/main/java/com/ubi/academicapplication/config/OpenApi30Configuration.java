@@ -1,4 +1,4 @@
-package com.ubi.academicapplication.controller.config;
+package com.ubi.academicapplication.config;
 
 
 import org.springframework.context.annotation.Configuration;

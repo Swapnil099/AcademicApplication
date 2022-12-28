@@ -3,20 +3,20 @@ package com.ubi.academicapplication.service;
 import java.io.ByteArrayInputStream;
 import java.util.List;
 
-import com.ubi.academicapplication.dto.regionDto.RegionCreationDto;
-import com.ubi.academicapplication.dto.regionDto.RegionDetailsDto;
-import com.ubi.academicapplication.dto.regionDto.RegionDto;
-import com.ubi.academicapplication.dto.regionDto.RegionSchoolDto;
-import com.ubi.academicapplication.dto.regionDto.RegionSchoolMappingDto;
+import com.ubi.academicapplication.dto.educationaldto.regionDto.RegionCreationDto;
+import com.ubi.academicapplication.dto.educationaldto.regionDto.RegionDetailsDto;
+import com.ubi.academicapplication.dto.educationaldto.regionDto.RegionDto;
+import com.ubi.academicapplication.dto.educationaldto.regionDto.RegionSchoolDto;
+import com.ubi.academicapplication.dto.educationaldto.regionDto.RegionSchoolMappingDto;
 import com.ubi.academicapplication.dto.response.Response;
 
 public interface RegionService {
 
 	Response<RegionDetailsDto> addRegion(RegionCreationDto regionCreationDto);
 
-	Response<List<RegionDto>> getRegionDetails(Integer PageNumber, Integer PageSize);
+	Response<List<RegionDetailsDto>> getRegionDetails(Integer PageNumber, Integer PageSize);
 
-	public Response<RegionDto> getRegionById(int id);
+	public Response<RegionDetailsDto> getRegionById(int id);
 
 	public Response<RegionDto> deleteRegionById(int id);
 
@@ -32,7 +32,7 @@ public interface RegionService {
 
 	Response<RegionSchoolDto> getRegionwithSchool(int id);
 	
-	Response<List<RegionDto>> getRegionwithSort(String field);
+	Response<List<RegionDetailsDto>> getRegionwithSort(String field);
 
 }
 

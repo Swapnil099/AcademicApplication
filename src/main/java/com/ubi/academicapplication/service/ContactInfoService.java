@@ -3,7 +3,6 @@ package com.ubi.academicapplication.service;
 import java.util.List;
 
 import com.ubi.academicapplication.dto.contactinfodto.ContactInfoDto;
-import com.ubi.academicapplication.dto.regionDto.RegionDto;
 import com.ubi.academicapplication.dto.response.Response;
 
 public interface ContactInfoService {

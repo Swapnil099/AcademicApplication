@@ -2,16 +2,13 @@ package com.ubi.academicapplication.mapper;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 import com.ubi.academicapplication.dto.classdto.ClassDto;
-import com.ubi.academicapplication.dto.regionDto.RegionDto;
 import com.ubi.academicapplication.entity.ClassDetail;
-import com.ubi.academicapplication.entity.Region;
 
 @Component
 public class ClassMapper {

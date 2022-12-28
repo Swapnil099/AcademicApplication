@@ -1,5 +1,6 @@
 package com.ubi.academicapplication.entity;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -25,42 +26,33 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 @ToString
 public class EducationalInstitution {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
-	
+
 	private String educationalInstitutionCode;
-	
+
 	private String educationalInstitutionName;
-	
+
 	private String educationalInstitutionType;
-	
+
 	private Long strength;
-	
+
 	private String state;
-	
+
 	private String exemptionFlag;
-	
+
 	private Long vvnAccount;
-	
-	
-	@ManyToMany(cascade=CascadeType.ALL)
-	@JoinTable(name="EI_REGION_TABLE",
-	joinColumns= {
-			@JoinColumn(name="educationalInstitution_id",referencedColumnName="id")
-	},
-	inverseJoinColumns= {
-			@JoinColumn(name="region_id",referencedColumnName="id")
-	})
-	
+
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(name = "EI_REGION_TABLE", joinColumns = {
+			@JoinColumn(name = "educationalInstitution_id", referencedColumnName = "id") }, inverseJoinColumns = {
+					@JoinColumn(name = "region_id", referencedColumnName = "id") })
+
 	private Set<Region> region;
-	
-	
-	
-	
-	
+
 }

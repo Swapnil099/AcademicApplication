@@ -1,4 +1,4 @@
-package com.ubi.academicapplication.dto.regionDto;
+package com.ubi.academicapplication.dto.educationaldto.regionDto;
 
 import java.util.Set;
 
@@ -9,9 +9,17 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegionCreationDto {
+public class RegionDto {
+
+	private int id;
+	
 	private String code;
+	
 	private String name;
+	
 	private Set<Integer> eduInstId;
+	
 	private Set<Integer> schoollId;
+	
+	
 }
