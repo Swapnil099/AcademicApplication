@@ -1,7 +1,9 @@
 package com.ubi.academicapplication.entity;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -33,7 +35,7 @@ public class ClassDetail
 {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "ClassId")
 	private Long classId;
 
@@ -48,7 +50,7 @@ public class ClassDetail
 	private School school;
 	
 	@OneToMany(mappedBy = "classDetail",cascade = CascadeType.ALL)	
-	List<Student> students = new ArrayList<>();
+	Set<Student> students = new HashSet<>();
 }
 
 
