@@ -1,4 +1,4 @@
-package com.ubi.academicapplication.dto.regionDto;
+package com.ubi.academicapplication.dto.educationaldto.regionDto;
 
 
 import lombok.AllArgsConstructor;
