@@ -1,13 +1,19 @@
 package com.ubi.academicapplication.controller;
 
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ubi.academicapplication.dto.classdto.ClassDto;
@@ -35,27 +41,40 @@ public class ClassController
 		Response<ClassStudentDto> response = classServiceImpl.addClassDetails(classDto);
 		return ResponseEntity.ok().body(response);
 	}
-//	
-//	@Operation(summary = "Get All Class details", security = @SecurityRequirement(name = "bearerAuth"))
-//	@GetMapping
-//	public ResponseEntity<Response<List<ClassDto>>> getClassDetails(	
-//			@RequestParam(value = "PageNumber", defaultValue = "0", required = false) Integer pageNumber,
-//			@RequestParam(value = "PageSize", defaultValue = "5", required = false) Integer pageSize) {
-//		Response<List<ClassDto>> response = classServiceImpl.getClassDetails(pageNumber, pageSize);
-//		return ResponseEntity.ok().body(response);
-//
-//	}
-//
-//	@GetMapping("{classid}")
-//	@Operation(summary = "Get Class By Id", security = @SecurityRequirement(name = "bearerAuth"))
-//	public ResponseEntity<Response> getClassById(@PathVariable("classid") Long classidL){
-//		Response response = classServiceImpl.getClassById(classidL);
-//		if(response.getStatusCode()==200){
-//			return ResponseEntity.status(HttpStatus.OK).body(response);
-//		}else{
-//			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response); 
-//		}
-//	}
+	
+	@Operation(summary = "Get All Class details", security = @SecurityRequirement(name = "bearerAuth"))
+	@GetMapping
+	public ResponseEntity<Response<List<ClassStudentDto>>> getClassDetails(	
+			@RequestParam(value = "PageNumber", defaultValue = "0", required = false) Integer pageNumber,
+			@RequestParam(value = "PageSize", defaultValue = "5", required = false) Integer pageSize) {
+		Response<List<ClassStudentDto>> response = classServiceImpl.getClassDetails(pageNumber, pageSize);
+		return ResponseEntity.ok().body(response);
+
+	}
+
+	@GetMapping("/{classid}")
+	@Operation(summary = "Get Class By Id", security = @SecurityRequirement(name = "bearerAuth"))
+	public ResponseEntity<Response<ClassStudentDto>> getClassById(@PathVariable("classid") Long classidL){
+		Response<ClassStudentDto> response = classServiceImpl.getClassById(classidL);
+		if(response.getStatusCode()==200){
+			return ResponseEntity.status(HttpStatus.OK).body(response);
+		}else{
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response); 
+		}
+	}
+	
+	@GetMapping("/get/{className}")
+	@Operation(summary = "Get Class By Name", security = @SecurityRequirement(name = "bearerAuth"))
+	public ResponseEntity<Response<ClassStudentDto>> getClassByName(@PathVariable("className") String className){
+		Response<ClassStudentDto> response = classServiceImpl.getClassByName(className);
+		if(response.getStatusCode()==200){
+			return ResponseEntity.status(HttpStatus.OK).body(response);
+		}else{
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response); 
+		}
+	}
+	
+	
 //
 //	@DeleteMapping("{classid}")
 //	@Operation(summary = "Delete Class By Id", security = @SecurityRequirement(name = "bearerAuth"))

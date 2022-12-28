@@ -1,22 +1,31 @@
 package com.ubi.academicapplication.service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.ubi.academicapplication.dto.classdto.ClassDto;
 import com.ubi.academicapplication.dto.classdto.ClassStudentDto;
 import com.ubi.academicapplication.dto.response.Response;
+import com.ubi.academicapplication.dto.student.StudentDto;
 import com.ubi.academicapplication.entity.ClassDetail;
 import com.ubi.academicapplication.entity.Student;
 import com.ubi.academicapplication.error.CustomException;
 import com.ubi.academicapplication.error.HttpStatusCode;
 import com.ubi.academicapplication.error.Result;
 import com.ubi.academicapplication.mapper.ClassMapper;
+import com.ubi.academicapplication.mapper.SchoolMapper;
 import com.ubi.academicapplication.mapper.StudentMapper;
 import com.ubi.academicapplication.repository.ClassRepository;
 import com.ubi.academicapplication.repository.SchoolRepository;
@@ -38,6 +47,9 @@ public class ClassServiceImpl implements ClassService {
 
 	@Autowired
 	private ClassMapper classMapper;
+	
+	@Autowired
+	private SchoolMapper schoolMapper;
 
 	@Autowired
 	private StudentMapper studentMapper;
@@ -46,11 +58,7 @@ public class ClassServiceImpl implements ClassService {
 
 		Result<ClassStudentDto> res = new Result<>();
 		Response<ClassStudentDto> response = new Response<>();
-		System.out.println("Hi-----------------");
-	  //  Optional<ClassDetail> tempClass=classRepository.findById(classDto.getClassId());
-	    System.out.println("Hellooooo---");
-	    
-
+		
 		ClassDetail className = classRepository.getClassByclassName(classDto.getClassName());
 		ClassDetail classCode = classRepository.getClassByclassCode(classDto.getClassCode());
 //		if (tempClass.isPresent()) {
@@ -90,41 +98,62 @@ public class ClassServiceImpl implements ClassService {
 		return response;
 	}
 
-//	public Response<List<ClassDto>> getClassDetails(Integer PageNumber, Integer PageSize) {
-//
-//		Result<List<ClassDto>> allClasses = new Result<>();
-//		Pageable pageing = PageRequest.of(PageNumber, PageSize);
-//		Response<List<ClassDto>> getListofClasses = new Response<List<ClassDto>>();
-//
-//		Page<ClassDetail> classList = this.classRepository.findAll(pageing);
-//		List<ClassDto> classDto = classMapper.entitiesToDtos(classList.toList());
-//		if (classList.isEmpty()) {
-//			throw new CustomException(HttpStatusCode.RESOURCE_NOT_FOUND.getCode(), HttpStatusCode.RESOURCE_NOT_FOUND,
-//					HttpStatusCode.RESOURCE_NOT_FOUND.getMessage(), allClasses);
-//		}
-//		allClasses.setData(classDto);
-//		getListofClasses.setStatusCode(HttpStatusCode.CLASS_RETREIVED_SUCCESSFULLY.getCode());
-//		getListofClasses.setMessage(HttpStatusCode.CLASS_RETREIVED_SUCCESSFULLY.getMessage());
-//		getListofClasses.setResult(allClasses);
-//		return getListofClasses;
-//	}
-//
-//	public Response<ClassDto> getClassById(Long classidL) {
-//
-//		Response<ClassDto> getClass = new Response<>();
-//		Optional<ClassDetail> classDetail = this.classRepository.findById(classidL);
-//		Result<ClassDto> classResult = new Result<>();
-//		if (!classDetail.isPresent()) {
-//			throw new CustomException(HttpStatusCode.NO_CLASS_MATCH_WITH_ID.getCode(),
-//					HttpStatusCode.NO_CLASS_MATCH_WITH_ID, HttpStatusCode.NO_CLASS_MATCH_WITH_ID.getMessage(),
-//					classResult);
-//		}
-//		classResult.setData(classMapper.entityToDto(classDetail.get()));
-//		getClass.setStatusCode(HttpStatusCode.CLASS_RETREIVED_SUCCESSFULLY.getCode());
-//		getClass.setMessage(HttpStatusCode.CLASS_RETREIVED_SUCCESSFULLY.getMessage());
-//		getClass.setResult(classResult);
-//		return getClass;
-//	}
+	public Response<List<ClassStudentDto>> getClassDetails(Integer PageNumber, Integer PageSize) {
+
+		Result<List<ClassStudentDto>> allClasses = new Result<>();
+		Pageable pageing = PageRequest.of(PageNumber, PageSize);
+		Response<List<ClassStudentDto>> getListofClasses = new Response<List<ClassStudentDto>>();
+
+		Page<ClassDetail> classList = this.classRepository.findAll(pageing);
+		List<ClassStudentDto> classDto =new ArrayList();
+		
+		for(ClassDetail classDetail:classList)
+		{
+			ClassStudentDto classStudentDto=new ClassStudentDto();
+			classStudentDto.setClassDto(classMapper.entityToDto(classDetail));
+			classStudentDto.setSchoolDto(schoolMapper.entityToDto(classDetail.getSchool()));
+			//Set<Student> s1=classDetail.getStudents();
+		    Set<StudentDto> studentDto=classDetail.getStudents().stream()
+		    		.map(students -> studentMapper.entityToDto(students)).collect(Collectors.toSet());
+		    classStudentDto.setStudentDto(studentDto);
+		    classDto.add(classStudentDto);
+		}
+		if (classList.isEmpty()) {
+		throw new CustomException(HttpStatusCode.RESOURCE_NOT_FOUND.getCode(), HttpStatusCode.RESOURCE_NOT_FOUND,
+				HttpStatusCode.RESOURCE_NOT_FOUND.getMessage(), allClasses);
+		}
+		
+		allClasses.setData(classDto);
+		getListofClasses.setStatusCode(HttpStatusCode.CLASS_RETREIVED_SUCCESSFULLY.getCode());
+		getListofClasses.setMessage(HttpStatusCode.CLASS_RETREIVED_SUCCESSFULLY.getMessage());
+		getListofClasses.setResult(allClasses);
+		return getListofClasses;
+	}
+
+	public Response<ClassStudentDto> getClassById(Long classid) {
+
+		Response<ClassStudentDto> getClass = new Response<>();
+		Optional<ClassDetail> classDetail = this.classRepository.findById(classid);
+		Result<ClassStudentDto> classResult = new Result<>();
+		if (!classDetail.isPresent()) {
+			throw new CustomException(HttpStatusCode.NO_CLASS_MATCH_WITH_ID.getCode(),
+					HttpStatusCode.NO_CLASS_MATCH_WITH_ID, HttpStatusCode.NO_CLASS_MATCH_WITH_ID.getMessage(),
+					classResult);
+		}
+		
+		ClassStudentDto classStudentDto=new ClassStudentDto();
+		classStudentDto.setClassDto(classMapper.entityToDto(classDetail.get()));
+		classStudentDto.setSchoolDto(schoolMapper.entityToDto(classDetail.get().getSchool()));
+		Set<StudentDto> studentDto=classDetail.get().getStudents().stream()
+	    		.map(students -> studentMapper.entityToDto(students)).collect(Collectors.toSet());
+	    classStudentDto.setStudentDto(studentDto);
+	    ;
+		classResult.setData(classStudentDto);
+		getClass.setStatusCode(HttpStatusCode.CLASS_RETREIVED_SUCCESSFULLY.getCode());
+		getClass.setMessage(HttpStatusCode.CLASS_RETREIVED_SUCCESSFULLY.getMessage());
+		getClass.setResult(classResult);
+		return getClass;
+	}
 
 //	public Response<ClassDto> deleteClassById(Long id) {
 //		Result<ClassDto> res = new Result<>();
@@ -189,23 +218,28 @@ public class ClassServiceImpl implements ClassService {
 //		return response;
 //	}
 //
-//	@Override
-//	public Response<ClassDto> getClassByName(String className) {
-//
-//		Response<ClassDto> getClass = new Response<ClassDto>();
-//		ClassDetail classDetail = classRepository.getClassByclassName(className);
-//		Result<ClassDto> classResult = new Result<>();
-//		if (classDetail == null) {
-//			throw new CustomException(HttpStatusCode.CLASS_NOT_FOUND.getCode(), HttpStatusCode.CLASS_NOT_FOUND,
-//					HttpStatusCode.CLASS_NOT_FOUND.getMessage(), classResult);
-//		}
-//
-//		classResult.setData(classMapper.entityToDto(classDetail));
-//		getClass.setStatusCode(HttpStatusCode.CLASS_RETREIVED_SUCCESSFULLY.getCode());
-//		getClass.setMessage(HttpStatusCode.CLASS_RETREIVED_SUCCESSFULLY.getMessage());
-//		getClass.setResult(classResult);
-//		return getClass;
-//	}
+	@Override
+	public Response<ClassStudentDto> getClassByName(String className) {
+
+		Response<ClassStudentDto> getClass = new Response<ClassStudentDto>();
+		ClassDetail classDetail = this.classRepository.getClassByclassName(className);
+		Result<ClassStudentDto> classResult = new Result<>();
+		if (classDetail == null) {
+			throw new CustomException(HttpStatusCode.CLASS_NOT_FOUND.getCode(), HttpStatusCode.CLASS_NOT_FOUND,
+					HttpStatusCode.CLASS_NOT_FOUND.getMessage(), classResult);
+		}
+		ClassStudentDto classStudentDto=new ClassStudentDto();
+		classStudentDto.setClassDto(classMapper.entityToDto(classDetail));
+		classStudentDto.setSchoolDto(schoolMapper.entityToDto(classDetail.getSchool()));
+		Set<StudentDto> studentDto=classDetail.getStudents().stream()
+	    		.map(students -> studentMapper.entityToDto(students)).collect(Collectors.toSet());
+	    classStudentDto.setStudentDto(studentDto);
+	    classResult.setData(classStudentDto);
+		getClass.setStatusCode(HttpStatusCode.CLASS_RETREIVED_SUCCESSFULLY.getCode());
+		getClass.setMessage(HttpStatusCode.CLASS_RETREIVED_SUCCESSFULLY.getMessage());
+		getClass.setResult(classResult);
+		return getClass;
+	}
 //
 //	@Override
 //	public Response<List<StudentDto>> getClasswithStudent(Long id) {

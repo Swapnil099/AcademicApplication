@@ -49,6 +49,16 @@ public class ClassMapper {
 		return classDtos.stream().filter(Objects::nonNull).map(this::dtoToEntity).collect(Collectors.toList());
 	}
 	
+	public ClassDto entityToDtos(ClassDetail classDetail)
+	{
+		ClassDto classDto=modelMapper.map(classDetail, ClassDto.class);
+		classDto.setSchoolId(classDetail.getSchool().getSchoolId());
+		Set<Long> studentId=classDetail.getStudents().stream().map(classDetails -> classDetails.getStudentId()).collect(Collectors.toSet());
+		classDto.setStudentId(studentId);
+		return classDto;
+	}
+	
+	
 	public ClassStudentDto toStudentDto(ClassDetail classDetail)
 	{
 		ClassDto classDto=this.entityToDto(classDetail);
@@ -70,7 +80,6 @@ public class ClassMapper {
 		schoolDto.setVvnAccount(school.getVvnAccount());
 		schoolDto.setVvnFund(school.getVvnFund());
 		schoolDto.setRegionId(school.getRegion().getId());
-		//classDto.setSchoolId(classDetail.getSchool().getSchoolId());
 		Set<StudentDto> studentDtoSet=new HashSet<>();
 		if(classDetail.getStudents()!=null)
 		{
@@ -99,7 +108,7 @@ public class ClassMapper {
 			}
 		}
 		return new ClassStudentDto(classDto,schoolDto, studentDtoSet );
-//		classDto.setStudentId(null);
 	}
+	
 
 }
