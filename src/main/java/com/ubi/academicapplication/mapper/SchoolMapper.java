@@ -1,6 +1,7 @@
 package com.ubi.academicapplication.mapper;
 
 import java.util.HashSet;
+
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -11,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.ubi.academicapplication.dto.classdto.ClassDto;
-import com.ubi.academicapplication.dto.regionDto.RegionDto;
+import com.ubi.academicapplication.dto.educationaldto.regionDto.RegionDto;
 import com.ubi.academicapplication.dto.school.SchoolDto;
 import com.ubi.academicapplication.dto.school.SchoolRegionDto;
 import com.ubi.academicapplication.entity.ClassDetail;
