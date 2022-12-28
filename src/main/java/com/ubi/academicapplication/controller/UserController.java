@@ -39,11 +39,12 @@ public class UserController {
         return ResponseEntity.ok().body(userResponse);
     }
 
+
     @Operation(summary = "Get All Users", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping
-    @IsSuperAdmin
-    public ResponseEntity<Response<List<UserDto>>> getAllUsers() {
-        Response<List<UserDto>> allUserDtoResponse = userService.getAllUsers();
+    @IsPrincipal
+    public ResponseEntity<Response<List<UserContactInfoDto>>> getAllUsers() {
+        Response<List<UserContactInfoDto>> allUserDtoResponse = userService.getAllUsers();
         return ResponseEntity.ok().body(allUserDtoResponse);
     }
 
@@ -89,8 +90,8 @@ public class UserController {
     @Operation(summary = "Update User By Id", security = @SecurityRequirement(name = "bearerAuth"))
     @PatchMapping ("/{userId}")
     @IsSuperAdmin
-    public ResponseEntity<Response<UserDto>> updateUserById(@PathVariable String userId, @RequestBody UserCreationDto userCreationDto) {
-        Response<UserDto> response = userService.updateUserById(userId, userCreationDto);
+    public ResponseEntity<Response<UserCreationDto>> updateUserById(@PathVariable String userId, @RequestBody UserCreationDto userCreationDto) {
+        Response<UserCreationDto> response = userService.updateUserById(userId, userCreationDto);
         return ResponseEntity.ok().body(response);
     }
     

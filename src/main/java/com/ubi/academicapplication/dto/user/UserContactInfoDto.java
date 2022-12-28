@@ -1,6 +1,7 @@
 package com.ubi.academicapplication.dto.user;
 
 import com.ubi.academicapplication.dto.contactinfodto.ContactInfoDto;
+import com.ubi.academicapplication.dto.role.RoleDto;
 import com.ubi.academicapplication.entity.ContactInfo;
 import com.ubi.academicapplication.entity.User;
 
@@ -13,9 +14,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserContactInfoDto {
 	
-	//private UserDto userDto;
-	//private ContactInfoDto contactInfoDto;
+	private UserDto userDto;
+	private RoleDto roleDto;
+	private ContactInfoDto contactInfoDto;
 
-	private User user;
-	private ContactInfo contactInfo;
+	
 }

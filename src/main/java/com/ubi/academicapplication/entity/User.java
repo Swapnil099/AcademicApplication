@@ -2,8 +2,10 @@ package com.ubi.academicapplication.entity;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -60,6 +62,15 @@ public class User implements UserDetails {
 		if(this.role != null) roles.add(new Authority(role.getRoleType()));
 		return roles;
 	}
+	
+	public User(String username, String password,Boolean activeStatus,ContactInfo contactInfo, Role role) {
+		this.username = username;
+		this.password = password;
+		this.isEnabled = activeStatus;
+		this.contactInfo=contactInfo;
+		this.role = role;
+		
+	}
 
 	@Override
 	public boolean isAccountNonExpired() {
@@ -81,7 +92,7 @@ public class User implements UserDetails {
 		return true;
 	}
 
-	@OneToOne
+	@OneToOne(cascade=CascadeType.ALL)
     @JoinColumn(name = "contact_id", referencedColumnName = "contactInfoId")
     private ContactInfo contactInfo;
 }

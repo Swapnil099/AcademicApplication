@@ -12,11 +12,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.ubi.academicapplication.dto.contactinfodto.ContactInfoCreationDto;
 import com.ubi.academicapplication.dto.contactinfodto.ContactInfoDto;
-import com.ubi.academicapplication.dto.regionDto.RegionDto;
 import com.ubi.academicapplication.dto.response.Response;
 import com.ubi.academicapplication.entity.ContactInfo;
-import com.ubi.academicapplication.entity.Region;
 import com.ubi.academicapplication.error.CustomException;
 import com.ubi.academicapplication.error.HttpStatusCode;
 import com.ubi.academicapplication.error.Result;
@@ -34,6 +33,9 @@ public class ContactInfoServiceImpl implements ContactInfoService {
 	@Autowired
 	private ContactInfoMapper contactInfoMapper;
 
+	@Autowired
+	Result result;
+
 	public Response<ContactInfoDto> addContactInfo(ContactInfoDto contactInfoDto) {
 
 		Response<ContactInfoDto> response = new Response<>();
@@ -49,9 +51,9 @@ public class ContactInfoServiceImpl implements ContactInfoService {
 		response.setResult(new Result<ContactInfoDto>(contactInfoMapper.entityToDto(savedContact)));
 		return response;
 	}
-	
-	    public Response<List<ContactInfoDto>> getContactInfo(Integer PageNumber, Integer PageSize) {
-	    Result<List<ContactInfoDto>> res = new Result<>();
+
+	public Response<List<ContactInfoDto>> getContactInfo(Integer PageNumber, Integer PageSize) {
+		Result<List<ContactInfoDto>> res = new Result<>();
 		res.setData(null);
 		Pageable paging = PageRequest.of(PageNumber, PageSize);
 		Response<List<ContactInfoDto>> getListofContacts = new Response<>();
@@ -66,15 +68,15 @@ public class ContactInfoServiceImpl implements ContactInfoService {
 		getListofContacts.setResult(res);
 		return getListofContacts;
 	}
-	 
-	   public Response<ContactInfoDto> getContactInfoById(Long classidL) {
-		
+
+	public Response<ContactInfoDto> getContactInfoById(Long contactInfoId) {
+
 		Result<ContactInfoDto> res = new Result<>();
 		res.setData(null);
 		Response<ContactInfoDto> getClass = new Response<ContactInfoDto>();
 		Optional<ContactInfo> cls = null;
 		Result<ContactInfoDto> contactResult = new Result<>();
-		cls = this.contactInfoRepository.findById(classidL);
+		cls = this.contactInfoRepository.findById(contactInfoId);
 		if (!cls.isPresent()) {
 			throw new CustomException(HttpStatusCode.NO_CONTACTINFO_MATCH_WITH_ID.getCode(),
 					HttpStatusCode.NO_CONTACTINFO_MATCH_WITH_ID, HttpStatusCode.NO_CONTACTINFO_MATCH_WITH_ID.getMessage(), res);
@@ -84,10 +86,10 @@ public class ContactInfoServiceImpl implements ContactInfoService {
 		getClass.setResult(contactResult);
 		return getClass;
 	}
-	  
-	   public Response<ContactInfoDto> deleteContactById(Long id) {
+
+	public Response<ContactInfoDto> deleteContactById(Long id) {
 		Result<ContactInfoDto> res = new Result<>();
-		
+
 		res.setData(null);
 		Optional<ContactInfo> contactDetail = contactInfoRepository.findById(id);
 		if (!contactDetail.isPresent()) {
@@ -102,59 +104,66 @@ public class ContactInfoServiceImpl implements ContactInfoService {
 		return response;
 	}
 
-	   public Response<ContactInfoDto> updateContactDetails(ContactInfoDto contactInfoDto) {
-			Result<ContactInfoDto> res = new Result<>();
-			
-			res.setData(null);
-			Optional<ContactInfo> existingContactContainer = contactInfoRepository.findById(contactInfoDto.getContactInfoId());
-			if (!existingContactContainer.isPresent()) {
-				throw new CustomException(HttpStatusCode.NO_CONTACTINFO_FOUND.getCode(), HttpStatusCode.NO_CONTACTINFO_FOUND,
-						HttpStatusCode.NO_CONTACTINFO_FOUND.getMessage(), res);
-			}
-			ContactInfoDto existingContacts = contactInfoMapper.entityToDto(existingContactContainer.get());
-			existingContacts.setFirstName(contactInfoDto.getFirstName());
-			existingContacts.setMiddleName(contactInfoDto.getMiddleName());
-			existingContacts.setLastName(contactInfoDto.getLastName());
-			existingContacts.setAddress(contactInfoDto.getAddress());
-			existingContacts.setAge(contactInfoDto.getAge());
-			existingContacts.setBloodGroup(contactInfoDto.getBloodGroup());
-			existingContacts.setState(contactInfoDto.getState());
-			existingContacts.setCity(contactInfoDto.getCity());
-			existingContacts.setNationality(contactInfoDto.getNationality());
-			existingContacts.setAadharCardNumber(contactInfoDto.getAadharCardNumber());
-			existingContacts.setEmail(contactInfoDto.getEmail());
-			existingContacts.setDob(contactInfoDto.getDob());
-			existingContacts.setGender(contactInfoDto.getGender());
-			existingContacts.setContactNumber(contactInfoDto.getContactNumber());
-			
-			ContactInfo updateContact = contactInfoRepository.save(contactInfoMapper.dtoToEntity(existingContacts));
-			Response<ContactInfoDto> response = new Response<>();
-			response.setMessage(HttpStatusCode.CONTACTINFO_UPDATED.getMessage());
-			response.setStatusCode(HttpStatusCode.CONTACTINFO_UPDATED.getCode());
-			response.setResult(new Result<>(contactInfoMapper.entityToDto(updateContact)));
-			return response;
+	@Override
+	public Response<ContactInfoCreationDto> updateContactInfoById(String contactInfoId,ContactInfoDto contactInfoDto) {
+
+		ContactInfo contactInfo = contactInfoRepository.getReferenceById(Long.parseLong(contactInfoId));
+		if(contactInfo == null){
+			throw new CustomException(HttpStatusCode.RESOURCE_NOT_FOUND.getCode(),
+					HttpStatusCode.RESOURCE_NOT_FOUND,
+					HttpStatusCode.RESOURCE_NOT_FOUND.getMessage(),
+					result);
 		}
-	   
-	   @Override
-	   public Response<List<ContactInfoDto>> getContactInfowithSort(String field) {
 
-	   	Result<List<ContactInfoDto>> allContactInfoResult = new Result<>();
+		contactInfo.setAadharCardNumber(contactInfoDto.getAadharCardNumber());
+		contactInfo.setAddress(contactInfoDto.getAddress());
+		contactInfo.setAge(contactInfoDto.getAge());
+		contactInfo.setBloodGroup(contactInfoDto.getBloodGroup());
+		contactInfo.setCity(contactInfoDto.getCity());
+		contactInfo.setContactNumber(contactInfoDto.getContactNumber());
+		contactInfo.setDob(contactInfoDto.getDob());
+		contactInfo.setEmail(contactInfoDto.getEmail());
+		contactInfo.setFirstName(contactInfoDto.getFirstName());
+		contactInfo.setGender(contactInfoDto.getGender());
+		contactInfo.setLastName(contactInfoDto.getLastName());
+		contactInfo.setMiddleName(contactInfoDto.getMiddleName());
+		contactInfo.setNationality(contactInfoDto.getNationality());
+		contactInfo.setState(contactInfoDto.getState());
 
-	   	Response<List<ContactInfoDto>> getListofContactInfo = new Response<>();
+		contactInfoRepository.save(contactInfo);
 
-	   	List<ContactInfo> list = this.contactInfoRepository.findAll(Sort.by(Sort.Direction.ASC,field));
-	   	List<ContactInfoDto> contactInfoDtos = contactInfoMapper
-	   			.entitiesToDtos(list);
+		Response response = new Response<>();
+		response.setStatusCode(HttpStatusCode.SUCCESSFUL.getCode());
+		response.setMessage(HttpStatusCode.SUCCESSFUL.getMessage());
+		response.setResult(new Result<>(contactInfoMapper.entityToDto(contactInfo)));
+		return response;
+	}
 
-	   	if (list.size() == 0) {
-	   		throw new CustomException(HttpStatusCode.NO_CONTACTINFO_FOUND.getCode(), HttpStatusCode.NO_CONTACTINFO_FOUND,
-	   				HttpStatusCode.NO_CONTACTINFO_FOUND.getMessage(), allContactInfoResult);
-	   	}
-	   	allContactInfoResult.setData(contactInfoDtos);
-	   	getListofContactInfo.setStatusCode(HttpStatusCode.CONTACTINFO_RETRIVED_SUCCESSFULLY.getCode());
-	   	getListofContactInfo.setMessage(HttpStatusCode.CONTACTINFO_RETRIVED_SUCCESSFULLY.getMessage());
-	   	getListofContactInfo.setResult(allContactInfoResult);
-	   	return getListofContactInfo;
-	   }
+	@Override
+	public Response<List<ContactInfoDto>> getContactInfowithSort(String field) {
 
+		Result<List<ContactInfoDto>> allContactInfoResult = new Result<>();
+
+		Response<List<ContactInfoDto>> getListofContactInfo = new Response<>();
+
+		List<ContactInfo> list = this.contactInfoRepository.findAll(Sort.by(Sort.Direction.ASC,field));
+		List<ContactInfoDto> contactInfoDtos = contactInfoMapper
+				.entitiesToDtos(list);
+
+		if (list.size() == 0) {
+			throw new CustomException(HttpStatusCode.NO_CONTACTINFO_FOUND.getCode(), HttpStatusCode.NO_CONTACTINFO_FOUND,
+					HttpStatusCode.NO_CONTACTINFO_FOUND.getMessage(), allContactInfoResult);
+		}
+		allContactInfoResult.setData(contactInfoDtos);
+		getListofContactInfo.setStatusCode(HttpStatusCode.CONTACTINFO_RETRIVED_SUCCESSFULLY.getCode());
+		getListofContactInfo.setMessage(HttpStatusCode.CONTACTINFO_RETRIVED_SUCCESSFULLY.getMessage());
+		getListofContactInfo.setResult(allContactInfoResult);
+		return getListofContactInfo;
+	}
+
+	@Override
+	public List<ContactInfo> getContactInfoFromString(ContactInfo contactInfo) {
+		List<ContactInfo> contactInfos = contactInfoRepository.findAll();
+		return contactInfos;
+	}
 }

@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -19,9 +20,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ubi.academicapplication.dto.contactinfodto.ContactInfoCreationDto;
 import com.ubi.academicapplication.dto.contactinfodto.ContactInfoDto;
 import com.ubi.academicapplication.dto.regionDto.RegionDto;
 import com.ubi.academicapplication.dto.response.Response;
+import com.ubi.academicapplication.dto.role.RoleCreationDto;
+import com.ubi.academicapplication.dto.role.RoleDto;
+import com.ubi.academicapplication.security.roleaccessinterface.IsSuperAdmin;
 import com.ubi.academicapplication.service.ContactInfoServiceImpl;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -73,12 +78,20 @@ public class ContactInfoController {
 
 	}
     
-    @PutMapping
+   /* @PutMapping
 	@Operation(summary = "Update Contact Details", security = @SecurityRequirement(name = "bearerAuth"))
 	public ResponseEntity<Response> updateClassDetails(@Valid @RequestBody ContactInfoDto contactInfoDto) {
 		Response<ContactInfoDto> response = contactInfoServiceImpl.updateContactDetails(contactInfoDto);
 		return ResponseEntity.ok().body(response);
-	}
+	}*/
+    
+    @Operation(summary = "Update ContactInfo By Id", security = @SecurityRequirement(name = "bearerAuth"))
+    @PatchMapping("/{contactInfoId}")
+   
+    public ResponseEntity<Response<ContactInfoCreationDto>> updateClassDetails(@PathVariable String contactInfoId, @RequestBody ContactInfoDto contactInfoDto) {
+        Response<ContactInfoCreationDto> response = contactInfoServiceImpl.updateContactInfoById(contactInfoId, contactInfoDto);
+        return ResponseEntity.ok().body(response);
+    }
     
     @Operation(summary = "Get Contact Info in Sorting", security = @SecurityRequirement(name = "bearerAuth"))
 	@GetMapping("/sort/{field}")

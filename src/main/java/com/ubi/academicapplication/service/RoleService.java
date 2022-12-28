@@ -21,4 +21,6 @@ public interface RoleService {
     Response<Set<RoleUserDto>> getUsersByRoleName(String roleType);
 
     Response<RoleDto> updateRoleById(String roleId,RoleCreationDto roleCreationDto);
+    
+    
 }
