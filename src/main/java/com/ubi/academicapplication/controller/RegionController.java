@@ -21,11 +21,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ubi.academicapplication.dto.regionDto.RegionCreationDto;
-import com.ubi.academicapplication.dto.regionDto.RegionDetailsDto;
-import com.ubi.academicapplication.dto.regionDto.RegionDto;
-import com.ubi.academicapplication.dto.regionDto.RegionSchoolDto;
-import com.ubi.academicapplication.dto.regionDto.RegionSchoolMappingDto;
+import com.ubi.academicapplication.dto.educationaldto.regionDto.RegionCreationDto;
+import com.ubi.academicapplication.dto.educationaldto.regionDto.RegionDetailsDto;
+import com.ubi.academicapplication.dto.educationaldto.regionDto.RegionDto;
+import com.ubi.academicapplication.dto.educationaldto.regionDto.RegionSchoolDto;
+import com.ubi.academicapplication.dto.educationaldto.regionDto.RegionSchoolMappingDto;
 import com.ubi.academicapplication.dto.response.Response;
 import com.ubi.academicapplication.security.roleaccessinterface.IsEducationInstituteHQAdmin;
 import com.ubi.academicapplication.service.RegionService;
@@ -56,8 +56,8 @@ public class RegionController {
 	@Operation(summary = "Get Region By Id", security = @SecurityRequirement(name = "bearerAuth"))
 	@GetMapping("/{id}")
 	@IsEducationInstituteHQAdmin
-	public ResponseEntity<Response<RegionDto>> getSingleRegion(@PathVariable int id) {
-		Response<RegionDto> response = regionService.getRegionById(id);
+	public ResponseEntity<Response<RegionDetailsDto>> getSingleRegion(@PathVariable int id) {
+		Response<RegionDetailsDto> response = regionService.getRegionById(id);
 		if (response.getStatusCode() == 200) {
 			return ResponseEntity.status(HttpStatus.OK).body(response);
 		} else {
@@ -68,15 +68,11 @@ public class RegionController {
 	@Operation(summary = "Get All Region", security = @SecurityRequirement(name = "bearerAuth"))
 	@GetMapping()
 	@IsEducationInstituteHQAdmin
-	public ResponseEntity<Response<List<RegionDto>>> getPayments(
+	public ResponseEntity<Response<List<RegionDetailsDto>>> getAllRegions(
 			@RequestParam(value = "PageNumber", defaultValue = "0", required = false) Integer pageNumber,
 			@RequestParam(value = "PageSize", defaultValue = "5", required = false) Integer pageSize) {
-		Response<List<RegionDto>> response = regionService.getRegionDetails(pageNumber, pageSize);
-		if (response.getStatusCode() == 200) {
-			return ResponseEntity.status(HttpStatus.OK).body(response);
-		} else {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-		}
+		Response<List<RegionDetailsDto>> response = regionService.getRegionDetails(pageNumber, pageSize);
+		return ResponseEntity.ok().body(response);
 
 	}
 
@@ -156,8 +152,8 @@ public class RegionController {
 	@Operation(summary = "Get Region in Sorting", security = @SecurityRequirement(name = "bearerAuth"))
 	@GetMapping("/sort/{field}")
 	@IsEducationInstituteHQAdmin
-	public ResponseEntity<Response<List<RegionDto>>> getRegionBySorting(@PathVariable String field) {
-		Response<List<RegionDto>> response = regionService.getRegionwithSort(field);
+	public ResponseEntity<Response<List<RegionDetailsDto>>> getRegionBySorting(@PathVariable String field) {
+		Response<List<RegionDetailsDto>> response = regionService.getRegionwithSort(field);
 		return ResponseEntity.ok().body(response);
 	}
 

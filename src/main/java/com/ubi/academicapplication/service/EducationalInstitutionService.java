@@ -4,9 +4,9 @@ import java.io.ByteArrayInputStream;
 import java.util.List;
 
 import com.ubi.academicapplication.dto.educationaldto.EducationalInstitutionDto;
-import com.ubi.academicapplication.dto.regionDto.EIRegionMappingDto;
-import com.ubi.academicapplication.dto.regionDto.EducationRegionGetDto;
-import com.ubi.academicapplication.dto.regionDto.EducationalRegionDto;
+import com.ubi.academicapplication.dto.educationaldto.regionDto.EIRegionMappingDto;
+import com.ubi.academicapplication.dto.educationaldto.regionDto.EducationRegionGetDto;
+import com.ubi.academicapplication.dto.educationaldto.regionDto.EducationalRegionDto;
 import com.ubi.academicapplication.dto.response.Response;
 
 public interface EducationalInstitutionService {

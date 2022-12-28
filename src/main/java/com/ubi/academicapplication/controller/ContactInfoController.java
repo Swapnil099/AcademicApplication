@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ubi.academicapplication.dto.contactinfodto.ContactInfoDto;
-import com.ubi.academicapplication.dto.regionDto.RegionDto;
 import com.ubi.academicapplication.dto.response.Response;
 import com.ubi.academicapplication.service.ContactInfoServiceImpl;
 

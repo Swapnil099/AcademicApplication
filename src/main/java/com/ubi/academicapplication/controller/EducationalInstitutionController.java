@@ -22,9 +22,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ubi.academicapplication.dto.educationaldto.EducationalInstitutionDto;
-import com.ubi.academicapplication.dto.regionDto.EIRegionMappingDto;
-import com.ubi.academicapplication.dto.regionDto.EducationRegionGetDto;
-import com.ubi.academicapplication.dto.regionDto.EducationalRegionDto;
+import com.ubi.academicapplication.dto.educationaldto.regionDto.EIRegionMappingDto;
+import com.ubi.academicapplication.dto.educationaldto.regionDto.EducationRegionGetDto;
+import com.ubi.academicapplication.dto.educationaldto.regionDto.EducationalRegionDto;
 import com.ubi.academicapplication.dto.response.Response;
 import com.ubi.academicapplication.security.roleaccessinterface.IsSuperAdmin;
 import com.ubi.academicapplication.service.EducationalInstitutionService;

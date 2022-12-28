@@ -19,10 +19,10 @@ import org.springframework.stereotype.Service;
 
 import com.ubi.academicapplication.csv.EducationalInstitutionCsvHelper;
 import com.ubi.academicapplication.dto.educationaldto.EducationalInstitutionDto;
-import com.ubi.academicapplication.dto.regionDto.EIRegionMappingDto;
-import com.ubi.academicapplication.dto.regionDto.EducationRegionGetDto;
-import com.ubi.academicapplication.dto.regionDto.EducationalRegionDto;
-import com.ubi.academicapplication.dto.regionDto.RegionGet;
+import com.ubi.academicapplication.dto.educationaldto.regionDto.EIRegionMappingDto;
+import com.ubi.academicapplication.dto.educationaldto.regionDto.EducationRegionGetDto;
+import com.ubi.academicapplication.dto.educationaldto.regionDto.EducationalRegionDto;
+import com.ubi.academicapplication.dto.educationaldto.regionDto.RegionGet;
 import com.ubi.academicapplication.dto.response.Response;
 import com.ubi.academicapplication.entity.EducationalInstitution;
 import com.ubi.academicapplication.entity.Region;
