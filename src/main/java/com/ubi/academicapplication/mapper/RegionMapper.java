@@ -64,6 +64,9 @@ public class RegionMapper {
 	public Set<RegionDto> entitiesToDto(Set<Region> region) {
 		return region.stream().filter(Objects::nonNull).map(this::entityToDto).collect(Collectors.toSet());
 	}
+	
+	
+
 
 	public Region dtoToEntity(RegionDto regionDto) {
 		return modelMapper.map(regionDto, Region.class);
@@ -106,4 +109,17 @@ public class RegionMapper {
 		return regionDto;
 	}
 	
+	
+	public RegionGet entityToDtos(Region region) {
+		return modelMapper.map(region, RegionGet.class);
+	}
+	
+	public Set<RegionGet> entitiesToDtos(Set<Region> region) {
+		return region.stream().filter(Objects::nonNull).map(this::entityToDtos).collect(Collectors.toSet());
+	}	
+	
+	
+	public RegionGet toRegionGetDto(Region region) {
+		return modelMapper.map(region, RegionGet.class);
+	}
 }
