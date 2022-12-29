@@ -36,4 +36,9 @@ public class SchoolCreationDto {
 	private int regionId;
 	
 	private Set<Long> classId;
+	
+	private int educationalInstitutionId;
+	
+	
+	
 }

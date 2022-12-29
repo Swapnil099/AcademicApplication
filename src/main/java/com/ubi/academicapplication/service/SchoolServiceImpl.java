@@ -23,15 +23,18 @@ import com.ubi.academicapplication.dto.response.Response;
 import com.ubi.academicapplication.dto.school.SchoolDto;
 import com.ubi.academicapplication.dto.school.SchoolRegionDto;
 import com.ubi.academicapplication.entity.ClassDetail;
+import com.ubi.academicapplication.entity.EducationalInstitution;
 import com.ubi.academicapplication.entity.Region;
 import com.ubi.academicapplication.entity.School;
 import com.ubi.academicapplication.error.CustomException;
 import com.ubi.academicapplication.error.HttpStatusCode;
 import com.ubi.academicapplication.error.Result;
 import com.ubi.academicapplication.mapper.ClassMapper;
+import com.ubi.academicapplication.mapper.EducationalInstitutionMapper;
 import com.ubi.academicapplication.mapper.RegionMapper;
 import com.ubi.academicapplication.mapper.SchoolMapper;
 import com.ubi.academicapplication.repository.ClassRepository;
+import com.ubi.academicapplication.repository.EducationalInstitutionRepository;
 import com.ubi.academicapplication.repository.RegionRepository;
 import com.ubi.academicapplication.repository.SchoolRepository;
 
@@ -49,6 +52,12 @@ public class SchoolServiceImpl implements SchoolService {
 	@Autowired
 	private ClassRepository classRepository;
 
+	@Autowired
+	private EducationalInstitutionRepository educationalRepository;
+	
+	@Autowired
+	private EducationalInstitutionMapper educationalMapper;
+	
 	@Autowired
 	private ClassMapper classMapper;
 
@@ -111,8 +120,10 @@ public class SchoolServiceImpl implements SchoolService {
 				school.getClassDetail().add(classDetail);
 				classDetail.setSchool(school);
 			}
-
 		}
+		
+		school.setEducationalInstitution(educationalRepository.getReferenceById(schoolDto.getEducationalInstitutionId()));
+		
 
 		School savedSchool = schoolRepository.save(school);
 
@@ -137,14 +148,17 @@ public class SchoolServiceImpl implements SchoolService {
 			schoolRegionDto.setSchoolDto(schoolMapper.entityToDtos(school));
 
 			schoolRegionDto.setRegionDto(regionMapper.toDto(school.getRegion()));
+			
 
 			Set<ClassDto> classDto = school.getClassDetail().stream()
 					.map(classDetail -> classMapper.entityToDto(classDetail)).collect(Collectors.toSet());
 
 			schoolRegionDto.setClassDto(classDto);
 			schoolDtos.add(schoolRegionDto);
-		}
-
+			
+		schoolRegionDto.setEducationalInstitutionDto(educationalMapper.toDto(school.getEducationalInstitution()));
+					}
+				
 		if (list.isEmpty()) {
 			throw new CustomException(HttpStatusCode.NO_SCHOOL_FOUND.getCode(), HttpStatusCode.NO_SCHOOL_FOUND,
 					HttpStatusCode.NO_SCHOOL_FOUND.getMessage(), allSchoolResult);
@@ -172,6 +186,7 @@ public class SchoolServiceImpl implements SchoolService {
 		schoolRegionDto.setSchoolDto(schoolMapper.entityToDto(sch.get()));
 		schoolRegionDto.setRegionDto(regionMapper.toDto(sch.get().getRegion()));
 		schoolRegionDto.setClassDto(classMapper.entitiesToDto(sch.get().getClassDetail()));
+		schoolRegionDto.setEducationalInstitutionDto(educationalMapper.toDto(sch.get().getEducationalInstitution()));
 		schoolResult.setData(schoolRegionDto);
 		getSchool.setStatusCode(HttpStatusCode.SCHOOL_RETRIVED_SUCCESSFULLY.getCode());
 		getSchool.setMessage(HttpStatusCode.SCHOOL_RETRIVED_SUCCESSFULLY.getMessage());
@@ -195,6 +210,7 @@ public class SchoolServiceImpl implements SchoolService {
 		schoolRegionDto.setSchoolDto(schoolMapper.entityToDto(sch.get()));
 		schoolRegionDto.setRegionDto(regionMapper.toDto(sch.get().getRegion()));
 		schoolRegionDto.setClassDto(classMapper.entitiesToDto(sch.get().getClassDetail()));
+		schoolRegionDto.setEducationalInstitutionDto(educationalMapper.toDto(sch.get().getEducationalInstitution()));
 		schoolResult.setData(schoolRegionDto);
 		getSchoolName.setStatusCode(HttpStatusCode.SCHOOL_RETRIVED_SUCCESSFULLY.getCode());
 		getSchoolName.setMessage(HttpStatusCode.SCHOOL_RETRIVED_SUCCESSFULLY.getMessage());
@@ -217,8 +233,13 @@ public class SchoolServiceImpl implements SchoolService {
 		for (ClassDetail classDetail : school.get().getClassDetail()) {
 			classDetail.setSchool(null);
 			classRepository.save(classDetail);
+			
+			EducationalInstitution educationalInstitution = school.get().getEducationalInstitution();
+			educationalInstitution.getSchool().remove(school.get());
+			educationalRepository.save(educationalInstitution );
+			
 		}
-
+		
 		schoolRepository.deleteById(schoolId);
 		Response<SchoolDto> response = new Response<>();
 		response.setMessage(HttpStatusCode.SCHOOL_DELETED.getMessage());
@@ -238,31 +259,38 @@ public class SchoolServiceImpl implements SchoolService {
 			throw new CustomException(HttpStatusCode.NO_SCHOOL_FOUND.getCode(), HttpStatusCode.NO_SCHOOL_FOUND,
 					HttpStatusCode.NO_SCHOOL_FOUND.getMessage(), res);
 		}
+		School school = existingSchool.get();
+		
 		SchoolDto existingSchools = schoolMapper.entityToDto(existingSchool.get());
-		existingSchools.setCode(schoolDto.getCode());
-		existingSchools.setContact(schoolDto.getContact());
-		existingSchools.setAddress(schoolDto.getAddress());
-		existingSchools.setExemptionFlag(schoolDto.isExemptionFlag());
-		existingSchools.setName(schoolDto.getName());
-		existingSchools.setStrength(schoolDto.getStrength());
-		existingSchools.setVvnAccount(schoolDto.getVvnAccount());
-		existingSchools.setStrength(schoolDto.getStrength());
-		existingSchools.setShift(schoolDto.getShift());
-		existingSchools.setType(schoolDto.getType());
-		existingSchools.setEmail(schoolDto.getEmail());
-		existingSchools.setSchoolId(schoolDto.getSchoolId());
-		existingSchools.setRegionId(schoolDto.getRegionId());
-		existingSchools.setClassId(new HashSet<>());
-
-		for (Long classId : schoolDto.getClassId()) {
-			ClassDetail classDetail = classRepository.getReferenceById(classId);
-			if (classDetail != null) 
-				existingSchools.getClassId().add(classId);
-		}
-
-		School s1 = schoolMapper.dtoToEntity(existingSchools);
-		School updateSchool = schoolRepository.save(s1);
-		SchoolRegionDto schoolRegionDto = schoolMapper.toSchoolClassDto(updateSchool);
+		school.setCode(schoolDto.getCode());
+		school.setContact(schoolDto.getContact());
+		school.setAddress(schoolDto.getAddress());
+		school.setExemptionFlag(schoolDto.isExemptionFlag());
+		school.setName(schoolDto.getName());
+		school.setStrength(schoolDto.getStrength());
+		school.setVvnAccount(schoolDto.getVvnAccount());
+		school.setStrength(schoolDto.getStrength());
+		school.setShift(schoolDto.getShift());
+		school.setType(schoolDto.getType());
+		school.setEmail(schoolDto.getEmail());
+		school.setSchoolId(schoolDto.getSchoolId());
+		
+		  for (Long classId : schoolDto.getClassId()) {
+			  ClassDetail classDetail = classRepository.getReferenceById(classId);
+			  classDetail.setSchool(school);
+			  classRepository.save(classDetail);
+			  school.getClassDetail().add(classDetail);
+		  }
+		  
+		  EducationalInstitution educationalInstitution = educationalRepository.getReferenceById(schoolDto.getEducationalInstitutionId());
+		  educationalRepository.save(educationalInstitution);
+		  school.setEducationalInstitution(educationalInstitution);
+		  
+		  School updatedSchool = schoolRepository.save(school);
+		  
+		SchoolRegionDto schoolRegionDto = schoolMapper.toSchoolClassDto(updatedSchool);
+		
+		
 		Response<SchoolRegionDto> response = new Response<>();
 		response.setMessage(HttpStatusCode.SCHOOL_UPDATED.getMessage());
 		response.setStatusCode(HttpStatusCode.SCHOOL_UPDATED.getCode());
@@ -270,6 +298,8 @@ public class SchoolServiceImpl implements SchoolService {
 		return response;
 	}
 
+	
+	
 	@Override
 	public Response<List<SchoolDto>> getSchoolwithSort(String field) {
 
