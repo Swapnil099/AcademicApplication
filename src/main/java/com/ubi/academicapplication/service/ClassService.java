@@ -15,20 +15,19 @@ public interface ClassService {
 
 	Response<ClassStudentDto> addClassDetails(ClassDto classDto);
 	
-//	Response<List<ClassDto>> getClassDetails(Integer PageNumber, Integer PageSize);
-//
-//	public Response<ClassDto> getClassById(Long classidL);
-//	
-//	public Response<ClassDto> deleteClassById(Long classidL);
-//
-//	Response<ClassDto> updateClassDetails(ClassDto classDto);
-//	
-//	Response<ClassDto> getClassByName(String className);
-//	
-//	Response<List<StudentDto>> getClasswithStudent(Long id);
-//	
-//	Response<List<ClassDto>> getClasswithSort(String field);
-//	
+	Response<List<ClassStudentDto>> getClassDetails(Integer PageNumber, Integer PageSize);
+
+	public Response<ClassStudentDto> getClassById(Long classid);
+	
+	public Response<ClassDto> deleteClassById(Long classid);
+
+	Response<ClassStudentDto> updateClassDetails(ClassDto classDto);
+	
+	Response<ClassStudentDto> getClassByName(String className);
+
+	
+	Response<List<ClassDto>> getClasswithSort(String field);
+	
 //	ByteArrayInputStream load();
 	
 }
