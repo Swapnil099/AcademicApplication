@@ -18,10 +18,10 @@ public interface ClassService {
 	Response<List<ClassStudentDto>> getClassDetails(Integer PageNumber, Integer PageSize);
 
 	public Response<ClassStudentDto> getClassById(Long classid);
-//	
-//	public Response<ClassDto> deleteClassById(Long classidL);
+	
+	public Response<ClassDto> deleteClassById(Long classid);
 
-//	Response<ClassStudentDto> updateClassDetails(ClassDto classDto);
+	Response<ClassStudentDto> updateClassDetails(ClassDto classDto);
 	
 	Response<ClassStudentDto> getClassByName(String className);
 

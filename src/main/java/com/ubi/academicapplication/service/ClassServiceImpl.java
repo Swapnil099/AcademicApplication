@@ -22,6 +22,7 @@ import com.ubi.academicapplication.dto.classdto.ClassStudentDto;
 import com.ubi.academicapplication.dto.response.Response;
 import com.ubi.academicapplication.dto.student.StudentDto;
 import com.ubi.academicapplication.entity.ClassDetail;
+import com.ubi.academicapplication.entity.School;
 import com.ubi.academicapplication.entity.Student;
 import com.ubi.academicapplication.error.CustomException;
 import com.ubi.academicapplication.error.HttpStatusCode;
@@ -63,10 +64,6 @@ public class ClassServiceImpl implements ClassService {
 		
 		ClassDetail className = classRepository.getClassByclassName(classDto.getClassName());
 		ClassDetail classCode = classRepository.getClassByclassCode(classDto.getClassCode());
-//		if (tempClass.isPresent()) {
-//			throw new CustomException(HttpStatusCode.NO_SCHOOL_FOUND.getCode(), HttpStatusCode.NO_SCHOOL_FOUND,
-//					HttpStatusCode.NO_SCHOOL_FOUND.getMessage(), res);
-//		}
 
 		if (className != null) {
 			throw new CustomException(HttpStatusCode.RESOURCE_ALREADY_EXISTS.getCode(),
@@ -157,68 +154,63 @@ public class ClassServiceImpl implements ClassService {
 		return getClass;
 	}
 
-//	public Response<ClassDto> deleteClassById(Long id) {
-//		Result<ClassDto> res = new Result<>();
-//		res.setData(null);
-//		Optional<ClassDetail> classes = classRepository.findById(id);
-//		if (!classes.isPresent()) {
-//			throw new CustomException(HttpStatusCode.RESOURCE_NOT_FOUND.getCode(), HttpStatusCode.RESOURCE_NOT_FOUND,
-//					HttpStatusCode.RESOURCE_NOT_FOUND.getMessage(), res);
-//		}
-//
-//		/*
-//		 * for(School newSchools:classes.get().getSchool()) {
-//		 * newSchools.getClassDetail().remove(classes.get());
-//		 * schoolRepository.save(newSchools); }
-//		 */
-//
-//
-//		
-//		//classes.get().setSchool(new HashSet<>());
-////		classRepository.save(classes.get());
-//		
-//		List<Student> stds = classes.get().getStudents();
-//		classRepository.deleteById(id);
-//		
-//		// retain students to DB
-//		stds.stream()
-//		.forEach(std -> {
-//			std.setClassDetail(null);
-//			studentRepository.save(std);
-//		});		
-////		studentRepository.saveAll(stds);	
-//		
-//		// classes.get().setSchool(new HashSet<>());
-//		classRepository.save(classes.get());
-//		classRepository.deleteById(id);
-//
-//		Response<ClassDto> response = new Response<>();
-//		response.setMessage(HttpStatusCode.CLASS_DELETED_SUCCESSFULLY.getMessage());
-//		response.setStatusCode(HttpStatusCode.CLASS_DELETED_SUCCESSFULLY.getCode());
-//		response.setResult(new Result<ClassDto>(classMapper.entityToDto(classes.get())));
-//		return response;
-//	}
-//
-//	public Response<ClassStudentDto> updateClassDetails(ClassDto classDetail) {
-//		Result<ClassStudentDto> res = new Result<>();
-//
-//		Optional<ClassStudentDto> existingClassContainer = classRepository.findById(classDetail.getClassId());
-//		if (!existingClassContainer.isPresent()) {
-//			throw new CustomException(HttpStatusCode.NO_CLASS_FOUND.getCode(), HttpStatusCode.NO_CLASS_FOUND,
-//					HttpStatusCode.NO_CLASS_FOUND.getMessage(), res);
-//		}
-//		ClassDto existingClass = classMapper.entityToDto(existingClassContainer.get());
-//		existingClass.setClassCode(classDetail.getClassCode());
-//		existingClass.setClassName(classDetail.getClassName());
-//
-//		ClassDetail updateClass = classRepository.save(classMapper.dtoToEntity(existingClass));
-//		Response<ClassDto> response = new Response<>();
-//		response.setMessage(HttpStatusCode.CLASS_UPDATED.getMessage());
-//		response.setStatusCode(HttpStatusCode.CLASS_UPDATED.getCode());
-//		response.setResult(new Result<>(classMapper.entityToDto(updateClass)));
-//		return response;
-//	}
-//
+	public Response<ClassDto> deleteClassById(Long id) {
+		Result<ClassDto> res = new Result<>();
+		Response<ClassDto> response = new Response<>();
+		Optional<ClassDetail> classes = classRepository.findById(id);
+		if (!classes.isPresent()) {
+			throw new CustomException(HttpStatusCode.RESOURCE_NOT_FOUND.getCode(), HttpStatusCode.RESOURCE_NOT_FOUND,
+					HttpStatusCode.RESOURCE_NOT_FOUND.getMessage(), res);
+		}
+		
+		School school=classes.get().getSchool();
+		school.getClassDetail().remove(classes.get());
+		schoolRepository.save(school);
+		
+		for(Student studentId: classes.get().getStudents())
+		{
+			studentId.setClassDetail(null);
+			studentRepository.save(studentId);
+		}
+		
+		classRepository.deleteById(id);
+		response.setMessage(HttpStatusCode.CLASS_DELETED_SUCCESSFULLY.getMessage());
+		response.setStatusCode(HttpStatusCode.CLASS_DELETED_SUCCESSFULLY.getCode());
+		response.setResult(new Result<ClassDto>(classMapper.entityToDto(classes.get())));
+		return response;
+	}
+
+	public Response<ClassStudentDto> updateClassDetails(ClassDto classDetailDto) {
+		Result<ClassStudentDto> res = new Result<>();
+		Response<ClassStudentDto> response = new Response<>();
+		Optional<ClassDetail> existingClassContainer = classRepository.findById(classDetailDto.getClassId());
+		if (!existingClassContainer.isPresent()) {
+			throw new CustomException(HttpStatusCode.NO_CLASS_FOUND.getCode(), HttpStatusCode.NO_CLASS_FOUND,
+					HttpStatusCode.NO_CLASS_FOUND.getMessage(), res);
+		}
+		ClassDto existingClassDetail=classMapper.entityToDto(existingClassContainer.get());
+		existingClassDetail.setClassId(classDetailDto.getClassId());
+		existingClassDetail.setClassName(classDetailDto.getClassName());
+		existingClassDetail.setClassCode(classDetailDto.getClassCode());
+		existingClassDetail.setSchoolId(classDetailDto.getSchoolId());
+		existingClassDetail.setStudentId(new HashSet<>());
+		for(Long classId: classDetailDto.getStudentId())
+		{
+			ClassDetail classDetail=classRepository.getReferenceById(classId);
+			if(classDetail!=null) existingClassDetail.getStudentId().add(classId);
+		}
+		
+		
+		ClassDetail classDetail1=classMapper.dtoToEntity(existingClassDetail);
+		ClassDetail updatedClassDetail=classRepository.save(classDetail1);
+		ClassStudentDto classStudentDto=classMapper.toStudentDto(updatedClassDetail);
+		res.setData(classStudentDto);
+		response.setMessage(HttpStatusCode.CLASS_UPDATED.getMessage());
+		response.setStatusCode(HttpStatusCode.CLASS_UPDATED.getCode());
+		response.setResult(res);
+		return response;
+	}
+
 	@Override
 	public Response<ClassStudentDto> getClassByName(String className) {
 
