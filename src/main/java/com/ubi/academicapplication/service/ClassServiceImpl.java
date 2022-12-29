@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.ubi.academicapplication.csv.ClassCsvHelper;
@@ -234,32 +235,31 @@ public class ClassServiceImpl implements ClassService {
 		return getClass;
 	}
 
-//
-//	@Override
-//	public Response<List<ClassDto>> getClasswithSort(String field) {
-//
-//		Result<List<ClassDto>> allClassResult = new Result<>();
-//
-//		Response<List<ClassDto>> getListofClasses = new Response<>();
-//
-//		List<ClassDetail> list = this.classRepository.findAll(Sort.by(Sort.Direction.ASC, field));
-//		List<ClassDto> classDtos = classMapper.entitiesToDtos(list);
-//
-//		if (list.size() == 0) {
-//			throw new CustomException(HttpStatusCode.NO_CLASS_FOUND.getCode(), HttpStatusCode.NO_CLASS_FOUND,
-//					HttpStatusCode.NO_CLASS_FOUND.getMessage(), allClassResult);
-//		}
-//		allClassResult.setData(classDtos);
-//		getListofClasses.setStatusCode(HttpStatusCode.CLASS_RETRIVED_SUCCESSFULLY.getCode());
-//		getListofClasses.setMessage(HttpStatusCode.CLASS_RETRIVED_SUCCESSFULLY.getMessage());
-//		getListofClasses.setResult(allClassResult);
-//		return getListofClasses;
-//	}
-//
 	@Override
-	public ByteArrayInputStream load() {
-		List<ClassDetail> classd = classRepository.findAll();
-		ByteArrayInputStream out = ClassCsvHelper.classCSV(classd);
-		return out;
+	public Response<List<ClassDto>> getClasswithSort(String field) {
+
+		Result<List<ClassDto>> allClassResult = new Result<>();
+
+		Response<List<ClassDto>> getListofClasses = new Response<>();
+
+		List<ClassDetail> list = this.classRepository.findAll(Sort.by(Sort.Direction.ASC, field));
+		List<ClassDto> classDtos = classMapper.entitiesToDtos(list);
+
+		if (list.size() == 0) {
+			throw new CustomException(HttpStatusCode.NO_CLASS_FOUND.getCode(), HttpStatusCode.NO_CLASS_FOUND,
+					HttpStatusCode.NO_CLASS_FOUND.getMessage(), allClassResult);
+		}
+		allClassResult.setData(classDtos);
+		getListofClasses.setStatusCode(HttpStatusCode.CLASS_RETRIVED_SUCCESSFULLY.getCode());
+		getListofClasses.setMessage(HttpStatusCode.CLASS_RETRIVED_SUCCESSFULLY.getMessage());
+		getListofClasses.setResult(allClassResult);
+		return getListofClasses;
 	}
+
+//	@Override
+//	public ByteArrayInputStream load() {
+//		List<ClassDetail> classd = classRepository.findAll();
+//		ByteArrayInputStream out = ClassCsvHelper.classCSV(classd);
+//		return out;
+//	}
 }

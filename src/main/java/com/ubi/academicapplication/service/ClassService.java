@@ -25,10 +25,10 @@ public interface ClassService {
 	
 	Response<ClassStudentDto> getClassByName(String className);
 
-//	
-//	Response<List<ClassDto>> getClasswithSort(String field);
 	
-	ByteArrayInputStream load();
+	Response<List<ClassDto>> getClasswithSort(String field);
+	
+//	ByteArrayInputStream load();
 	
 }
 
