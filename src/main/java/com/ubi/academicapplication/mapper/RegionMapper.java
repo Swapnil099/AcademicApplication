@@ -34,10 +34,11 @@ public class RegionMapper {
 		regionDto.setCode(region.getCode());
 		regionDto.setName(region.getName());
 		regionDto.setId(region.getId());
-		regionDto.setSchoollId(region.getSchool().stream().map(school->school.getSchoolId()).collect(Collectors.toSet()));
-		regionDto.setEduInstId(region.getEducationalInstitiute().stream().map(eduInsti->eduInsti.getId()).collect(Collectors.toSet()));
+		regionDto.setSchoollId(region.getSchool().stream().filter(Objects::nonNull).map(school->school.getSchoolId()).collect(Collectors.toSet()));
+		regionDto.setEduInstId(region.getEducationalInstitiute().stream().filter(Objects::nonNull).map(eduInsti->eduInsti.getId()).collect(Collectors.toSet()));
 		return regionDto;
 	}
+	
 	
 	public RegionDto toDto(Region region)
 	{
@@ -47,8 +48,8 @@ public class RegionMapper {
 		regionDto.setCode(region.getCode());
 		regionDto.setName(region.getName());
 		regionDto.setId(region.getId());
-		regionDto.setSchoollId(region.getSchool().stream().map(school->school.getSchoolId()).collect(Collectors.toSet()));
-		regionDto.setEduInstId(region.getEducationalInstitiute().stream().map(eduInsti->eduInsti.getId()).collect(Collectors.toSet()));
+		regionDto.setSchoollId(region.getSchool().stream().filter(Objects::nonNull).map(school->school.getSchoolId()).collect(Collectors.toSet()));
+		regionDto.setEduInstId(region.getEducationalInstitiute().stream().filter(Objects::nonNull).map(eduInsti->eduInsti.getId()).collect(Collectors.toSet()));
 		}
 		return regionDto;
 	}
@@ -58,8 +59,8 @@ public class RegionMapper {
 		regionDetailsDto.setCode(region.getCode());
 		regionDetailsDto.setName(region.getName());
 		regionDetailsDto.setId(region.getId());
-		regionDetailsDto.setEduInstiDto(region.getEducationalInstitiute().stream().map(eduInsti->educationalInstitutionMapper.entityToDto(eduInsti)).collect(Collectors.toSet()));
-		regionDetailsDto.setSchoolDto(region.getSchool().stream().map(school->schoolMapper.entityToDto(school)).collect(Collectors.toSet()));
+		regionDetailsDto.setEduInstiDto(region.getEducationalInstitiute().stream().filter(Objects::nonNull).map(eduInsti->educationalInstitutionMapper.entityToDto(eduInsti)).collect(Collectors.toSet()));
+		regionDetailsDto.setSchoolDto(region.getSchool().stream().filter(Objects::nonNull).map(school->schoolMapper.entityToDto(school)).collect(Collectors.toSet()));
 		return regionDetailsDto;
 	}
 

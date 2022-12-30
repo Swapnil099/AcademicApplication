@@ -28,7 +28,7 @@ public class ClassMapper {
 		classDto.setClassName(classDetail.getClassName());
 		classDto.setClassCode(classDetail.getClassCode());
 		classDto.setSchoolId(classDetail.getSchool().getSchoolId());
-		classDto.setStudentId(classDetail.getStudents().stream().map(student -> student.getStudentId()).collect(Collectors.toSet()));
+		classDto.setStudentId(classDetail.getStudents().stream().filter(Objects::nonNull).map(student -> student.getStudentId()).collect(Collectors.toSet()));
 		return classDto;
 	}
 
@@ -53,7 +53,7 @@ public class ClassMapper {
 	{
 		ClassDto classDto=modelMapper.map(classDetail, ClassDto.class);
 		classDto.setSchoolId(classDetail.getSchool().getSchoolId());
-		Set<Long> studentId=classDetail.getStudents().stream().map(classDetails -> classDetails.getStudentId()).collect(Collectors.toSet());
+		Set<Long> studentId=classDetail.getStudents().stream().filter(Objects::nonNull).map(classDetails -> classDetails.getStudentId()).collect(Collectors.toSet());
 		classDto.setStudentId(studentId);
 		return classDto;
 	}
@@ -80,6 +80,7 @@ public class ClassMapper {
 		schoolDto.setVvnAccount(school.getVvnAccount());
 		schoolDto.setVvnFund(school.getVvnFund());
 		schoolDto.setRegionId(school.getRegion().getId());
+		schoolDto.setEducationalInstitutionId(school.getEducationalInstitution().getId());
 		Set<StudentDto> studentDtoSet=new HashSet<>();
 		if(classDetail.getStudents()!=null)
 		{

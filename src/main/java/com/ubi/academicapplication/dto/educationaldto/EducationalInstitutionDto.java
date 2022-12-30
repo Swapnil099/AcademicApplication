@@ -33,6 +33,5 @@ public class EducationalInstitutionDto {
 
 	private Set<Integer> regionId;
 	
-	private int regionsId;
 
 }
