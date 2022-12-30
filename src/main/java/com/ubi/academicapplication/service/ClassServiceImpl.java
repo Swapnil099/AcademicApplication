@@ -1,14 +1,12 @@
 package com.ubi.academicapplication.service;
 
 import java.io.ByteArrayInputStream;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +15,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
 import com.ubi.academicapplication.csv.ClassCsvHelper;
 import com.ubi.academicapplication.dto.classdto.ClassDto;
 import com.ubi.academicapplication.dto.classdto.ClassStudentDto;
@@ -113,6 +110,8 @@ public class ClassServiceImpl implements ClassService {
 			ClassStudentDto classStudentDto=new ClassStudentDto();
 			classStudentDto.setClassDto(classMapper.entityToDto(classDetail));
 			classStudentDto.setSchoolDto(schoolMapper.entityToDto(classDetail.getSchool()));
+      
+			//Set<Student> s1=classDetail.getStudents();
 		    Set<StudentDto> studentDto=classDetail.getStudents().stream()
 		    		.map(students -> studentMapper.entityToDto(students)).collect(Collectors.toSet());
 		    classStudentDto.setStudentDto(studentDto);

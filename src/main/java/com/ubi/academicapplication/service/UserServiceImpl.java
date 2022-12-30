@@ -22,6 +22,8 @@ import com.ubi.academicapplication.entity.User;
 import com.ubi.academicapplication.error.CustomException;
 import com.ubi.academicapplication.error.HttpStatusCode;
 import com.ubi.academicapplication.error.Result;
+import com.ubi.academicapplication.mapper.ContactInfoMapper;
+import com.ubi.academicapplication.mapper.RoleMapper;
 import com.ubi.academicapplication.mapper.UserMapper;
 import com.ubi.academicapplication.repository.ContactInfoRepository;
 import com.ubi.academicapplication.repository.UserRepository;
@@ -34,15 +36,25 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserRepository userRepository;
-	
+
 	@Autowired
-    private ContactInfoRepository contactInfoRepository;
+	private ContactInfoRepository contactInfoRepository;
 
 	@Autowired
 	private RoleService roleService;
 
 	@Autowired
+	private ContactInfoService contactInfoService;
+
+	@Autowired
 	private UserMapper userMapper;
+
+	@Autowired
+	private ContactInfoMapper contactInfoMapper;
+
+	@Autowired
+	private RoleMapper roleMapper;
+
 
 
 	@Autowired
@@ -52,10 +64,10 @@ public class UserServiceImpl implements UserService {
 	Result result;
 
 	@Override
-	public Response<List<UserDto>> getAllUsers() {
+	public Response<List<UserContactInfoDto>> getAllUsers() {
 		List<User> users = userRepository.findAll();
-		List<UserDto> allUsers = users.stream().map(userMapper::toDto).collect(Collectors.toList());
-		Response<List<UserDto>> response = new Response<>();
+		List<UserContactInfoDto> allUsers = users.stream().map(userMapper::toUserContactInfoDto).collect(Collectors.toList());
+		Response<List<UserContactInfoDto>> response = new Response<>();
 		response.setStatusCode(HttpStatusCode.SUCCESSFUL.getCode());
 		response.setMessage(HttpStatusCode.SUCCESSFUL.getMessage());
 		response.setResult(new Result<>(allUsers));
@@ -74,15 +86,23 @@ public class UserServiceImpl implements UserService {
 		}
 
 		User user = userMapper.toUser(userCreationDTO);
-		User userWithPreEncodePassword = new User(user.getUsername(),user.getPassword(),user.getIsEnabled(),user.getRole());
+		User userWithPreEncodePassword = new User(user.getUsername(),user.getPassword(),user.getIsEnabled(),user.getContactInfo(),user.getRole());
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
-		userRepository.save(user);
+
 		userWithPreEncodePassword.setId(user.getId());
+		ContactInfo contact =contactInfoMapper.dtoToEntity(userCreationDTO.getContactInfoDto());
+		contact=contactInfoRepository.save(contact);
+		user.setContactInfo(contact);
+		userRepository.save(user);
+		user.setPassword(userWithPreEncodePassword.getPassword());
+
+
 		response.setStatusCode(HttpStatusCode.RESOURCE_CREATED_SUCCESSFULLY.getCode());
 		response.setMessage(HttpStatusCode.RESOURCE_CREATED_SUCCESSFULLY.getMessage());
-		response.setResult(new Result<>(userWithPreEncodePassword));
+		response.setResult(new Result<>(user));
 		return response;
 	}
+
 
 	@Override
 	public Response<UserDto> getUserById(String userId) {
@@ -194,7 +214,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Response<UserDto> updateUserById(String userId, UserCreationDto userCreationDto) {
+	public Response<UserCreationDto> updateUserById(String userId, UserCreationDto userCreationDto) {
 		Optional<User> currUser = userRepository.findById(Long.parseLong(userId));
 		if(!currUser.isPresent()){
 			throw new CustomException(HttpStatusCode.RESOURCE_NOT_FOUND.getCode(),
@@ -212,6 +232,7 @@ public class UserServiceImpl implements UserService {
 		}
 		user.setUsername(userCreationDto.getUsername());
 		user.setIsEnabled(userCreationDto.getIsActivate());
+
 		Role role = roleService.getRoleByRoleType(userCreationDto.getRoleType());
 		if(role == null){
 			throw new CustomException(HttpStatusCode.ROLE_NOT_EXISTS.getCode(),
@@ -219,13 +240,22 @@ public class UserServiceImpl implements UserService {
 					HttpStatusCode.ROLE_NOT_EXISTS.getMessage(),
 					result);
 		}
+
+		ContactInfo contact=user.getContactInfo();
+		Long contactInfoId=contact.getContactInfoId();
+		contact=contactInfoMapper.dtoToEntity(userCreationDto.getContactInfoDto());
+		contact.setContactInfoId(contactInfoId);
+		contactInfoRepository.save(contact);
+		user.setContactInfo(contact);
+
 		user.setRole(role);
 		userRepository.save(user);
 
 		Response response = new Response<>();
 		response.setStatusCode(HttpStatusCode.SUCCESSFUL.getCode());
 		response.setMessage(HttpStatusCode.SUCCESSFUL.getMessage());
-		response.setResult(new Result<>(userMapper.toDto(user)));
+		response.setResult(new Result<>(userMapper.toUserCreationDto(user)));
+
 		return response;
 	}
 
@@ -259,38 +289,38 @@ public class UserServiceImpl implements UserService {
 		response.setResult(new Result<UserContactInfoDto>(userContactInfoDto));
 		return response;
 	}
-	
-	 @Override
-	  	public Response<UserContactInfoDto> getContactInfowithUser(Long id) {
 
-	  		Response<UserContactInfoDto> response = new Response<>();
-	  		Result<UserContactInfoDto> res = new Result<>();
+	@Override
+	public Response<UserContactInfoDto> getContactInfowithUser(Long id) {
 
-	  		Optional<User> user = this.userRepository.findById(id);
+		Response<UserContactInfoDto> response = new Response<>();
+		Result<UserContactInfoDto> res = new Result<>();
 
-	  		if (!user.isPresent()) {
-	  			throw new CustomException(HttpStatusCode.NO_USER_MATCH_WITH_ID.getCode(),
-	  					HttpStatusCode.NO_USER_MATCH_WITH_ID,
-	  					HttpStatusCode.NO_USER_MATCH_WITH_ID.getMessage(), res);
-	  		}
-	  		UserContactInfoDto userContactInfoDto = new UserContactInfoDto();
-	  		userContactInfoDto.setUser(user.get());
-	  		userContactInfoDto.setContactInfo(user.get().getContactInfo());
-	  		
+		Optional<User> user = this.userRepository.findById(id);
 
-	  		res.setData(userContactInfoDto);
+		if (!user.isPresent()) {
+			throw new CustomException(HttpStatusCode.NO_USER_MATCH_WITH_ID.getCode(),
+					HttpStatusCode.NO_USER_MATCH_WITH_ID,
+					HttpStatusCode.NO_USER_MATCH_WITH_ID.getMessage(), res);
+		}
+		UserContactInfoDto userContactInfoDto = new UserContactInfoDto();
+		userContactInfoDto.setUserDto(userMapper.toDto(user.get()));
+		userContactInfoDto.setRoleDto(roleMapper.toDto(user.get().getRole()));
+		userContactInfoDto.setContactInfoDto(contactInfoMapper.entityToDto(user.get().getContactInfo()));
 
-	  		response.setStatusCode(HttpStatusCode.USER_RETRIVED_SUCCESSFULLY.getCode());
-	  		response.setMessage(HttpStatusCode.USER_RETRIVED_SUCCESSFULLY.getMessage());
-	  		response.setResult(res);
-	  		return response;
+		res.setData(userContactInfoDto);
 
-	  	}
-	 
-	 @Override
-		public ByteArrayInputStream load() {
-			List<User> user=userRepository.findAll();
-	        ByteArrayInputStream out = UserContactInfoCsvHelper.userCSV(user);
-		    return out;
-		  }
+		response.setStatusCode(HttpStatusCode.USER_RETRIVED_SUCCESSFULLY.getCode());
+		response.setMessage(HttpStatusCode.USER_RETRIVED_SUCCESSFULLY.getMessage());
+		response.setResult(res);
+		return response;
+
+	}
+
+	@Override
+	public ByteArrayInputStream load() {
+		List<User> user=userRepository.findAll();
+		ByteArrayInputStream out = UserContactInfoCsvHelper.userCSV(user);
+		return out;
+	}
 }

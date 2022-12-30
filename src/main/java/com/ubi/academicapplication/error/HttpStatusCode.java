@@ -177,6 +177,8 @@ public enum HttpStatusCode {
 	REGION_UPDATED(200,"Region Updated Successfully"),
 	
 	MAPPING_ALREADY_EXIST(108,"Mapping Already Exist");
+	
+
 
 	private int code;
 	private String message;
