@@ -9,12 +9,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class ClassDto {
-	private Long classId;
+@NoArgsConstructor
+public class ClassCreationDto {
 	private String classCode;
 	private String className;
 	private int schoolId;
-	private Set<Long> studentId;
+	private Set<Student> student;
 }

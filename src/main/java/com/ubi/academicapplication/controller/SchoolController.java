@@ -1,17 +1,8 @@
 package com.ubi.academicapplication.controller;
 
-import java.text.ParseException;
 import java.util.List;
 
 import javax.validation.Valid;
-
-import com.ubi.academicapplication.dto.classdto.SchholClassMappingDto;
-import com.ubi.academicapplication.dto.classdto.SchoolClassDto;
-import com.ubi.academicapplication.dto.response.Response;
-import com.ubi.academicapplication.dto.school.SchoolDto;
-import com.ubi.academicapplication.dto.school.SchoolRegionDto;
-import com.ubi.academicapplication.security.roleaccessinterface.IsPrincipal;
-import com.ubi.academicapplication.security.roleaccessinterface.IsRegionalOfficeAdmin;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +22,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ubi.academicapplication.dto.response.Response;
+import com.ubi.academicapplication.dto.school.SchoolDto;
+import com.ubi.academicapplication.dto.school.SchoolRegionDto;
+import com.ubi.academicapplication.security.roleaccessinterface.IsRegionalOfficeAdmin;
 import com.ubi.academicapplication.service.SchoolService;
 
 import io.swagger.v3.oas.annotations.Operation;

@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.util.List;
 
 import com.ubi.academicapplication.dto.classdto.ClassDto;
+import com.ubi.academicapplication.dto.classdto.ClassStudentDto;
 import com.ubi.academicapplication.dto.contactinfodto.ContactInfoDto;
 import com.ubi.academicapplication.dto.response.Response;
 import com.ubi.academicapplication.dto.student.StudentDto;
@@ -12,23 +13,22 @@ import com.ubi.academicapplication.dto.student.StudentDto;
 
 public interface ClassService {
 
-	Response<ClassDto> addClassDetails(ClassDto classDto);
+	Response<ClassStudentDto> addClassDetails(ClassDto classDto);
 	
-	Response<List<ClassDto>> getClassDetails(Integer PageNumber, Integer PageSize);
+	Response<List<ClassStudentDto>> getClassDetails(Integer PageNumber, Integer PageSize);
 
-	public Response<ClassDto> getClassById(Long classidL);
+	public Response<ClassStudentDto> getClassById(Long classid);
 	
-	public Response<ClassDto> deleteClassById(Long classidL);
+	public Response<ClassDto> deleteClassById(Long classid);
 
-	Response<ClassDto> updateClassDetails(ClassDto classDto);
+	Response<ClassStudentDto> updateClassDetails(ClassDto classDto);
 	
-	Response<ClassDto> getClassByName(String className);
-	
-	Response<List<StudentDto>> getClasswithStudent(Long id);
+	Response<ClassStudentDto> getClassByName(String className);
+
 	
 	Response<List<ClassDto>> getClasswithSort(String field);
 	
-	ByteArrayInputStream load();
+//	ByteArrayInputStream load();
 	
 }
 
