@@ -56,6 +56,7 @@ public class ClassServiceImpl implements ClassService {
 	@Autowired
 	private StudentMapper studentMapper;
 
+
 	public Response<ClassStudentDto> addClassDetails(ClassDto classDto) {
 
 		Result<ClassStudentDto> res = new Result<>();
@@ -64,10 +65,17 @@ public class ClassServiceImpl implements ClassService {
 		ClassDetail className = classRepository.getClassByclassName(classDto.getClassName());
 		ClassDetail classCode = classRepository.getClassByclassCode(classDto.getClassCode());
 
-		if (className != null) {
-			throw new CustomException(HttpStatusCode.RESOURCE_ALREADY_EXISTS.getCode(),
-					HttpStatusCode.RESOURCE_ALREADY_EXISTS, HttpStatusCode.RESOURCE_ALREADY_EXISTS.getMessage(), res);
+		School school  = schoolRepository.getReferenceById(classDto.getSchoolId());
+		
+		if(school != null) {
+			for(ClassDetail classDetail:school.getClassDetail()) {
+				if(classDetail.getClassName().equals(classDto.getClassName())){
+					throw new CustomException(HttpStatusCode.RESOURCE_ALREADY_EXISTS.getCode(),
+							HttpStatusCode.RESOURCE_ALREADY_EXISTS, HttpStatusCode.RESOURCE_ALREADY_EXISTS.getMessage(), res);
+				}
+			}
 		}
+		
 		if (classCode != null) {
 			throw new CustomException(HttpStatusCode.RESOURCE_ALREADY_EXISTS.getCode(),
 					HttpStatusCode.RESOURCE_ALREADY_EXISTS, HttpStatusCode.RESOURCE_ALREADY_EXISTS.getMessage(), res);
@@ -77,7 +85,7 @@ public class ClassServiceImpl implements ClassService {
 		classDetail.setClassId(classDto.getClassId());
 		classDetail.setClassName(classDto.getClassName());
 		classDetail.setClassCode(classDto.getClassCode());
-		classDetail.setSchool(schoolRepository.getReferenceById(classDto.getSchoolId()));
+		classDetail.setSchool(school);
 		classDetail.setStudents(new HashSet<>());
 		for(Long student: classDto.getStudentId())
 		{

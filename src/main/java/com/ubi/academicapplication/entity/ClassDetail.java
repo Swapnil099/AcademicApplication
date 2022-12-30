@@ -49,7 +49,7 @@ public class ClassDetail
 	@JoinColumn(name = "schoolId" )
 	private School school;
 	
-	@OneToMany(mappedBy = "classDetail",cascade = CascadeType.ALL)	
+	@OneToMany(mappedBy = "classDetail",cascade = CascadeType.ALL)
 	Set<Student> students = new HashSet<>();
 }
 
