@@ -110,7 +110,20 @@ public class EducationalInstitutionMapper {
 	}
 	
 	
-	
+	public EducationalInstitutionDto toDto(EducationalInstitution educationalInstitution)
+	{
+		EducationalInstitutionDto educationalInstitutionDto =  new EducationalInstitutionDto();
+		if(educationalInstitution!=null) {
 		
-
+		educationalInstitutionDto.setId(educationalInstitution.getId());
+	    educationalInstitutionDto.setEducationalInstitutionCode(educationalInstitution.getEducationalInstitutionCode());
+		educationalInstitutionDto.setEducationalInstitutionName(educationalInstitution.getEducationalInstitutionName());
+		educationalInstitutionDto.setEducationalInstitutionType(educationalInstitution.getEducationalInstitutionType());
+		educationalInstitutionDto.setStrength(educationalInstitution.getStrength());
+		educationalInstitutionDto.setState(educationalInstitution.getState());
+		educationalInstitutionDto.setExemptionFlag(educationalInstitution.getExemptionFlag());
+		educationalInstitutionDto.setVvnAccount(educationalInstitution.getVvnAccount());		
+		}
+		return educationalInstitutionDto;
+}
 }

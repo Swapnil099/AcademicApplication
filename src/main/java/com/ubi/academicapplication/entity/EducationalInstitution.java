@@ -1,6 +1,5 @@
 package com.ubi.academicapplication.entity;
 
-import java.time.LocalDate;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -11,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -55,4 +55,10 @@ public class EducationalInstitution {
 
 	private Set<Region> region;
 
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "educationalInstitution")
+	private Set<School> school;
+
+	
+	
+	
 }

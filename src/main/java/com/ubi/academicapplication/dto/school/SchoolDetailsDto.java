@@ -41,4 +41,8 @@ public class SchoolDetailsDto {
 	private int regionId;
 	
    Set<ClassDto> classDto=new HashSet<>();
+   
+   private int educationalInstitutionId;
+   
+   
 }

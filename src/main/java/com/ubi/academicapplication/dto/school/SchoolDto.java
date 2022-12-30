@@ -39,4 +39,6 @@ public class SchoolDto {
 	
 	private Set<Long> classId;
 
+	private int educationalInstitutionId;
+	
 }

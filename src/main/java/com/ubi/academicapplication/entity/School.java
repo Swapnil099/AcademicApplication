@@ -77,4 +77,11 @@ public class School {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "school")
 	private Set<ClassDetail> classDetail;
 
+	@ManyToOne
+	@JoinColumn(name = "educationalInstitute_id", referencedColumnName = "id")
+	private EducationalInstitution educationalInstitution;
+	
+	
+	
+	
 }
