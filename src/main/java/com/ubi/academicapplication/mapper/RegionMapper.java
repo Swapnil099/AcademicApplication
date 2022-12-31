@@ -34,7 +34,6 @@ public class RegionMapper {
 		regionDto.setCode(region.getCode());
 		regionDto.setName(region.getName());
 		regionDto.setId(region.getId());
-		regionDto.setSchoollId(region.getSchool().stream().filter(Objects::nonNull).map(school->school.getSchoolId()).collect(Collectors.toSet()));
 		regionDto.setEduInstId(region.getEducationalInstitiute().stream().filter(Objects::nonNull).map(eduInsti->eduInsti.getId()).collect(Collectors.toSet()));
 		return regionDto;
 	}
@@ -48,7 +47,6 @@ public class RegionMapper {
 		regionDto.setCode(region.getCode());
 		regionDto.setName(region.getName());
 		regionDto.setId(region.getId());
-		regionDto.setSchoollId(region.getSchool().stream().filter(Objects::nonNull).map(school->school.getSchoolId()).collect(Collectors.toSet()));
 		regionDto.setEduInstId(region.getEducationalInstitiute().stream().filter(Objects::nonNull).map(eduInsti->eduInsti.getId()).collect(Collectors.toSet()));
 		}
 		return regionDto;
@@ -71,9 +69,6 @@ public class RegionMapper {
 	public Set<RegionDto> entitiesToDto(Set<Region> region) {
 		return region.stream().filter(Objects::nonNull).map(this::entityToDto).collect(Collectors.toSet());
 	}
-	
-	
-
 
 	public Region dtoToEntity(RegionDto regionDto) {
 		return modelMapper.map(regionDto, Region.class);
@@ -82,8 +77,6 @@ public class RegionMapper {
 	public List<Region> dtosToEntities(List<RegionDto> regionDto) {
 		return regionDto.stream().filter(Objects::nonNull).map(this::dtoToEntity).collect(Collectors.toList());
 	}
-	
-	
 	
 	public SchoolDto entityToDto(School school) {
 		return modelMapper.map(school, SchoolDto.class);

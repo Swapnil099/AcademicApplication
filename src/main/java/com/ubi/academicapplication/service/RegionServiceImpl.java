@@ -161,8 +161,8 @@ public class RegionServiceImpl implements RegionService {
 	}
 
 	@Override
-	public Response<RegionDto> updateRegionDetails(RegionDto regionDto) {
-		Result<RegionDto> res = new Result<>();
+	public Response<RegionDetailsDto> updateRegionDetails(RegionDto regionDto) {
+		Result<RegionDetailsDto> res = new Result<>();
 
 		res.setData(null);
 		Optional<Region> existingRegionContainer = regionRepository.findById(regionDto.getId());
@@ -170,15 +170,43 @@ public class RegionServiceImpl implements RegionService {
 			throw new CustomException(HttpStatusCode.REGION_NOT_FOUND.getCode(), HttpStatusCode.REGION_NOT_FOUND,
 					HttpStatusCode.REGION_NOT_FOUND.getMessage(), res);
 		}
-		RegionDto existingRegion = regionMapper.entityToDto(existingRegionContainer.get());
-		existingRegion.setCode(regionDto.getCode());
-		existingRegion.setName(regionDto.getName());
+		Region region = existingRegionContainer.get();
 
-		Region updateRegion = regionRepository.save(regionMapper.dtoToEntity(existingRegion));
-		Response<RegionDto> response = new Response<>();
+		if(!region.getCode().equals(regionDto.getCode())){
+			System.out.println(region.getCode() + " --- " + regionDto.getCode());
+			Region regionWithSameCode = regionRepository.getRegionByCode(regionDto.getCode());
+			if(regionWithSameCode != null) {
+				throw new CustomException(HttpStatusCode.REGION_CODE_DUPLICATE.getCode(), HttpStatusCode.REGION_CODE_DUPLICATE,
+						HttpStatusCode.REGION_CODE_DUPLICATE.getMessage(), res);
+			}
+		}
+
+		if(!region.getName().equals(regionDto.getName())){
+			Region regionWithSameName = regionRepository.getRegionByName(regionDto.getName());
+			if(regionWithSameName != null) {
+				throw new CustomException(HttpStatusCode.REGION_NAME_DUPLICATE.getCode(), HttpStatusCode.REGION_NAME_DUPLICATE,
+						HttpStatusCode.REGION_NAME_DUPLICATE.getMessage(), res);
+			}
+		}
+
+		region.setCode(regionDto.getCode());
+		region.setName(regionDto.getName());
+
+		for(Integer educationId:regionDto.getEduInstId()){
+			EducationalInstitution educationalInstitution = educationalInstitutionRepository.getReferenceById(educationId);
+			if(!educationalInstitution.getRegion().contains(region)) {
+				educationalInstitution.getRegion().add(region);
+				educationalInstitutionRepository.save(educationalInstitution);
+				region.getEducationalInstitiute().add(educationalInstitution);
+			}
+
+		}
+
+		Region updateRegion = regionRepository.save(region);
+		Response<RegionDetailsDto> response = new Response<>();
 		response.setMessage(HttpStatusCode.REGION_UPDATED.getMessage());
 		response.setStatusCode(HttpStatusCode.REGION_UPDATED.getCode());
-		response.setResult(new Result<>(regionMapper.entityToDto(updateRegion)));
+		response.setResult(new Result<>(regionMapper.toRegionDetails(updateRegion)));
 		return response;
 	}
 

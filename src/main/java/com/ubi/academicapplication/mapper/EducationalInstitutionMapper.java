@@ -74,7 +74,6 @@ public class EducationalInstitutionMapper {
 				regionDto.setCode(region.getCode());
 				regionDto.setName(region.getName());
 				regionDto.setId(region.getId());
-				regionDto.setSchoollId(region.getSchool().stream().map(school->school.getSchoolId()).collect(Collectors.toSet()));
 				regionDto.setEduInstId(region.getEducationalInstitiute().stream().map(eduInsti->eduInsti.getId()).collect(Collectors.toSet()));
 				regionDtoSet.add(regionDto);
 			}
@@ -125,5 +124,5 @@ public class EducationalInstitutionMapper {
 		educationalInstitutionDto.setVvnAccount(educationalInstitution.getVvnAccount());		
 		}
 		return educationalInstitutionDto;
-}
+	}
 }

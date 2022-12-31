@@ -67,7 +67,7 @@ public class ClassServiceImpl implements ClassService {
 
 		School school  = schoolRepository.getReferenceById(classDto.getSchoolId());
 		
-		if(school != null) {
+		if(school != null && school.getClassDetail()!=null) {
 			for(ClassDetail classDetail:school.getClassDetail()) {
 				if(classDetail.getClassName().equals(classDto.getClassName())){
 					throw new CustomException(HttpStatusCode.RESOURCE_ALREADY_EXISTS.getCode(),
@@ -76,25 +76,12 @@ public class ClassServiceImpl implements ClassService {
 			}
 		}
 		
-		if (classCode != null) {
-			throw new CustomException(HttpStatusCode.RESOURCE_ALREADY_EXISTS.getCode(),
-					HttpStatusCode.RESOURCE_ALREADY_EXISTS, HttpStatusCode.RESOURCE_ALREADY_EXISTS.getMessage(), res);
-		}
-		
 		ClassDetail classDetail=new ClassDetail();
 		classDetail.setClassId(classDto.getClassId());
 		classDetail.setClassName(classDto.getClassName());
 		classDetail.setClassCode(classDto.getClassCode());
 		classDetail.setSchool(school);
 		classDetail.setStudents(new HashSet<>());
-		for(Long student: classDto.getStudentId())
-		{
-			Student student1=studentRepository.getReferenceById(student);
-			if(student1!=null)
-			{
-				classDetail.getStudents().add(student1);
-			}
-		}
 		
 		ClassDetail savedClass=classRepository.save(classDetail);
 		ClassStudentDto classStudentDto=classMapper.toStudentDto(savedClass);
@@ -201,13 +188,7 @@ public class ClassServiceImpl implements ClassService {
 		existingClassDetail.setClassName(classDetailDto.getClassName());
 		existingClassDetail.setClassCode(classDetailDto.getClassCode());
 		existingClassDetail.setSchoolId(classDetailDto.getSchoolId());
-		existingClassDetail.setStudentId(new HashSet<>());
-		for(Long classId: classDetailDto.getStudentId())
-		{
-			ClassDetail classDetail=classRepository.getReferenceById(classId);
-			if(classDetail!=null) existingClassDetail.getStudentId().add(classId);
-		}
-		
+
 		
 		ClassDetail classDetail1=classMapper.dtoToEntity(existingClassDetail);
 		ClassDetail updatedClassDetail=classRepository.save(classDetail1);
