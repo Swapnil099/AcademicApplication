@@ -23,11 +23,14 @@ public class ClassMapper {
 
 	// entity to DTO Mapping
 	public ClassDto entityToDto(ClassDetail classDetail) {
-		ClassDto classDto = new ClassDto();
-		classDto.setClassId(classDetail.getClassId());
-		classDto.setClassName(classDetail.getClassName());
-		classDto.setClassCode(classDetail.getClassCode());
-		classDto.setSchoolId(classDetail.getSchool().getSchoolId());
+		ClassDto classDto = null;
+		if(classDetail != null){
+			classDto = new ClassDto();
+			classDto.setClassId(classDetail.getClassId());
+			classDto.setClassName(classDetail.getClassName());
+			classDto.setClassCode(classDetail.getClassCode());
+			classDto.setSchoolId(classDetail.getSchool().getSchoolId());
+		}
 		return classDto;
 	}
 

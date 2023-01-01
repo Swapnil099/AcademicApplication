@@ -63,8 +63,7 @@ public class SchoolMapper {
 		if(school.getEducationalInstitution() != null) {
 			schoolDto.setEducationalInstitutionId(school.getEducationalInstitution().getId());
 		}
-		
-			
+
 		return schoolDto;		
 	}
 
@@ -131,21 +130,21 @@ public class SchoolMapper {
 			}
 		}
 		EducationalInstitution edu=school.getEducationalInstitution();
-		EducationalInstitutionDto edDto=new EducationalInstitutionDto();
-		edDto.setId(edu.getId());
-		edDto.setEducationalInstitutionCode(edu.getEducationalInstitutionCode());
-		edDto.setEducationalInstitutionName(edu.getEducationalInstitutionName());
-		edDto.setEducationalInstitutionType(edu.getEducationalInstitutionType());
-		edDto.setStrength(edu.getStrength());
-		edDto.setState(edu.getState());
-		edDto.setExemptionFlag(edu.getExemptionFlag());
-		edDto.setVvnAccount(edu.getVvnAccount());
-		
+		EducationalInstitutionDto edDto=null;
+		if(edu != null){
+			edDto = new EducationalInstitutionDto();
+			edDto.setId(edu.getId());
+			edDto.setEducationalInstitutionCode(edu.getEducationalInstitutionCode());
+			edDto.setEducationalInstitutionName(edu.getEducationalInstitutionName());
+			edDto.setEducationalInstitutionType(edu.getEducationalInstitutionType());
+			edDto.setStrength(edu.getStrength());
+			edDto.setState(edu.getState());
+			edDto.setExemptionFlag(edu.getExemptionFlag());
+			edDto.setVvnAccount(edu.getVvnAccount());
+		}
 		//edDto.setRegionsId(edu.ge);
 		//edDto.setRegionsId(edu.getRegion());
 		return new SchoolRegionDto(schoolDto, regionDto, classDtoSet, edDto);
-		
-		
-		
+
 	}
 }

@@ -79,13 +79,6 @@ public class RegionServiceImpl implements RegionService {
 		savedRegion.setSchool(new HashSet<>());
 		savedRegion = regionRepository.save(savedRegion);
 		
-		for(Integer schoolId : regionCreationDto.getSchoollId()) {
-			School school = schoolRepository.getReferenceById(schoolId);
-			school.setRegion(savedRegion);
-			schoolRepository.save(school);
-			savedRegion.getSchool().add(school);
-		}
-		
 		for(Integer eduInstiId : regionCreationDto.getEduInstId()) {
 			EducationalInstitution eduInsti = educationalInstitutionRepository.getReferenceById(eduInstiId);
 			eduInsti.getRegion().add(savedRegion);
@@ -140,23 +133,32 @@ public class RegionServiceImpl implements RegionService {
 	public Response<RegionDto> deleteRegionById(int id) {
 		Result<RegionDto> res = new Result<>();
 		res.setData(null);
-		Optional<Region> region = regionRepository.findById(id);
-		if (!region.isPresent()) {
+		Optional<Region> regionTemp = regionRepository.findById(id);
+		if (!regionTemp.isPresent()) {
 			throw new CustomException(HttpStatusCode.RESOURCE_NOT_FOUND.getCode(), HttpStatusCode.RESOURCE_NOT_FOUND,
 					HttpStatusCode.RESOURCE_NOT_FOUND.getMessage(), res);
 		}
-
-		for (EducationalInstitution eduInsti : region.get().getEducationalInstitiute()) {
-			eduInsti.getRegion().remove(region.get());
+		Region region = regionTemp.get();
+		Set<EducationalInstitution> educationalInstitutionSet = region.getEducationalInstitiute();
+		for (EducationalInstitution eduInsti : educationalInstitutionSet) {
+			eduInsti.getRegion().remove(region);
 			educationalInstitutionRepository.save(eduInsti);
 		}
-		region.get().setEducationalInstitiute(new HashSet<>());
-		regionRepository.save(region.get());
+
+		Set<School> schoolSet = region.getSchool();
+		for(School school:schoolSet){
+			region.getSchool().remove(school);
+			school.setRegion(null);
+			schoolRepository.save(school);
+		}
+
+		region.setEducationalInstitiute(new HashSet<>());
+		regionRepository.save(region);
 		regionRepository.deleteById(id);
 		Response<RegionDto> response = new Response<>();
 		response.setMessage(HttpStatusCode.REGION_DELETED_SUCCESSFULLY.getMessage());
 		response.setStatusCode(HttpStatusCode.REGION_DELETED_SUCCESSFULLY.getCode());
-		response.setResult(new Result<RegionDto>(regionMapper.entityToDto(region.get())));
+		response.setResult(new Result<RegionDto>(regionMapper.entityToDto(region)));
 		return response;
 	}
 
@@ -191,18 +193,22 @@ public class RegionServiceImpl implements RegionService {
 
 		region.setCode(regionDto.getCode());
 		region.setName(regionDto.getName());
+		Set<EducationalInstitution> educationalInstitutionSet = region.getEducationalInstitiute();
+		for(EducationalInstitution educationalInstitution:educationalInstitutionSet){
+			educationalInstitution.getRegion().remove(region);
+			region.getEducationalInstitiute().remove(educationalInstitution);
+			educationalInstitutionRepository.save(educationalInstitution);
+		}
+		Region updateRegion = regionRepository.save(region);
 
 		for(Integer educationId:regionDto.getEduInstId()){
 			EducationalInstitution educationalInstitution = educationalInstitutionRepository.getReferenceById(educationId);
-			if(!educationalInstitution.getRegion().contains(region)) {
-				educationalInstitution.getRegion().add(region);
-				educationalInstitutionRepository.save(educationalInstitution);
-				region.getEducationalInstitiute().add(educationalInstitution);
-			}
-
+			educationalInstitution.getRegion().add(region);
+			educationalInstitutionRepository.save(educationalInstitution);
+			region.getEducationalInstitiute().add(educationalInstitution);
 		}
 
-		Region updateRegion = regionRepository.save(region);
+		updateRegion = regionRepository.save(region);
 		Response<RegionDetailsDto> response = new Response<>();
 		response.setMessage(HttpStatusCode.REGION_UPDATED.getMessage());
 		response.setStatusCode(HttpStatusCode.REGION_UPDATED.getCode());
