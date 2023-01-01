@@ -2,6 +2,7 @@ package com.ubi.academicapplication.controller;
 
 import java.util.List;
 
+import com.ubi.academicapplication.dto.pagination.PaginationResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,10 +69,10 @@ public class RegionController {
 	@Operation(summary = "Get All Region", security = @SecurityRequirement(name = "bearerAuth"))
 	@GetMapping()
 	@IsEducationInstituteHQAdmin
-	public ResponseEntity<Response<List<RegionDetailsDto>>> getAllRegions(
+	public ResponseEntity<Response<PaginationResponse<List<RegionDetailsDto>>>> getAllRegions(
 			@RequestParam(value = "PageNumber", defaultValue = "0", required = false) Integer pageNumber,
 			@RequestParam(value = "PageSize", defaultValue = "5", required = false) Integer pageSize) {
-		Response<List<RegionDetailsDto>> response = regionService.getRegionDetails(pageNumber, pageSize);
+		Response<PaginationResponse<List<RegionDetailsDto>>> response = regionService.getRegionDetails(pageNumber, pageSize);
 		return ResponseEntity.ok().body(response);
 
 	}

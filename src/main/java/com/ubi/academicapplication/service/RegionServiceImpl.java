@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.ubi.academicapplication.dto.pagination.PaginationResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -64,12 +65,12 @@ public class RegionServiceImpl implements RegionService {
 		
 		
 		if (regionName != null) {
-			throw new CustomException(HttpStatusCode.RESOURCE_ALREADY_EXISTS.getCode(),
-					HttpStatusCode.RESOURCE_ALREADY_EXISTS, HttpStatusCode.RESOURCE_ALREADY_EXISTS.getMessage(), res);
+			throw new CustomException(HttpStatusCode.REGION_NAME_DUPLICATE.getCode(),
+					HttpStatusCode.REGION_NAME_DUPLICATE, HttpStatusCode.REGION_NAME_DUPLICATE.getMessage(), res);
 		}
 		if (regionCode != null) {
-			throw new CustomException(HttpStatusCode.RESOURCE_ALREADY_EXISTS.getCode(),
-					HttpStatusCode.RESOURCE_ALREADY_EXISTS, HttpStatusCode.RESOURCE_ALREADY_EXISTS.getMessage(), res);
+			throw new CustomException(HttpStatusCode.REGION_CODE_DUPLICATE.getCode(),
+					HttpStatusCode.REGION_CODE_DUPLICATE, HttpStatusCode.REGION_CODE_DUPLICATE.getMessage(), res);
 		}
 		
 		Region savedRegion = new Region();
@@ -95,10 +96,10 @@ public class RegionServiceImpl implements RegionService {
 	}
 
 	@Override
-	public Response<List<RegionDetailsDto>> getRegionDetails(Integer PageNumber, Integer PageSize) {
-		Result<List<RegionDetailsDto>> allRegion = new Result<>();
+	public Response<PaginationResponse<List<RegionDetailsDto>>> getRegionDetails(Integer PageNumber, Integer PageSize) {
+		Result<PaginationResponse<List<RegionDetailsDto>>> allRegion = new Result<>();
 		Pageable paging = PageRequest.of(PageNumber, PageSize);
-		Response<List<RegionDetailsDto>> getListofRegion = new Response<List<RegionDetailsDto>>();
+		Response<PaginationResponse<List<RegionDetailsDto>>> getListofRegion = new Response<PaginationResponse<List<RegionDetailsDto>>>();
 
 		Page<Region> list = this.regionRepository.findAll(paging);
 		List<RegionDetailsDto> regionDtos = list.toList().stream().map(region -> regionMapper.toRegionDetails(region)).collect(Collectors.toList());
@@ -106,7 +107,10 @@ public class RegionServiceImpl implements RegionService {
 			throw new CustomException(HttpStatusCode.RESOURCE_NOT_FOUND.getCode(), HttpStatusCode.RESOURCE_NOT_FOUND,
 					HttpStatusCode.RESOURCE_NOT_FOUND.getMessage(), allRegion);
 		}
-		allRegion.setData(regionDtos);
+
+		PaginationResponse paginationResponse = new PaginationResponse<List<RegionDetailsDto>>(regionDtos,list.getTotalPages(),list.getTotalElements());
+
+		allRegion.setData(paginationResponse);
 		getListofRegion.setStatusCode(HttpStatusCode.REGION_RETREIVED_SUCCESSFULLY.getCode());
 		getListofRegion.setMessage(HttpStatusCode.REGION_RETREIVED_SUCCESSFULLY.getMessage());
 		getListofRegion.setResult(allRegion);

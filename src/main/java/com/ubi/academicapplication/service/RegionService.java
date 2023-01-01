@@ -8,13 +8,14 @@ import com.ubi.academicapplication.dto.educationaldto.regionDto.RegionDetailsDto
 import com.ubi.academicapplication.dto.educationaldto.regionDto.RegionDto;
 import com.ubi.academicapplication.dto.educationaldto.regionDto.RegionSchoolDto;
 import com.ubi.academicapplication.dto.educationaldto.regionDto.RegionSchoolMappingDto;
+import com.ubi.academicapplication.dto.pagination.PaginationResponse;
 import com.ubi.academicapplication.dto.response.Response;
 
 public interface RegionService {
 
 	Response<RegionDetailsDto> addRegion(RegionCreationDto regionCreationDto);
 
-	Response<List<RegionDetailsDto>> getRegionDetails(Integer PageNumber, Integer PageSize);
+	Response<PaginationResponse<List<RegionDetailsDto>>> getRegionDetails(Integer PageNumber, Integer PageSize);
 
 	public Response<RegionDetailsDto> getRegionById(int id);
 
