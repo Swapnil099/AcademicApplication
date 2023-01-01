@@ -44,9 +44,7 @@ public class Region {
 	@ManyToMany(mappedBy="region",cascade = CascadeType.MERGE)
 	private Set<EducationalInstitution> educationalInstitiute;
 
-	
-	
-	@OneToMany(mappedBy="region" , cascade=CascadeType.ALL)
+	@OneToMany(mappedBy="region" , cascade=CascadeType.MERGE)
 	private Set<School> school;
 	
 }

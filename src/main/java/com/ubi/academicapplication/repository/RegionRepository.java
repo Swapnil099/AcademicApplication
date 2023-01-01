@@ -16,8 +16,4 @@ public interface RegionRepository extends JpaRepository<Region,Integer> {
 
 	Set<Region> getReferenceByIdIn(Set<Integer> regionId);
 
-	
-	
-     
-     
 }

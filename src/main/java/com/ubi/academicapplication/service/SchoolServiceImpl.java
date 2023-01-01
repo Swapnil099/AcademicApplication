@@ -72,16 +72,9 @@ public class SchoolServiceImpl implements SchoolService {
 		Result<SchoolRegionDto> res = new Result<>();
 
 		Response<SchoolRegionDto> response = new Response<>();
-		Optional<School> tempSchools = schoolRepository.findById(schoolDto.getSchoolId());
 
 		School schoolName = schoolRepository.getSchoolByName(schoolDto.getName());
-
 		School schoolCode = schoolRepository.getSchoolByCode(schoolDto.getCode());
-
-		if (tempSchools.isPresent()) {
-			throw new CustomException(HttpStatusCode.NO_SCHOOL_FOUND.getCode(), HttpStatusCode.NO_SCHOOL_FOUND,
-					HttpStatusCode.NO_SCHOOL_FOUND.getMessage(), res);
-		}
 
 		if (schoolName != null) {
 			throw new CustomException(HttpStatusCode.SCHOOL_NAME_ALREADY_EXISTS.getCode(),
@@ -121,9 +114,12 @@ public class SchoolServiceImpl implements SchoolService {
 				classDetail.setSchool(school);
 			}
 		}
-		
-		school.setEducationalInstitution(educationalRepository.getReferenceById(schoolDto.getEducationalInstitutionId()));
-		
+		if(schoolDto.getEducationalInstitutionId() != 0){
+			EducationalInstitution educationalInstitution = educationalRepository.getReferenceById(schoolDto.getEducationalInstitutionId());
+			if(educationalInstitution != null){
+				school.setEducationalInstitution(educationalInstitution);
+			}
+		}
 
 		School savedSchool = schoolRepository.save(school);
 
@@ -148,8 +144,6 @@ public class SchoolServiceImpl implements SchoolService {
 			schoolRegionDto.setSchoolDto(schoolMapper.entityToDtos(school));
 
 			schoolRegionDto.setRegionDto(regionMapper.toDto(school.getRegion()));
-			
-
 			Set<ClassDto> classDto = school.getClassDetail().stream()
 					.map(classDetail -> classMapper.entityToDto(classDetail)).collect(Collectors.toSet());
 

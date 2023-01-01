@@ -56,8 +56,9 @@ public enum HttpStatusCode {
 	
 	EDUCATIONAL_INSTITUTION_CODE_ALREADY_EXISTS(110, "Educational Institution Code Already exists"),
 
+	REGION_CODE_DUPLICATE(110,"region with given code already exist"),
 
-		
+	REGION_NAME_DUPLICATE(110,"region with given name already exist"),
 	NO_TRANSFERCERTIFICATE_FOUND(108, "No Transfer Certificate Found"),
 	
 	NO_CONTACTINFO_MATCH_WITH_ID(109,"No such contact info found with such id"),

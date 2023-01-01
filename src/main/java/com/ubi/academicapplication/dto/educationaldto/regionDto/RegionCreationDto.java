@@ -13,5 +13,4 @@ public class RegionCreationDto {
 	private String code;
 	private String name;
 	private Set<Integer> eduInstId;
-	private Set<Integer> schoollId;
 }

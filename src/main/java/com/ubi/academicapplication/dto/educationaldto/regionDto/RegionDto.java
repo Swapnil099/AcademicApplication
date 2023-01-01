@@ -18,8 +18,4 @@ public class RegionDto {
 	private String name;
 	
 	private Set<Integer> eduInstId;
-	
-	private Set<Integer> schoollId;
-	
-	
 }

@@ -68,7 +68,6 @@ public class School {
 	
 	@Column(name = "vvnFund")
 	private int vvnFund;
-	
 
 	@ManyToOne
 	@JoinColumn(name="region_id",referencedColumnName="id" )
@@ -78,10 +77,7 @@ public class School {
 	private Set<ClassDetail> classDetail;
 
 	@ManyToOne
-	@JoinColumn(name = "educationalInstitute_id", referencedColumnName = "id")
+	@JoinColumn(name = "educationalInstitute_id", referencedColumnName = "id",nullable = true)
 	private EducationalInstitution educationalInstitution;
-	
-	
-	
-	
+
 }

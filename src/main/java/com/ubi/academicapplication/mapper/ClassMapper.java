@@ -23,12 +23,14 @@ public class ClassMapper {
 
 	// entity to DTO Mapping
 	public ClassDto entityToDto(ClassDetail classDetail) {
-		ClassDto classDto = new ClassDto();
-		classDto.setClassId(classDetail.getClassId());
-		classDto.setClassName(classDetail.getClassName());
-		classDto.setClassCode(classDetail.getClassCode());
-		classDto.setSchoolId(classDetail.getSchool().getSchoolId());
-		classDto.setStudentId(classDetail.getStudents().stream().filter(Objects::nonNull).map(student -> student.getStudentId()).collect(Collectors.toSet()));
+		ClassDto classDto = null;
+		if(classDetail != null){
+			classDto = new ClassDto();
+			classDto.setClassId(classDetail.getClassId());
+			classDto.setClassName(classDetail.getClassName());
+			classDto.setClassCode(classDetail.getClassCode());
+			classDto.setSchoolId(classDetail.getSchool().getSchoolId());
+		}
 		return classDto;
 	}
 
@@ -54,7 +56,6 @@ public class ClassMapper {
 		ClassDto classDto=modelMapper.map(classDetail, ClassDto.class);
 		classDto.setSchoolId(classDetail.getSchool().getSchoolId());
 		Set<Long> studentId=classDetail.getStudents().stream().filter(Objects::nonNull).map(classDetails -> classDetails.getStudentId()).collect(Collectors.toSet());
-		classDto.setStudentId(studentId);
 		return classDto;
 	}
 	
