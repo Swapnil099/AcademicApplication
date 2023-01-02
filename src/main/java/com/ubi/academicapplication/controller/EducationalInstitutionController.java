@@ -25,6 +25,7 @@ import com.ubi.academicapplication.dto.educationaldto.EducationalInstitutionDto;
 import com.ubi.academicapplication.dto.educationaldto.regionDto.EIRegionMappingDto;
 import com.ubi.academicapplication.dto.educationaldto.regionDto.EducationRegionGetDto;
 import com.ubi.academicapplication.dto.educationaldto.regionDto.EducationalRegionDto;
+import com.ubi.academicapplication.dto.pagination.PaginationResponse;
 import com.ubi.academicapplication.dto.response.Response;
 import com.ubi.academicapplication.security.roleaccessinterface.IsSuperAdmin;
 import com.ubi.academicapplication.service.EducationalInstitutionService;
@@ -72,10 +73,12 @@ public class EducationalInstitutionController {
 	@Operation(summary = "Get All Educational Institution", security = @SecurityRequirement(name = "bearerAuth"))
 	@GetMapping()
 	@IsSuperAdmin
-	public ResponseEntity<Response<List<EducationRegionGetDto>>> getEducationalInstitutions(
+	public ResponseEntity<Response<PaginationResponse<List<EducationRegionGetDto>>>> getEducationalInstitutions(
 			@RequestParam(value = "PageNumber", defaultValue = "0", required = false) Integer pageNumber,
-			@RequestParam(value = "PageSize", defaultValue = "5", required = false) Integer pageSize) {
-		Response<List<EducationRegionGetDto>> response = educationalInstitutionService
+			@RequestParam(value = "PageSize", defaultValue = "5", required = false) Integer pageSize
+	       )
+	{
+		Response<PaginationResponse<List<EducationRegionGetDto>>> response = educationalInstitutionService
 				.getAllEducationalInstitutions(pageNumber, pageSize);
 		if (response.getStatusCode() == 200) {
 			return ResponseEntity.status(HttpStatus.OK).body(response);
