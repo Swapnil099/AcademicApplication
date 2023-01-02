@@ -63,7 +63,11 @@ public class UserMapper {
 	public UserContactInfoDto toUserContactInfoDto(User user)
 	{
 		UserDto userDto= this.toDto(user);
-		RoleDto roleDto=roleMapper.toDto(user.getRole());
+		RoleDto roleDto = null;
+		if(user.getRole() != null){
+			roleDto=roleMapper.toDto(user.getRole());
+		}
+
 		ContactInfoDto contactInfoDto= null;
 		if(user.getContactInfo() != null)
 		{
