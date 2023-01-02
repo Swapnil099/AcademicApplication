@@ -107,7 +107,7 @@ public class SchoolServiceImpl implements SchoolService {
 		school.setClassDetail(new HashSet<>());
 
 		for (Long classId : schoolDto.getClassId()) {
-			System.out.println(classId);
+			//System.out.println(classId);
 			ClassDetail classDetail = classRepository.getReferenceById(classId);
 			if (classDetail != null) {
 				school.getClassDetail().add(classDetail);
@@ -263,11 +263,17 @@ public class SchoolServiceImpl implements SchoolService {
 		school.setName(schoolDto.getName());
 		school.setStrength(schoolDto.getStrength());
 		school.setVvnAccount(schoolDto.getVvnAccount());
+		school.setVvnFund(schoolDto.getVvnFund());
 		school.setStrength(schoolDto.getStrength());
 		school.setShift(schoolDto.getShift());
 		school.setType(schoolDto.getType());
 		school.setEmail(schoolDto.getEmail());
 		school.setSchoolId(schoolDto.getSchoolId());
+		
+		Region region = regionRepository.getReferenceById(schoolDto.getRegionId());
+		regionRepository.save(region);
+		school.setRegion(region);
+		
 		
 		  for (Long classId : schoolDto.getClassId()) {
 			  ClassDetail classDetail = classRepository.getReferenceById(classId);
@@ -279,6 +285,8 @@ public class SchoolServiceImpl implements SchoolService {
 		  EducationalInstitution educationalInstitution = educationalRepository.getReferenceById(schoolDto.getEducationalInstitutionId());
 		  educationalRepository.save(educationalInstitution);
 		  school.setEducationalInstitution(educationalInstitution);
+		  
+		  
 		  
 		  School updatedSchool = schoolRepository.save(school);
 		  
@@ -313,7 +321,8 @@ public class SchoolServiceImpl implements SchoolService {
 		getListofSchools.setResult(allSchoolResult);
 		return getListofSchools;
 	}
-
+	
+	
 	@Override
 	public ByteArrayInputStream loadSchoolAndClass() {
 		List<School> school = schoolRepository.findAll();
@@ -321,3 +330,4 @@ public class SchoolServiceImpl implements SchoolService {
 		return out;
 	}
 }
+
