@@ -21,8 +21,6 @@ import com.ubi.academicapplication.entity.EducationalInstitution;
 import com.ubi.academicapplication.entity.Region;
 import com.ubi.academicapplication.entity.School;
 
-import ch.qos.logback.core.joran.action.ActionUtil.Scope;
-
 @Component
 public class SchoolMapper {
 
@@ -47,9 +45,13 @@ public class SchoolMapper {
 		schoolDto.setExemptionFlag(school.isExemptionFlag());
 		schoolDto.setVvnAccount(school.getVvnAccount());
 		schoolDto.setVvnFund(school.getVvnFund());
-		schoolDto.setRegionId(school.getRegion().getId());
 	
-		//schoolDto.setClassId(school.getClassDetail().stream().map(e->e.getClassId()).collect(Collectors.toSet()));
+		if(school.getRegion() != null)
+		{
+			schoolDto.setRegionId(school.getRegion().getId());
+		}		
+		
+	
 		if(school.getClassDetail() != null) 
 		{
 			for (ClassDetail cd : school.getClassDetail()) 
@@ -59,7 +61,7 @@ public class SchoolMapper {
 			}
 		}
 		
-		//schoolDto.setEducationalInstitutionId(school.getEducationalInstitution().getId());
+	
 		if(school.getEducationalInstitution() != null) {
 			schoolDto.setEducationalInstitutionId(school.getEducationalInstitution().getId());
 		}
@@ -111,11 +113,10 @@ public class SchoolMapper {
 	public SchoolRegionDto toSchoolClassDto(School school) {
 		SchoolDto schoolDto = this.entityToDto(school);
 		Region region = school.getRegion();
-		RegionDto regionDto = new RegionDto();
+		RegionDto regionDto = new RegionDto();		
 		regionDto.setCode(region.getCode());
 		regionDto.setName(region.getName());
 		regionDto.setId(region.getId());
-		
 		
 		Set<ClassDto> classDtoSet = new HashSet<>();
 		if(school.getClassDetail() != null) {
@@ -142,8 +143,6 @@ public class SchoolMapper {
 			edDto.setExemptionFlag(edu.getExemptionFlag());
 			edDto.setVvnAccount(edu.getVvnAccount());
 		}
-		//edDto.setRegionsId(edu.ge);
-		//edDto.setRegionsId(edu.getRegion());
 		return new SchoolRegionDto(schoolDto, regionDto, classDtoSet, edDto);
 
 	}
