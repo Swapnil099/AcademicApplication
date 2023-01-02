@@ -64,9 +64,11 @@ public class UserMapper {
 	{
 		UserDto userDto= this.toDto(user);
 		RoleDto roleDto=roleMapper.toDto(user.getRole());
-		ContactInfoDto contactInfoDto= contactInfoMapper.entityToDto(user.getContactInfo());
+		ContactInfoDto contactInfoDto= null;
+		if(user.getContactInfo() != null)
+		{
+			contactInfoDto = contactInfoMapper.entityToDto(user.getContactInfo());
+		}
 		return new UserContactInfoDto(userDto,roleDto,contactInfoDto);
 	}
-
-
 }

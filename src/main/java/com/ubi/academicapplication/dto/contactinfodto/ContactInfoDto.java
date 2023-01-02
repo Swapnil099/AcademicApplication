@@ -41,6 +41,4 @@ public class ContactInfoDto {
 	@Pattern(regexp  ="^\\d{12}$",message = "Please Enter a Valid Aadhar Card Number")
 	private String aadharCardNumber;
 	private String nationality;
-
-
 }
