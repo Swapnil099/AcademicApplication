@@ -1,6 +1,7 @@
 package com.ubi.academicapplication.service;
 
 import java.io.ByteArrayInputStream;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -24,6 +25,7 @@ import com.ubi.academicapplication.dto.educationaldto.regionDto.EIRegionMappingD
 import com.ubi.academicapplication.dto.educationaldto.regionDto.EducationRegionGetDto;
 import com.ubi.academicapplication.dto.educationaldto.regionDto.EducationalRegionDto;
 import com.ubi.academicapplication.dto.educationaldto.regionDto.RegionGet;
+import com.ubi.academicapplication.dto.pagination.PaginationResponse;
 import com.ubi.academicapplication.dto.response.Response;
 import com.ubi.academicapplication.entity.EducationalInstitution;
 import com.ubi.academicapplication.entity.Region;
@@ -157,20 +159,23 @@ public class EducationalInstitutionServiceImpl implements EducationalInstitution
 	}
 
 	@Override
-	public Response<List<EducationRegionGetDto>> getAllEducationalInstitutions(Integer pageNumber, Integer pageSize) {
+	public Response<PaginationResponse<List<EducationRegionGetDto>>> getAllEducationalInstitutions(Integer pageNumber, Integer pageSize) {
 
-		Result<List<EducationRegionGetDto>> allEducationalResult = new Result<>();
+		Result<PaginationResponse<List<EducationRegionGetDto>>> allEducationalResult = new Result<>();
+		
+		
 		Pageable paging = PageRequest.of(pageNumber, pageSize);
-		Response<List<EducationRegionGetDto>> getListofEducationalInstitution = new Response<>();
+		
+		Response<PaginationResponse<List<EducationRegionGetDto>>> getListofEducationalInstitution = new Response<>();
 
-		// Integer count = educationalInstitutionRepository.findAll().size();
+		
 
 		Page<EducationalInstitution> list = this.educationalInstitutionRepository.findAll(paging);
 
 		List<EducationRegionGetDto> EducationalRegionDtoList = new ArrayList<>();
 		for (EducationalInstitution eduInsti : list) {
 			EducationRegionGetDto educationalRegionDto = new EducationRegionGetDto();
-			// educationalRegionDto.setTotalEducationInstituteCount(count);
+			
 			educationalRegionDto.setEducationalInstituteDto(educationalInstitutionMapper.entityToDtos(eduInsti));
 			Set<RegionGet> regionDtos = eduInsti.getRegion().stream().map(region -> regionMapper.toDtos(region))
 					.collect(Collectors.toSet());
@@ -184,7 +189,10 @@ public class EducationalInstitutionServiceImpl implements EducationalInstitution
 					HttpStatusCode.NO_EDUCATIONAL_INSTITUTION_FOUND,
 					HttpStatusCode.NO_EDUCATIONAL_INSTITUTION_FOUND.getMessage(), allEducationalResult);
 		}
-		allEducationalResult.setData(EducationalRegionDtoList);
+		
+		PaginationResponse paginationResponse=new PaginationResponse<List<EducationRegionGetDto>>(EducationalRegionDtoList,list.getTotalPages(),list.getTotalElements());
+		
+		allEducationalResult.setData(paginationResponse);
 		getListofEducationalInstitution
 				.setStatusCode(HttpStatusCode.EDUCATIONAL_INSTITUTION_RETRIVED_SUCCESSFULLY.getCode());
 		getListofEducationalInstitution

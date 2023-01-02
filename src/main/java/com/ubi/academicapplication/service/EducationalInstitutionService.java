@@ -9,6 +9,7 @@ import com.ubi.academicapplication.dto.educationaldto.EducationalInstitutionDto;
 import com.ubi.academicapplication.dto.educationaldto.regionDto.EIRegionMappingDto;
 import com.ubi.academicapplication.dto.educationaldto.regionDto.EducationRegionGetDto;
 import com.ubi.academicapplication.dto.educationaldto.regionDto.EducationalRegionDto;
+import com.ubi.academicapplication.dto.pagination.PaginationResponse;
 import com.ubi.academicapplication.dto.response.Response;
 
 public interface EducationalInstitutionService {
@@ -17,7 +18,7 @@ public interface EducationalInstitutionService {
 
 	Response<EducationRegionGetDto> getEducationalInstituteByName(String educationalInstitutionName);
 
-	Response<List<EducationRegionGetDto>> getAllEducationalInstitutions(Integer pageNumber, Integer pageSize);
+	Response<PaginationResponse<List<EducationRegionGetDto>>> getAllEducationalInstitutions(Integer pageNumber, Integer pageSize);
 
 	Response<EducationalInstitutionDto> deleteEducationalInstitution(int id);
 
