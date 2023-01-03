@@ -19,6 +19,8 @@ import org.springframework.stereotype.Service;
 
 import com.ubi.academicapplication.csv.SchoolClassCsvHelper;
 import com.ubi.academicapplication.dto.classdto.ClassDto;
+import com.ubi.academicapplication.dto.educationaldto.regionDto.EducationRegionGetDto;
+import com.ubi.academicapplication.dto.pagination.PaginationResponse;
 import com.ubi.academicapplication.dto.response.Response;
 import com.ubi.academicapplication.dto.school.SchoolDto;
 import com.ubi.academicapplication.dto.school.SchoolRegionDto;
@@ -131,11 +133,11 @@ public class SchoolServiceImpl implements SchoolService {
 	}
 
 	@Override
-	public Response<List<SchoolRegionDto>> getAllSchools(Integer PageNumber, Integer PageSize) {
+	public Response<PaginationResponse<List<SchoolRegionDto>>> getAllSchools(Integer PageNumber, Integer PageSize) {
 
-		Result<List<SchoolRegionDto>> allSchoolResult = new Result<>();
+		Result<PaginationResponse<List<SchoolRegionDto>>> allSchoolResult = new Result<>();
 		Pageable paging = PageRequest.of(PageNumber, PageSize);
-		Response<List<SchoolRegionDto>> getListofSchools = new Response<>();
+		Response<PaginationResponse<List<SchoolRegionDto>>> getListofSchools = new Response<>();
 
 		Page<School> list = this.schoolRepository.findAll(paging);
 		List<SchoolRegionDto> schoolDtos = new ArrayList<>();
@@ -157,7 +159,11 @@ public class SchoolServiceImpl implements SchoolService {
 			throw new CustomException(HttpStatusCode.NO_SCHOOL_FOUND.getCode(), HttpStatusCode.NO_SCHOOL_FOUND,
 					HttpStatusCode.NO_SCHOOL_FOUND.getMessage(), allSchoolResult);
 		}
-		allSchoolResult.setData(schoolDtos);
+		
+		PaginationResponse paginationResponse=new PaginationResponse<List<SchoolRegionDto>>(schoolDtos,list.getTotalPages(),list.getTotalElements());
+
+		
+		allSchoolResult.setData(paginationResponse);
 		getListofSchools.setStatusCode(HttpStatusCode.SCHOOL_RETRIVED_SUCCESSFULLY.getCode());
 		getListofSchools.setMessage(HttpStatusCode.SCHOOL_RETRIVED_SUCCESSFULLY.getMessage());
 		getListofSchools.setResult(allSchoolResult);

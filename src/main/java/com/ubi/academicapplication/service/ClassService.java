@@ -6,6 +6,7 @@ import java.util.List;
 import com.ubi.academicapplication.dto.classdto.ClassDto;
 import com.ubi.academicapplication.dto.classdto.ClassStudentDto;
 import com.ubi.academicapplication.dto.contactinfodto.ContactInfoDto;
+import com.ubi.academicapplication.dto.pagination.PaginationResponse;
 import com.ubi.academicapplication.dto.response.Response;
 import com.ubi.academicapplication.dto.student.StudentDto;
 
@@ -15,7 +16,7 @@ public interface ClassService {
 
 	Response<ClassStudentDto> addClassDetails(ClassDto classDto);
 	
-	Response<List<ClassStudentDto>> getClassDetails(Integer PageNumber, Integer PageSize);
+	Response<PaginationResponse<List<ClassStudentDto>>> getClassDetails(Integer PageNumber, Integer PageSize);
 
 	public Response<ClassStudentDto> getClassById(Long classid);
 	

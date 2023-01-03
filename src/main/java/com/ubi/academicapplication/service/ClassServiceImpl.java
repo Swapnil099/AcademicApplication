@@ -18,6 +18,8 @@ import org.springframework.stereotype.Service;
 import com.ubi.academicapplication.csv.ClassCsvHelper;
 import com.ubi.academicapplication.dto.classdto.ClassDto;
 import com.ubi.academicapplication.dto.classdto.ClassStudentDto;
+import com.ubi.academicapplication.dto.educationaldto.regionDto.EducationRegionGetDto;
+import com.ubi.academicapplication.dto.pagination.PaginationResponse;
 import com.ubi.academicapplication.dto.response.Response;
 import com.ubi.academicapplication.dto.student.StudentDto;
 import com.ubi.academicapplication.entity.ClassDetail;
@@ -91,11 +93,11 @@ public class ClassServiceImpl implements ClassService {
 		return response;
 	}
 
-	public Response<List<ClassStudentDto>> getClassDetails(Integer PageNumber, Integer PageSize) {
+	public Response<PaginationResponse<List<ClassStudentDto>>> getClassDetails(Integer PageNumber, Integer PageSize) {
 
-		Result<List<ClassStudentDto>> allClasses = new Result<>();
+		Result<PaginationResponse<List<ClassStudentDto>>> allClasses = new Result<>();
 		Pageable pageing = PageRequest.of(PageNumber, PageSize);
-		Response<List<ClassStudentDto>> getListofClasses = new Response<List<ClassStudentDto>>();
+		Response<PaginationResponse<List<ClassStudentDto>>> getListofClasses = new Response<PaginationResponse<List<ClassStudentDto>>>();
 
 		Page<ClassDetail> classList = this.classRepository.findAll(pageing);
 		List<ClassStudentDto> classDto =new ArrayList();
@@ -117,7 +119,10 @@ public class ClassServiceImpl implements ClassService {
 				HttpStatusCode.RESOURCE_NOT_FOUND.getMessage(), allClasses);
 		}
 		
-		allClasses.setData(classDto);
+		PaginationResponse paginationResponse=new PaginationResponse<List<ClassStudentDto>>(classDto,classList.getTotalPages(),classList.getTotalElements());
+		
+		
+		allClasses.setData(paginationResponse);
 		getListofClasses.setStatusCode(HttpStatusCode.CLASS_RETREIVED_SUCCESSFULLY.getCode());
 		getListofClasses.setMessage(HttpStatusCode.CLASS_RETREIVED_SUCCESSFULLY.getMessage());
 		getListofClasses.setResult(allClasses);

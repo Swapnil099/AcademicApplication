@@ -11,6 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.ubi.academicapplication.csv.StudentCSVHelper;
+import com.ubi.academicapplication.dto.classdto.ClassStudentDto;
+import com.ubi.academicapplication.dto.pagination.PaginationResponse;
 import com.ubi.academicapplication.dto.response.Response;
 import com.ubi.academicapplication.dto.student.StudentDto;
 import com.ubi.academicapplication.entity.ClassDetail;
@@ -68,19 +70,23 @@ public class StudentServiceImpl implements StudentService {
 		return response;
 	}
 
-	public Response<List<StudentDto>> getStudents(Integer PageNumber, Integer PageSize) {
-		Result<List<StudentDto>> res = new Result<>();
+	public Response<PaginationResponse<List<StudentDto>>> getStudents(Integer PageNumber, Integer PageSize) {
+		Result<PaginationResponse<List<StudentDto>>> res = new Result<>();
 		Pageable paging = PageRequest.of(PageNumber, PageSize);
-		Response<List<StudentDto>> getListofStudent = new Response<>();
+		Response<PaginationResponse<List<StudentDto>>> getListofStudent = new Response<>();
 		Page<Student> list = this.repository.findAll(paging);
 
 		List<StudentDto> studentDtos = studentMapper.entitiesToDtos(list.toList());
 
-		res.setData(studentDtos);
+		
 		if (list.isEmpty()) {
 			throw new CustomException(HttpStatusCode.NO_ENTRY_FOUND.getCode(), HttpStatusCode.NO_ENTRY_FOUND,
 					HttpStatusCode.NO_ENTRY_FOUND.getMessage(), res);
 		}
+		
+		PaginationResponse paginationResponse=new PaginationResponse<List<StudentDto>>(studentDtos,list.getTotalPages(),list.getTotalElements());
+		
+		res.setData(paginationResponse);
 		getListofStudent.setStatusCode(200);
 		getListofStudent.setResult(res);
 		return getListofStudent;

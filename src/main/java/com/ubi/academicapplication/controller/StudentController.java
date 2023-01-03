@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ubi.academicapplication.dto.pagination.PaginationResponse;
 import com.ubi.academicapplication.dto.response.Response;
 import com.ubi.academicapplication.dto.student.StudentDto;
 import com.ubi.academicapplication.security.roleaccessinterface.IsTeacher;
@@ -46,10 +47,10 @@ public class StudentController {
 	@Operation(summary = "Get All Student", security = @SecurityRequirement(name = "bearerAuth"))
 	@GetMapping
 	@IsTeacher
-	public ResponseEntity<Response<List<StudentDto>>> getStudents(
+	public ResponseEntity<Response<PaginationResponse<List<StudentDto>>>> getStudents(
 			@RequestParam(value = "PageNumber", defaultValue = "0", required = false) Integer pageNumber,
 			@RequestParam(value = "PageSize", defaultValue = "5", required = false) Integer pageSize) {
-		Response<List<StudentDto>> response = service.getStudents(pageNumber, pageSize);
+		Response<PaginationResponse<List<StudentDto>>> response = service.getStudents(pageNumber, pageSize);
 		return ResponseEntity.ok().body(response);
 
 	}
