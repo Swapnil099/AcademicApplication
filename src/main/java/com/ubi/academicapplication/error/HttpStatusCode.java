@@ -170,11 +170,15 @@ public enum HttpStatusCode {
 	
 	CLASS_DELETED_SUCCESSFULLY(200, "Class Deleted Successfully"),
 	
+	TEACHER_NOT_VERIFIED(200, "Not verified by Teacher"),
+	
 	REGION_NOT_FOUND(108,"No such region found"),
 	
 	CLASS_NOT_FOUND(108, "No Class Found"),
 	
 	REGION_UPDATED(200,"Region Updated Successfully"),
+	
+	STUDENT_VERIFIED_SUCCESSFULLY(200,"Student verified successfully"),
 	
 	MAPPING_ALREADY_EXIST(108,"Mapping Already Exist");
 	

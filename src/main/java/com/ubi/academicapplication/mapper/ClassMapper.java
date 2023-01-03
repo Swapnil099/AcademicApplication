@@ -102,8 +102,8 @@ public class ClassMapper {
 				studentDto.setStatus(student.getStatus());
 				studentDto.setStudentStatus(student.isStudentStatus());
 				studentDto.setVerifiedByPrincipal(student.getVerifiedByPrincipal());
-				studentDto.setVerifiedByRegion(student.getVerifiedByRegion());
-				studentDto.setVerifiedByTeacher(student.getVerifiedByTeacher());
+			
+				studentDto.setVerifiedByTeacher(student.isVerifiedByTeacher());
 				studentDtoSet.add(studentDto);
 			}
 		}

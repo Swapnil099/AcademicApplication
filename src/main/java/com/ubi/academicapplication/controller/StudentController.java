@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ubi.academicapplication.dto.response.Response;
 import com.ubi.academicapplication.dto.student.StudentDto;
+import com.ubi.academicapplication.dto.student.StudentVerifyDto;
+import com.ubi.academicapplication.security.roleaccessinterface.IsPrincipal;
 import com.ubi.academicapplication.security.roleaccessinterface.IsTeacher;
 import com.ubi.academicapplication.service.StudentServiceImpl;
 
@@ -138,8 +140,21 @@ public class StudentController {
 		return ResponseEntity.ok().body(students);
 	}
 	
+	@Operation(summary = "Verified by Teacher", security = @SecurityRequirement(name = "bearerAuth"))
+	@PatchMapping("/verifiedByTeacher/{userId}")
+	@IsTeacher
+	public ResponseEntity<Response<List<StudentVerifyDto>>> verifyStudentById(@PathVariable String userId,@RequestBody StudentVerifyDto id) {
+		Response<List<StudentVerifyDto>> response = service.verifiedByTeacher(userId,id);
+		return ResponseEntity.ok().body(response);
+	}
 	
-	
+	@Operation(summary = "Verified by Principal", security = @SecurityRequirement(name = "bearerAuth"))
+	@PatchMapping("/verifiedByPrincipal/{userId}")
+	@IsPrincipal
+	public ResponseEntity<Response<List<StudentVerifyDto>>> principalverifyStudentById(@PathVariable String userId,@RequestBody StudentVerifyDto id) {
+		Response<List<StudentVerifyDto>> response = service.verifiedByPrincipal(userId,id);
+		return ResponseEntity.ok().body(response);
+	}
 	
 	
 }

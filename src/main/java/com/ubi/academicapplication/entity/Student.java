@@ -2,7 +2,6 @@ package com.ubi.academicapplication.entity;
 
 import java.time.LocalDate;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -44,9 +43,10 @@ public class Student {
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	private LocalDate joiningDate;
 	private String status;
-	private String verifiedByTeacher;
-	private String verifiedByPrincipal;
-	private String verifiedByRegion;
+
+	private boolean verifiedByTeacher;
+	private Boolean verifiedByPrincipal;
+
 	private Boolean isActivate;
 	private String currentStatus;
 	
