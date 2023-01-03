@@ -61,7 +61,7 @@ public class StudentCSVHelper {
 	             data.add(String.valueOf(student.getGender()));
 	             data.add(String.valueOf(student.getJoiningDate()));
 	             data.add(String.valueOf(student.getStatus()));    
-	             data.add(String.valueOf(student.isVerifiedByTeacher()));
+	             data.add(String.valueOf(student.getVerifiedByTeacher()));
 	             data.add(String.valueOf(student.getVerifiedByPrincipal()));
 	           
 	             data.add(String.valueOf(student.getIsActivate()));

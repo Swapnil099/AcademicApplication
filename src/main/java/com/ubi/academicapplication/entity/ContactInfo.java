@@ -36,8 +36,7 @@ public class ContactInfo {
 	private Long contactInfoId;
 	private String firstName;
 	private String middleName;
-	
-	//@Column(name="lastname")
+
 	private String lastName;
 	
 	@Email(message = "Please Enter a valid Email Address")

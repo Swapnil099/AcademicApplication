@@ -2,6 +2,8 @@ package com.ubi.academicapplication.controller;
 
 import java.util.List;
 
+import com.ubi.academicapplication.dto.student.StudentPromoteDemoteDto;
+import com.ubi.academicapplication.security.roleaccessinterface.IsSuperAdmin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
@@ -105,20 +107,6 @@ public class StudentController {
 	}
 
 	
-	@Operation(summary = "Change Current Status To Promoted Of Student By Id", security = @SecurityRequirement(name = "bearerAuth"))
-	@PatchMapping("/promoted/{id}")
-	public ResponseEntity<Response<StudentDto>> changeCurrentStatusToPromoted(@PathVariable Long id) {
-		Response<StudentDto> response = service.changeCurrentStatusToPromoted( id);
-		return ResponseEntity.ok().body(response);
-	}
-
-	@Operation(summary = "Change Current Status To Demoted Of Student By Id", security = @SecurityRequirement(name = "bearerAuth"))
-	@PatchMapping("/demoted/{id}")
-	public ResponseEntity<Response<StudentDto>> changeCurrentStatusToDomoted(@PathVariable Long id) {
-		Response<StudentDto> response = service.changeCurrentStatusToDemoted(id);
-		return ResponseEntity.ok().body(response);
-	}
-	
 	@Operation(summary = "Download Csv", security = @SecurityRequirement(name = "bearerAuth"))
 	@GetMapping("/download")
 	  public ResponseEntity<Resource> getFile() {
@@ -154,6 +142,25 @@ public class StudentController {
 	@IsPrincipal
 	public ResponseEntity<Response<List<StudentVerifyDto>>> principalverifyStudentById(@PathVariable String userId,@RequestBody StudentVerifyDto id) {
 		Response<List<StudentVerifyDto>> response = service.verifiedByPrincipal(userId,id);
+		return ResponseEntity.ok().body(response);
+	}
+
+	@Operation(summary = "Student Promoted User By Id", security = @SecurityRequirement(name = "bearerAuth"))
+	@PatchMapping ("/promote/{userId}")
+	@IsTeacher
+	public ResponseEntity<Response<StudentPromoteDemoteDto>>promoteStudent(@PathVariable String userId, @RequestBody StudentPromoteDemoteDto studentPromoteDemoteCreationDto) {
+		Response<StudentPromoteDemoteDto> response = service.studentPromoted(userId, studentPromoteDemoteCreationDto);
+		return ResponseEntity.ok().body(response);
+	}
+
+
+
+
+	@Operation(summary = "Student Demoted User By Id", security = @SecurityRequirement(name = "bearerAuth"))
+	@PatchMapping ("/demote/{userId}")
+	@IsTeacher
+	public ResponseEntity<Response<StudentPromoteDemoteDto>> demoteStudent(@PathVariable String userId, @RequestBody StudentPromoteDemoteDto studentPromoteDemoteCreationDto) {
+		Response<StudentPromoteDemoteDto> response = service.studentDemoted(userId, studentPromoteDemoteCreationDto);
 		return ResponseEntity.ok().body(response);
 	}
 	

@@ -81,7 +81,9 @@ public class ClassMapper {
 		schoolDto.setVvnAccount(school.getVvnAccount());
 		schoolDto.setVvnFund(school.getVvnFund());
 		schoolDto.setRegionId(school.getRegion().getId());
-		schoolDto.setEducationalInstitutionId(school.getEducationalInstitution().getId());
+		if(school.getEducationalInstitution() != null){
+			schoolDto.setEducationalInstitutionId(school.getEducationalInstitution().getId());
+		}
 		Set<StudentDto> studentDtoSet=new HashSet<>();
 		if(classDetail.getStudents()!=null)
 		{
@@ -105,7 +107,7 @@ public class ClassMapper {
 				studentDto.setStudentStatus(student.isStudentStatus());
 				studentDto.setVerifiedByPrincipal(student.getVerifiedByPrincipal());
 			
-				studentDto.setVerifiedByTeacher(student.isVerifiedByTeacher());
+				studentDto.setVerifiedByTeacher(student.getVerifiedByTeacher());
 				studentDtoSet.add(studentDto);
 			}
 		}
