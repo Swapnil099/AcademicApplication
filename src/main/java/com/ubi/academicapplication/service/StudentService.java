@@ -5,6 +5,7 @@ import java.util.List;
 import com.ubi.academicapplication.dto.pagination.PaginationResponse;
 import com.ubi.academicapplication.dto.response.Response;
 import com.ubi.academicapplication.dto.student.StudentDto;
+import com.ubi.academicapplication.dto.student.StudentPromoteDemoteDto;
 import com.ubi.academicapplication.dto.student.StudentVerifyDto;
 
 
@@ -33,7 +34,9 @@ public interface StudentService {
 	
 	Response<List<StudentVerifyDto>> verifiedByPrincipal(String userId,StudentVerifyDto studentVerifyDto);
 
-	
+	Response<StudentPromoteDemoteDto> studentPromoted(String userId, StudentPromoteDemoteDto studentPromoteDemoteCreationDto);
+
+	Response<StudentPromoteDemoteDto> studentDemoted(String userId,StudentPromoteDemoteDto studentPromoteDemoteCreationDto);
 	
 	
 }

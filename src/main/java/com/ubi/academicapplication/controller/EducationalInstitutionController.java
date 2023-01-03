@@ -85,7 +85,6 @@ public class EducationalInstitutionController {
 		} else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 		}
-
 	}
 
 	@Operation(summary = "Delete Educational Institution By Id", security = @SecurityRequirement(name = "bearerAuth"))
