@@ -47,10 +47,11 @@ public class Student {
 	private String verifiedByTeacher;
 	private String verifiedByPrincipal;
 	private String verifiedByRegion;
+	
 	private Boolean isActivate;
 	private String currentStatus;
 	
-	@ManyToOne(fetch = FetchType.LAZY )
+	@ManyToOne(fetch = FetchType.LAZY ,cascade=CascadeType.MERGE)
 	private ClassDetail classDetail;
 
 }

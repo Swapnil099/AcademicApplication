@@ -1,8 +1,10 @@
 package com.ubi.academicapplication.dto.response;
 
 import java.io.Serializable;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.ubi.academicapplication.dto.student.StudentPromoteDemoteDto;
 import com.ubi.academicapplication.error.Result;
 
 import lombok.AllArgsConstructor;
@@ -16,5 +18,8 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = false)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Response<T> extends BaseResponse implements Serializable{
+
 	private Result <T> result;
+
+	
 }

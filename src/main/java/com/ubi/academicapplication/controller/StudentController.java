@@ -22,6 +22,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ubi.academicapplication.dto.response.Response;
 import com.ubi.academicapplication.dto.student.StudentDto;
+import com.ubi.academicapplication.dto.student.StudentPromoteDemoteDto;
+import com.ubi.academicapplication.dto.user.UserCreationDto;
+import com.ubi.academicapplication.security.roleaccessinterface.IsSuperAdmin;
 import com.ubi.academicapplication.security.roleaccessinterface.IsTeacher;
 import com.ubi.academicapplication.service.StudentServiceImpl;
 
@@ -138,6 +141,25 @@ public class StudentController {
 		return ResponseEntity.ok().body(students);
 	}
 	
+	
+	 @Operation(summary = "Student Promoted User By Id", security = @SecurityRequirement(name = "bearerAuth"))
+	    @PatchMapping ("/promote/{userId}")
+	    @IsSuperAdmin
+	    public ResponseEntity<Response<StudentPromoteDemoteDto>>promoteStudent(@PathVariable String userId, @RequestBody StudentPromoteDemoteDto studentPromoteDemoteCreationDto) {
+	        Response<StudentPromoteDemoteDto> response = service.studentPromoted(userId, studentPromoteDemoteCreationDto);
+	        return ResponseEntity.ok().body(response);
+	    }
+	
+	
+
+
+	 @Operation(summary = "Student Demoted User By Id", security = @SecurityRequirement(name = "bearerAuth"))
+	    @PatchMapping ("/demote/{userId}")
+	    @IsSuperAdmin
+	    public ResponseEntity<Response<StudentPromoteDemoteDto>> demoteStudent(@PathVariable String userId, @RequestBody StudentPromoteDemoteDto studentPromoteDemoteCreationDto) {
+	        Response<StudentPromoteDemoteDto> response = service.studentDemoted(userId, studentPromoteDemoteCreationDto);
+	        return ResponseEntity.ok().body(response);
+	    }
 	
 	
 	

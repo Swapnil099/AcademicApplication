@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.ubi.academicapplication.dto.response.Response;
 import com.ubi.academicapplication.dto.student.StudentDto;
+import com.ubi.academicapplication.dto.student.StudentPromoteDemoteDto;
 
 
 public interface StudentService {
@@ -31,4 +32,8 @@ public interface StudentService {
 	
 	
 	
+    Response<StudentPromoteDemoteDto> studentPromoted(String userId,StudentPromoteDemoteDto studentPromoteDemoteCreationDto);
+    
+	Response<StudentPromoteDemoteDto> studentDemoted(String userId,StudentPromoteDemoteDto studentPromoteDemoteCreationDto);
+
 }

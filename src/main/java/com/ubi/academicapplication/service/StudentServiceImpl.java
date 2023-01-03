@@ -13,14 +13,22 @@ import org.springframework.stereotype.Service;
 import com.ubi.academicapplication.csv.StudentCSVHelper;
 import com.ubi.academicapplication.dto.response.Response;
 import com.ubi.academicapplication.dto.student.StudentDto;
+import com.ubi.academicapplication.dto.student.StudentPromoteDemoteDto;
 import com.ubi.academicapplication.entity.ClassDetail;
+import com.ubi.academicapplication.entity.ContactInfo;
 import com.ubi.academicapplication.entity.Student;
+import com.ubi.academicapplication.entity.StudentPromoteDemote;
+import com.ubi.academicapplication.entity.User;
 import com.ubi.academicapplication.error.CustomException;
 import com.ubi.academicapplication.error.HttpStatusCode;
 import com.ubi.academicapplication.error.Result;
 import com.ubi.academicapplication.mapper.StudentMapper;
+import com.ubi.academicapplication.mapper.UserMapper;
 import com.ubi.academicapplication.repository.ClassRepository;
+import com.ubi.academicapplication.repository.StudentPromoteDemoteRepository;
 import com.ubi.academicapplication.repository.StudentRepository;
+import com.ubi.academicapplication.repository.UserRepository;
+
 
 @Service
 public class StudentServiceImpl implements StudentService {
@@ -28,12 +36,24 @@ public class StudentServiceImpl implements StudentService {
 	@Autowired
 	private StudentMapper studentMapper;
 
+
+	@Autowired
+	private UserMapper userMapper;
+
 	@Autowired
 	ClassRepository classRepository;
 
 	@Autowired
 	private StudentRepository repository;
 
+	@Autowired
+	private StudentPromoteDemoteRepository promoteDemoterepository;
+	
+	@Autowired
+	Result result;
+
+	@Autowired
+	private UserRepository userRepository;
 	  
 	  public ByteArrayInputStream load() {
 	    List<Student> student = repository.findAll();
@@ -60,7 +80,7 @@ public class StudentServiceImpl implements StudentService {
 			
 		Student student = studentMapper.dtoToEntity(studentDto);
 		student.setClassDetail(classDetail);
-
+        student.setCurrentStatus("promoted");
 		Student savedStudent = repository.save(student);
 		response.setStatusCode(HttpStatusCode.RESOURCE_CREATED_SUCCESSFULLY.getCode());
 		response.setMessage(HttpStatusCode.RESOURCE_CREATED_SUCCESSFULLY.getMessage());
@@ -258,4 +278,107 @@ public class StudentServiceImpl implements StudentService {
 		return getListofStudent;
 	}
 
+
+	@Override
+	public Response<StudentPromoteDemoteDto> studentPromoted(String userId,StudentPromoteDemoteDto studentPromoteDemoteCreationDto) {
+		
+		Optional<User> currUser = userRepository.findById(Long.parseLong(userId));
+		
+		if(!currUser.isPresent()){
+		
+			throw new CustomException(HttpStatusCode.RESOURCE_NOT_FOUND.getCode(),
+					HttpStatusCode.RESOURCE_NOT_FOUND,
+					HttpStatusCode.RESOURCE_NOT_FOUND.getMessage(),
+					result);
+			
+		}
+		Result<List<StudentPromoteDemoteDto>> res = new Result<>();
+		ClassDetail classDetails=classRepository.getReferenceById(studentPromoteDemoteCreationDto.getClassId());
+		
+		for(Long category: studentPromoteDemoteCreationDto.getStudentId()){
+
+			Optional<Student> existingStudentContainer = repository.findById(category);
+			if (existingStudentContainer.isPresent()) {
+				if(!Boolean.TRUE.equals(existingStudentContainer.get().getCurrentStatus())) {
+					existingStudentContainer.get().setCurrentStatus("promoted");
+					repository.save(existingStudentContainer.get());
+				}
+				StudentPromoteDemote student =new StudentPromoteDemote();
+				student.setClassId(studentPromoteDemoteCreationDto.getClassId());
+				student.setStudentId(category);
+				student.setPromoted(true);
+				student.setUserId(Long.parseLong(userId));
+				StudentPromoteDemote savedStudent = promoteDemoterepository.save(student);
+				
+				Student updatedStudent=existingStudentContainer.get();
+				updatedStudent.setClassDetail(classDetails);
+				updatedStudent.setCurrentStatus("promoted");
+				repository.save(updatedStudent);
+
+			} else {
+				throw new CustomException(HttpStatusCode.NO_STUDENT_FOUND.getCode(), HttpStatusCode.NO_STUDENT_FOUND,
+						HttpStatusCode.NO_STUDENT_FOUND.getMessage(), res);
+			}
+		}
+		
+	 
+		Response<StudentPromoteDemoteDto> response = new Response<>();
+		response.setStatusCode(HttpStatusCode.STUDENT_PROMOTED_SUCCESSFULLY.getCode());
+			response.setMessage(HttpStatusCode.STUDENT_PROMOTED_SUCCESSFULLY.getMessage());
+			response.setResult(new Result(studentMapper.entityToDtoId(studentPromoteDemoteCreationDto)));
+			return response;
+	}
+
+	
+	
+	 
+	
+	
+	@Override
+	public Response<StudentPromoteDemoteDto> studentDemoted(String userId,StudentPromoteDemoteDto studentPromoteDemoteCreationDto) {
+		Optional<User> currUser = userRepository.findById(Long.parseLong(userId));
+		if(!currUser.isPresent()){
+			throw new CustomException(HttpStatusCode.RESOURCE_NOT_FOUND.getCode(),
+					HttpStatusCode.RESOURCE_NOT_FOUND,
+					HttpStatusCode.RESOURCE_NOT_FOUND.getMessage(),
+					result);
+		}
+	
+		Result<List<StudentPromoteDemoteDto>> res = new Result<>();
+		ClassDetail classDetails=classRepository.getReferenceById(studentPromoteDemoteCreationDto.getClassId());
+		
+	
+		for(Long category: studentPromoteDemoteCreationDto.getStudentId()){
+
+			Optional<Student> existingStudentContainer = repository.findById(category);
+			if (existingStudentContainer.isPresent()) {
+				if(!Boolean.TRUE.equals(existingStudentContainer.get().getCurrentStatus())) {
+					existingStudentContainer.get().setCurrentStatus("demoted");
+					repository.save(existingStudentContainer.get());
+				}
+				StudentPromoteDemote student =new StudentPromoteDemote();
+				student.setClassId(studentPromoteDemoteCreationDto.getClassId());
+				student.setStudentId(category);
+				student.setPromoted(false);
+				student.setUserId(Long.parseLong(userId));
+				StudentPromoteDemote savedStudent = promoteDemoterepository.save(student);
+				
+				Student updatedStudent=existingStudentContainer.get();
+				updatedStudent.setClassDetail(classDetails);
+				updatedStudent.setCurrentStatus("demoted");
+				repository.save(updatedStudent);
+
+			}else {
+				throw new CustomException(HttpStatusCode.NO_STUDENT_FOUND.getCode(), HttpStatusCode.NO_STUDENT_FOUND,
+						HttpStatusCode.NO_STUDENT_FOUND.getMessage(), res);
+			}
+		}
+
+		Response<StudentPromoteDemoteDto> response = new Response<>();
+		response.setStatusCode(HttpStatusCode.STUDENT_DEMOTED_SUCCESSFULLY.getCode());
+		response.setMessage(HttpStatusCode.STUDENT_DEMOTED_SUCCESSFULLY.getMessage());
+		response.setResult(new Result(studentMapper.entityToDtoId(studentPromoteDemoteCreationDto)));
+		return response;
+	
+	}
 }

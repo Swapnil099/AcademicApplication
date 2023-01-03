@@ -129,7 +129,9 @@ public enum HttpStatusCode {
 	
 	CONTACTINFO_UPDATED(200,"Contact info updated successfully"),
 
-
+	STUDENT_PROMOTED_SUCCESSFULLY(200, "Student promoted Successfully"),
+	STUDENT_DEMOTED_SUCCESSFULLY(200, "Student Demoted Successfully"),
+	
 	STUDENT_UPDATED(200, "Student Updated Successfully"),
 
 	//CLASS_DELETED(200, "class deleted successfully"),

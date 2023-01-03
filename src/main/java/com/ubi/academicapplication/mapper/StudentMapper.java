@@ -9,7 +9,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 import com.ubi.academicapplication.dto.student.StudentDto;
+import com.ubi.academicapplication.dto.student.StudentPromoteDemoteDto;
 import com.ubi.academicapplication.entity.Student;
+import com.ubi.academicapplication.entity.StudentPromoteDemote;
+
 
 @Component
 public class StudentMapper {
@@ -36,6 +39,7 @@ public class StudentMapper {
 		 	studentDto.setVerifiedByPrincipal(student.getVerifiedByPrincipal());
 		 	studentDto.setVerifiedByRegion(student.getVerifiedByRegion());
 		 	studentDto.setVerifiedByTeacher(student.getVerifiedByTeacher());
+		 	
 		    studentDto.setClassId(student.getClassDetail().getClassId());
 		    return studentDto;
 		}
@@ -56,5 +60,29 @@ public class StudentMapper {
 	public Set<StudentDto> entitiesToDto(List<Student> list) {
 		return list.stream().filter(Objects::nonNull).map(this::entityToDto).collect(Collectors.toSet());
 	}
+	
+	// DTO to entity Mapping promote demote student
+			public StudentPromoteDemote dtoToEntity(StudentPromoteDemoteDto studentPromoteDemoteCreationDto) {
+				return modelMapper.map(studentPromoteDemoteCreationDto, StudentPromoteDemote.class);
+			}
+	
+			// entity to DTO Mapping  promote demote student
+			public StudentPromoteDemoteDto entityToDto(StudentPromoteDemote studentPromoteDemoteCreation) {
+				StudentPromoteDemoteDto studentPromoteDemoteCreationDto=modelMapper.map(studentPromoteDemoteCreation, StudentPromoteDemoteDto.class);
+			studentPromoteDemoteCreationDto.setClassId(studentPromoteDemoteCreationDto.getClassId());
+			studentPromoteDemoteCreationDto.setStudentId(studentPromoteDemoteCreationDto.getStudentId());
+			
+				  return studentPromoteDemoteCreationDto;
+				}
 
+			public StudentPromoteDemoteDto entityToDtoId(StudentPromoteDemoteDto student) {
+			 
+				StudentPromoteDemoteDto studentPromoteDemoteCreationDto=modelMapper.map(student, StudentPromoteDemoteDto.class);
+				studentPromoteDemoteCreationDto.setClassId(student.getClassId());
+				studentPromoteDemoteCreationDto.setStudentId(student.getStudentId());
+			
+				return studentPromoteDemoteCreationDto;
+			}
+
+			
 }
