@@ -14,7 +14,9 @@ import org.springframework.stereotype.Service;
 
 import com.ubi.academicapplication.dto.contactinfodto.ContactInfoCreationDto;
 import com.ubi.academicapplication.dto.contactinfodto.ContactInfoDto;
+import com.ubi.academicapplication.dto.pagination.PaginationResponse;
 import com.ubi.academicapplication.dto.response.Response;
+import com.ubi.academicapplication.dto.student.StudentDto;
 import com.ubi.academicapplication.entity.ContactInfo;
 import com.ubi.academicapplication.error.CustomException;
 import com.ubi.academicapplication.error.HttpStatusCode;
@@ -52,18 +54,22 @@ public class ContactInfoServiceImpl implements ContactInfoService {
 		return response;
 	}
 
-	public Response<List<ContactInfoDto>> getContactInfo(Integer PageNumber, Integer PageSize) {
-		Result<List<ContactInfoDto>> res = new Result<>();
+	public Response<PaginationResponse<List<ContactInfoDto>>> getContactInfo(Integer PageNumber, Integer PageSize) {
+		Result<PaginationResponse<List<ContactInfoDto>>> res = new Result<>();
 		res.setData(null);
 		Pageable paging = PageRequest.of(PageNumber, PageSize);
-		Response<List<ContactInfoDto>> getListofContacts = new Response<>();
+		Response<PaginationResponse<List<ContactInfoDto>>> getListofContacts = new Response<>();
 		Page<ContactInfo> list = this.contactInfoRepository.findAll(paging);
 		List<ContactInfoDto> contactInfoDtos = contactInfoMapper.entitiesToDtos(list.toList());
-		res.setData(contactInfoDtos);
+		
+		//res.setData(contactInfoDtos);
 		if (list.getSize() == 0) {
 			throw new CustomException(HttpStatusCode.NO_ENTRY_FOUND.getCode(), HttpStatusCode.NO_ENTRY_FOUND,
 					HttpStatusCode.NO_ENTRY_FOUND.getMessage(), res);
 		}
+		PaginationResponse paginationResponse=new PaginationResponse<List<ContactInfoDto>>(contactInfoDtos,list.getTotalPages(),list.getTotalElements());
+		res.setData(paginationResponse);
+		
 		getListofContacts.setStatusCode(200);
 		getListofContacts.setResult(res);
 		return getListofContacts;

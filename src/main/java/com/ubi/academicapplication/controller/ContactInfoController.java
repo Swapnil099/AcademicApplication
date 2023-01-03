@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ubi.academicapplication.dto.contactinfodto.ContactInfoCreationDto;
 import com.ubi.academicapplication.dto.contactinfodto.ContactInfoDto;
+import com.ubi.academicapplication.dto.pagination.PaginationResponse;
 import com.ubi.academicapplication.dto.response.Response;
 import com.ubi.academicapplication.dto.role.RoleCreationDto;
 import com.ubi.academicapplication.dto.role.RoleDto;
@@ -50,10 +51,10 @@ public class ContactInfoController {
 
 	@GetMapping
 	@Operation(summary = "Get All Contact details", security = @SecurityRequirement(name = "bearerAuth"))
-	public ResponseEntity<Response<List<ContactInfoDto>>> getContactInfo(	
+	public ResponseEntity<Response<PaginationResponse<List<ContactInfoDto>>>> getContactInfo(	
 			@RequestParam(value = "PageNumber", defaultValue = "0", required = false) Integer pageNumber,
 			@RequestParam(value = "PageSize", defaultValue = "5", required = false) Integer pageSize) {
-		Response<List<ContactInfoDto>> response = contactInfoServiceImpl.getContactInfo(pageNumber, pageSize);
+		Response<PaginationResponse<List<ContactInfoDto>>> response = contactInfoServiceImpl.getContactInfo(pageNumber, pageSize);
 		return ResponseEntity.ok().body(response);
 
 	}

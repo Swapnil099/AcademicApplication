@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.ubi.academicapplication.dto.contactinfodto.ContactInfoCreationDto;
 import com.ubi.academicapplication.dto.contactinfodto.ContactInfoDto;
+import com.ubi.academicapplication.dto.pagination.PaginationResponse;
 import com.ubi.academicapplication.dto.response.Response;
 import com.ubi.academicapplication.entity.ContactInfo;
 
@@ -11,7 +12,7 @@ public interface ContactInfoService {
 
 	Response<ContactInfoDto> addContactInfo(ContactInfoDto contactInfoDto);
 
-	Response<List<ContactInfoDto>> getContactInfo(Integer PageNumber, Integer PageSize);
+	Response<PaginationResponse<List<ContactInfoDto>>> getContactInfo(Integer PageNumber, Integer PageSize);
 
 	public Response<ContactInfoDto> getContactInfoById(Long contactInfoId);
 
