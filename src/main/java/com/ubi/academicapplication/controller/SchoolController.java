@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ubi.academicapplication.dto.pagination.PaginationResponse;
 import com.ubi.academicapplication.dto.response.Response;
 import com.ubi.academicapplication.dto.school.SchoolDto;
 import com.ubi.academicapplication.dto.school.SchoolRegionDto;
@@ -54,10 +55,10 @@ public class SchoolController {
 	@Operation(summary = "Get All Schools ", security = @SecurityRequirement(name = "bearerAuth"))
 	@GetMapping
 	@IsRegionalOfficeAdmin
-	public ResponseEntity<Response<List<SchoolRegionDto>>> getAllSchools(
+	public ResponseEntity<Response<PaginationResponse<List<SchoolRegionDto>>>> getAllSchools(
 			@RequestParam(value = "PageNumber", defaultValue = "0", required = false) Integer pageNumber,
 			@RequestParam(value = "PageSize", defaultValue = "5", required = false) Integer pageSize) {
-		Response<List<SchoolRegionDto>> response = schoolService.getAllSchools(pageNumber, pageSize);
+		Response<PaginationResponse<List<SchoolRegionDto>>> response = schoolService.getAllSchools(pageNumber, pageSize);
 		return ResponseEntity.ok().body(response);
 	}
 	@Operation(summary = "Delete School By Id", security = @SecurityRequirement(name = "bearerAuth"))

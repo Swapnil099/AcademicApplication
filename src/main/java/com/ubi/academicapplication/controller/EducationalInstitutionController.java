@@ -76,7 +76,7 @@ public class EducationalInstitutionController {
 	public ResponseEntity<Response<PaginationResponse<List<EducationRegionGetDto>>>> getEducationalInstitutions(
 			@RequestParam(value = "PageNumber", defaultValue = "0", required = false) Integer pageNumber,
 			@RequestParam(value = "PageSize", defaultValue = "5", required = false) Integer pageSize
-	       )
+			  )
 	{
 		Response<PaginationResponse<List<EducationRegionGetDto>>> response = educationalInstitutionService
 				.getAllEducationalInstitutions(pageNumber, pageSize);

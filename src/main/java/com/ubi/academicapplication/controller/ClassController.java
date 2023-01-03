@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ubi.academicapplication.dto.classdto.ClassDto;
 import com.ubi.academicapplication.dto.classdto.ClassStudentDto;
+import com.ubi.academicapplication.dto.pagination.PaginationResponse;
 import com.ubi.academicapplication.dto.response.Response;
 import com.ubi.academicapplication.service.ClassServiceImpl;
 
@@ -47,10 +48,10 @@ public class ClassController {
 
 	@Operation(summary = "Get All Class details", security = @SecurityRequirement(name = "bearerAuth"))
 	@GetMapping
-	public ResponseEntity<Response<List<ClassStudentDto>>> getClassDetails(
+	public ResponseEntity<Response<PaginationResponse<List<ClassStudentDto>>>> getClassDetails(
 			@RequestParam(value = "PageNumber", defaultValue = "0", required = false) Integer pageNumber,
 			@RequestParam(value = "PageSize", defaultValue = "5", required = false) Integer pageSize) {
-		Response<List<ClassStudentDto>> response = classServiceImpl.getClassDetails(pageNumber, pageSize);
+		Response<PaginationResponse<List<ClassStudentDto>>> response = classServiceImpl.getClassDetails(pageNumber, pageSize);
 		return ResponseEntity.ok().body(response);
 
 	}

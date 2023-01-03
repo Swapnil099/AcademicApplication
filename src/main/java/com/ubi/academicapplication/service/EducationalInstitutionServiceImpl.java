@@ -159,9 +159,10 @@ public class EducationalInstitutionServiceImpl implements EducationalInstitution
 	}
 
 	@Override
-	public Response<PaginationResponse<List<EducationRegionGetDto>>> getAllEducationalInstitutions(Integer pageNumber, Integer pageSize) {
+	public Response<PaginationResponse<List<EducationRegionGetDto>>> getAllEducationalInstitutions(Integer pageNumber,Integer pageSize) {
 
 		Result<PaginationResponse<List<EducationRegionGetDto>>> allEducationalResult = new Result<>();
+		
 		
 		
 		Pageable paging = PageRequest.of(pageNumber, pageSize);
