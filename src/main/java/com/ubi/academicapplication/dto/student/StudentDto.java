@@ -2,17 +2,24 @@ package com.ubi.academicapplication.dto.student;
 
 import java.time.LocalDate;
 
+import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.annotations.ColumnDefault;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@SuperBuilder
 public class StudentDto {
 	@Id
 	@GeneratedValue
@@ -35,10 +42,10 @@ public class StudentDto {
 	private LocalDate joiningDate;
 	
 	private String status;
-	private String verifiedByTeacher;
-	private String verifiedByPrincipal;
-	private String verifiedByRegion;
-	
+
+	private boolean verifiedByTeacher;
+	private Boolean verifiedByPrincipal;
+
 	private Boolean isActivate;
 	private String currentStatus;
 	

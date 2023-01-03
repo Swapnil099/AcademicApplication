@@ -40,12 +40,12 @@ public class ClassCsvHelper {
 			header.add("Mother Name");
 			header.add("Mother Occupation");
 			header.add("Status");
-			header.add("Verified By Principal");
-			header.add("Verified By Region");
-			header.add("Verified By Teacher");
 			header.add("Date Of Birth");
 			header.add("Is Activate");
 			header.add("Joining Date");
+			header.add("Verified By Principal");
+			
+			header.add("Verified By Teacher");
 
 
 			csvPrinter.printRecord(header);
@@ -73,13 +73,13 @@ public class ClassCsvHelper {
 					data.add(student.getMotherName());
 					data.add(student.getMotherOccupation());
 					data.add(student.getStatus());
-					data.add(student.getVerifiedByPrincipal());
-					data.add(student.getVerifiedByRegion());
-					data.add(student.getVerifiedByTeacher());
-
+					
+				
 					data.add(String.valueOf(student.getDateOfBirth()));
 					data.add(String.valueOf(student.getIsActivate()));
 					data.add(String.valueOf(student.getJoiningDate()));
+					data.add(String.valueOf(student.getVerifiedByPrincipal()));
+					data.add(String.valueOf(student.isVerifiedByTeacher()));
 
 				}
 

@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.ubi.academicapplication.dto.response.Response;
 import com.ubi.academicapplication.dto.student.StudentDto;
+import com.ubi.academicapplication.dto.student.StudentVerifyDto;
 
 
 public interface StudentService {
@@ -28,6 +29,10 @@ public interface StudentService {
 	
 	Response<List<StudentDto>> findByGenderAndCategoryAndMinority(String gender,String category, String minority);
 	
+	Response<List<StudentVerifyDto>> verifiedByTeacher(String userId,StudentVerifyDto studentVerifyDto);
+	
+	Response<List<StudentVerifyDto>> verifiedByPrincipal(String userId,StudentVerifyDto studentVerifyDto);
+
 	
 	
 	

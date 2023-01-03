@@ -40,7 +40,7 @@ public class StudentCSVHelper {
 			header.add("status");			
 			header.add("verified By Teacher");
 			header.add("verified By Principal");
-			header.add("verified By Region");
+		
 			header.add("isActivate");
 			header.add("currentStatus");
 			header.add("classId");
@@ -61,9 +61,9 @@ public class StudentCSVHelper {
 	             data.add(String.valueOf(student.getGender()));
 	             data.add(String.valueOf(student.getJoiningDate()));
 	             data.add(String.valueOf(student.getStatus()));    
-	             data.add(String.valueOf(student.getVerifiedByTeacher()));
+	             data.add(String.valueOf(student.isVerifiedByTeacher()));
 	             data.add(String.valueOf(student.getVerifiedByPrincipal()));
-	             data.add(String.valueOf(student.getVerifiedByRegion()));
+	           
 	             data.add(String.valueOf(student.getIsActivate()));
 	             data.add(String.valueOf(student.getCurrentStatus()));
 

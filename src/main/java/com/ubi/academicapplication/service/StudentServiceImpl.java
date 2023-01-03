@@ -13,14 +13,17 @@ import org.springframework.stereotype.Service;
 import com.ubi.academicapplication.csv.StudentCSVHelper;
 import com.ubi.academicapplication.dto.response.Response;
 import com.ubi.academicapplication.dto.student.StudentDto;
+import com.ubi.academicapplication.dto.student.StudentVerifyDto;
 import com.ubi.academicapplication.entity.ClassDetail;
 import com.ubi.academicapplication.entity.Student;
+import com.ubi.academicapplication.entity.User;
 import com.ubi.academicapplication.error.CustomException;
 import com.ubi.academicapplication.error.HttpStatusCode;
 import com.ubi.academicapplication.error.Result;
 import com.ubi.academicapplication.mapper.StudentMapper;
 import com.ubi.academicapplication.repository.ClassRepository;
 import com.ubi.academicapplication.repository.StudentRepository;
+import com.ubi.academicapplication.repository.UserRepository;
 
 @Service
 public class StudentServiceImpl implements StudentService {
@@ -33,6 +36,12 @@ public class StudentServiceImpl implements StudentService {
 
 	@Autowired
 	private StudentRepository repository;
+	
+	@Autowired
+	Result result;
+	
+	@Autowired
+	private UserRepository userRepository;
 
 	  
 	  public ByteArrayInputStream load() {
@@ -60,6 +69,9 @@ public class StudentServiceImpl implements StudentService {
 			
 		Student student = studentMapper.dtoToEntity(studentDto);
 		student.setClassDetail(classDetail);
+		student.setVerifiedByPrincipal(false);
+		student.setVerifiedByTeacher(false);
+		student.setIsActivate(false);
 
 		Student savedStudent = repository.save(student);
 		response.setStatusCode(HttpStatusCode.RESOURCE_CREATED_SUCCESSFULLY.getCode());
@@ -144,9 +156,9 @@ public class StudentServiceImpl implements StudentService {
 		existingStudent.setGender(studentDto.getGender());
 		existingStudent.setJoiningDate(studentDto.getJoiningDate());
 		existingStudent.setStatus(studentDto.getStatus());
-		existingStudent.setVerifiedByTeacher(studentDto.getVerifiedByTeacher());
+		existingStudent.setVerifiedByTeacher(studentDto.isVerifiedByTeacher());
 		existingStudent.setVerifiedByPrincipal(studentDto.getVerifiedByPrincipal());
-		existingStudent.setVerifiedByRegion(studentDto.getVerifiedByRegion());
+		
 		existingStudent.setClassId(studentDto.getClassId());
 		ClassDetail classDetail = classRepository.getReferenceById(studentDto.getClassId());
 		Student student = studentMapper.dtoToEntity(existingStudent);
@@ -257,5 +269,74 @@ public class StudentServiceImpl implements StudentService {
 		getListofStudent.setResult(new Result<>(studentMapper.entitiesToDtos(student)));
 		return getListofStudent;
 	}
+	
+	
+	@Override
+	public Response<List<StudentVerifyDto>> verifiedByTeacher(String userId,StudentVerifyDto studentVerifyDto) {
 
+		Optional<User> currUser = userRepository.findById(Long.parseLong(userId));
+		if(!currUser.isPresent()){
+			throw new CustomException(HttpStatusCode.RESOURCE_NOT_FOUND.getCode(),
+					HttpStatusCode.RESOURCE_NOT_FOUND,
+					HttpStatusCode.RESOURCE_NOT_FOUND.getMessage(),
+					result);
+		}
+	
+		Result<List<StudentVerifyDto>> res = new Result<>();
+		for(Long category: studentVerifyDto.getStudentId()){
+
+			Optional<Student> existingStudentContainer = repository.findById(category);
+			if (existingStudentContainer.isPresent()) {
+				if(!Boolean.TRUE.equals(existingStudentContainer.get().isVerifiedByTeacher())) {
+					existingStudentContainer.get().setVerifiedByTeacher(true);
+					repository.save(existingStudentContainer.get());
+				}
+
+			} else {
+				throw new CustomException(HttpStatusCode.NO_STUDENT_FOUND.getCode(), HttpStatusCode.NO_STUDENT_FOUND,
+						HttpStatusCode.NO_STUDENT_FOUND.getMessage(), res);
+			}
+		}
+
+		Response<List<StudentVerifyDto>> response = new Response<>();
+		response.setStatusCode(HttpStatusCode.STUDENT_VERIFIED_SUCCESSFULLY.getCode());
+		response.setMessage(HttpStatusCode.STUDENT_VERIFIED_SUCCESSFULLY.getMessage());
+		response.setResult(new Result(studentMapper.entityToDtoId(studentVerifyDto)));
+		return response;
+	}
+	
+	
+	@Override
+	public Response<List<StudentVerifyDto>> verifiedByPrincipal(String userId,StudentVerifyDto studentVerifyDto) {
+
+		Optional<User> currUser = userRepository.findById(Long.parseLong(userId));
+		if(!currUser.isPresent()){
+			throw new CustomException(HttpStatusCode.RESOURCE_NOT_FOUND.getCode(),
+					HttpStatusCode.RESOURCE_NOT_FOUND,
+					HttpStatusCode.RESOURCE_NOT_FOUND.getMessage(),
+					result);
+		}
+		
+		for(Long category: studentVerifyDto.getStudentId()) {
+
+			Optional<Student> existingStudentContainer = repository.findById(category);
+			if (existingStudentContainer.isPresent()) {
+				
+				if(Boolean.TRUE.equals(existingStudentContainer.get().isVerifiedByTeacher())) {
+					existingStudentContainer.get().setVerifiedByPrincipal(true);
+					repository.save(existingStudentContainer.get());
+			
+				} else {
+					 studentVerifyDto.getStudentId().remove(category);
+				}
+				 
+			}
+		}
+		Response<List<StudentVerifyDto>> response = new Response<>();
+		response.setStatusCode(HttpStatusCode.STUDENT_VERIFIED_SUCCESSFULLY.getCode());
+		response.setMessage(HttpStatusCode.STUDENT_VERIFIED_SUCCESSFULLY.getMessage());
+		response.setResult(new Result(studentMapper.entityToDtoId(studentVerifyDto)));
+		return response;
+	}
 }
+
